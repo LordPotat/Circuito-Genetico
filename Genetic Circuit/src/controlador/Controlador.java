@@ -20,6 +20,7 @@ public class Controlador {
 		modelo = new Modelo();
 		System.out.println("Holiiii");
 		System.out.println("Holiiii");
+		System.out.println("Holiiii");
 	}
 	
 	public void iniciar() {
