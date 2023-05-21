@@ -18,6 +18,7 @@ public class Controlador {
 		initLookAndFeel();
 		vista = new Vista();
 		modelo = new Modelo();
+		System.out.println("Holiii");
 	}
 	
 	public void iniciar() {
