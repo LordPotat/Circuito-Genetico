@@ -19,6 +19,7 @@ public class Controlador {
 		vista = new Vista();
 		modelo = new Modelo();
 		System.out.println("Holiiii");
+		System.out.println("Holiiii");
 	}
 	
 	public void iniciar() {
