@@ -16,10 +16,14 @@ public class Entidad {
 	private double distanciaMinima;
 	private int tiempoObtenido;
 	
-	public Entidad() {
-		aptitud = 0;
-		genActual = 0;
-		haChocado = false;
+	public Entidad(int tiempoVida, PVector posInicial) {
+		adn = new ADN(tiempoVida);
+		posicion = posInicial;
+		velocidad = new PVector(0,0);
+		aceleracion = new PVector(0,0);
+		aptitud = genActual = 0;
+		haChocado = haLlegado = false;
+		comprobarObjetivo();
 	}
 	
 	public void actuar() {
@@ -68,6 +72,12 @@ public class Entidad {
 		if (haLlegado) {
 			aptitud *= 2;
 		}
+	}
+
+	
+	
+	public ADN getAdn() {
+		return adn;
 	}
 
 	public double getAptitud() {

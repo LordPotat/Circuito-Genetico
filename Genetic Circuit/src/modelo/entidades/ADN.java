@@ -9,20 +9,22 @@ public class ADN {
 	private PVector[] genes;
 	private float fuerzamax = 0.1f;
 
-	public ADN (int num) {
-		genes = new PVector[num];
-		for (int i = 0; i < genes.length; i++) {
-			genes[i] = PVector.random2D();
-			genes[i].mult(new Random().nextFloat(0, fuerzamax));
+	public ADN (int numFuerzas) {
+		genes = new PVector[numFuerzas];
+		if(Poblacion.getNumGeneraciones() == 1) {
+			for (PVector gen : genes) {
+				generarFuerzaAleatoria(gen);
+			}
 		}
+	}
+
+	public void generarFuerzaAleatoria(PVector gen) {
+		gen = PVector.random2D();
+		gen.mult(new Random().nextFloat(0, fuerzamax));
 	}
 
 	public PVector[] getGenes() {
 		return genes;
-	}
-
-	public void setGenes(PVector[] genes) {
-		this.genes = genes;
 	}
 
 }

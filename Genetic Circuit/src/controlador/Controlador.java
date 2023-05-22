@@ -17,7 +17,7 @@ public class Controlador {
 	public Controlador() {
 		initLookAndFeel();
 		vista = new Vista();
-		modelo = new Modelo();
+		modelo = new Modelo(10, 1);
 	}
 	
 	public void iniciar() {
