@@ -12,7 +12,7 @@ public class Modelo {
 	private Meta meta;
 	private Obstaculo[] obstaculos;
 	
-	public Modelo(HashMap<String, ?> metaParams, int numObstaculos, ArrayList<HashMap<String, ?>> obstaculosParams) {
+	public Modelo(HashMap<String, Object> metaParams, int numObstaculos, ArrayList<HashMap<String, Object>> obstaculosParams) {
 		
 		meta = new Meta(
 				(PVector) metaParams.get("Posicion"),
@@ -23,7 +23,7 @@ public class Modelo {
 		//initObstaculos(obstaculosParams);
 	}
 
-	private void initObstaculos(ArrayList<HashMap<String, ?>> obstaculosParams) {
+	private void initObstaculos(ArrayList<HashMap<String, Object>> obstaculosParams) {
 		for(int i=0; i < obstaculos.length; i++) {
 			HashMap<String, ?> params = obstaculosParams.get(i);
 			obstaculos[i] = new Obstaculo(

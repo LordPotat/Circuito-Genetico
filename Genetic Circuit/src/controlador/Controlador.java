@@ -1,13 +1,6 @@
 package controlador;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
 import modelo.Modelo;
 import processing.core.PVector;
 import vista.Vista;
@@ -23,11 +16,10 @@ public class Controlador {
 	}
 
 	private void initModelo() {
-		HashMap<String, ?> metaParams = (HashMap<String, ?>) Map.of(
-				"Posicion", new PVector(vista.getVentana().width - 10, 10),
-				"Ancho", 10f,
-				"Alto", 10f
-		);
+		HashMap<String, Object> metaParams = new HashMap<String, Object>();
+		metaParams.put("Posicion", new PVector(vista.getVentana().width - 10, 10));
+		metaParams.put("Ancho", 10f);	
+		metaParams.put("Alto", 10f);		
 		modelo = new Modelo(metaParams, 8, null)  ;
 	}
 	
