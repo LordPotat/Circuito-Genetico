@@ -1,6 +1,7 @@
 package vista.ventana_grafica;
 
 import controlador.Controlador;
+import modelo.entidades.Poblacion;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -43,7 +44,15 @@ public class Ventana extends PApplet {
 		background(255);
 		drawFramerate();
 		drawMeta(new PVector(this.width - 50f, 50f), 50f, 50f);
-		
+		Poblacion poblacionEntidades = controlador.getModelo().getPoblacionEntidades();
+		if(numFramesGen < poblacionEntidades.getTiempoVida()) {
+			poblacionEntidades.realizarCiclo();
+			numFramesGen++;
+		} else {
+			numFramesGen = 0;
+			poblacionEntidades.seleccionar();
+			poblacionEntidades.reproducir();
+		}
 	}
 	
 	public void drawMeta(PVector posicion, float ancho, float alto) {

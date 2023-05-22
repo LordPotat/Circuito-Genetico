@@ -43,7 +43,14 @@ public class Controlador {
 	public void iniciar() {
 		
 	}
-	
+
+	public Vista getVista() {
+		return vista;
+	}
+
+	public Modelo getModelo() {
+		return modelo;
+	}
 	
 }
 
