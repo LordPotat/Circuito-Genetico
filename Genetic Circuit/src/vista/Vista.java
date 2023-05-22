@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import controlador.Controlador;
 import vista.panel_control.PanelControl;
 import vista.ventana_grafica.Ventana;
 
@@ -14,11 +15,11 @@ public class Vista {
 	private Ventana ventana;
 	private PanelControl panelControl;
 	
-	public Vista() {
+	public Vista(Controlador controlador) {
 		initLookAndFeel();
 		String[] processingArgs = {"Circuito Genético"};
-		ventana = Ventana.crearVentana(processingArgs);
-		panelControl = new PanelControl();
+		ventana = Ventana.crearVentana(processingArgs, controlador);
+		panelControl = new PanelControl(controlador);
 		panelControl.setVisible(true);
 	}
 

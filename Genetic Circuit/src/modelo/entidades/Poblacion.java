@@ -30,7 +30,7 @@ public class Poblacion {
 	public Poblacion(Modelo contexto, HashMap<String, Integer> poblacionParams, PVector posInicial) {
 		entidades = new Entidad[poblacionParams.get("NumEntidades")];
 		poolGenetico = new ArrayList<Entidad>();
-		this.tasaMutacion = poblacionParams.get("TasaMutacion");
+		this.tasaMutacion = ((double) poblacionParams.get("TasaMutacion")) / 100;
 		numGeneraciones = 1;
 		this.tiempoVida = poblacionParams.get("TiempoVida");
 		this.posInicial = posInicial;
@@ -63,6 +63,7 @@ public class Poblacion {
 			entidades[i] = hijo;
 		}
 		poolGenetico.clear();
+		numGeneraciones++;
 	}
 	
 	private Entidad cruzarEntidades(Entidad pariente1, Entidad pariente2) {

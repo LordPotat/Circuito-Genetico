@@ -1,15 +1,29 @@
 package vista.ventana_grafica;
 
+import controlador.Controlador;
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.core.PVector;
 
 public class Ventana extends PApplet {
 
-	public static Ventana crearVentana(String[] processingArgs) {
-		Ventana ventana = new Ventana();
-		PApplet.runSketch(processingArgs, ventana);
-		return ventana;
+	private static Ventana instancia = null;
+	
+	private Controlador controlador;
+	private int numFramesGen;
+	
+	private Ventana(Controlador controlador) {
+		this.controlador = controlador;
 	}
+	
+	public static Ventana crearVentana(String[] processingArgs, Controlador controlador) {
+		if (instancia == null) {
+			instancia = new Ventana(controlador);
+		}
+		PApplet.runSketch(processingArgs, instancia);
+		return instancia;
+	}
+	
 	
 	public void settings() {
 		size(1280, 720);
@@ -21,14 +35,36 @@ public class Ventana extends PApplet {
 		surface.setIcon(icono);
 		windowTitle("Circuito Genético");
 		frameRate(60);
+		stroke(0);
 		background(255);
 	}
 	
 	public void draw() {
 		background(255);
 		drawFramerate();
+		drawMeta(new PVector(this.width - 50f, 50f), 50f, 50f);
+		
 	}
-
+	
+	public void drawMeta(PVector posicion, float ancho, float alto) {
+		pushMatrix();
+		translate(posicion.x, posicion.y);
+		fill(0, 255, 0);
+		ellipseMode(CENTER);
+		ellipse(0, 0, ancho, alto);
+		popMatrix();
+	}
+	
+	public void drawEntidades() {
+		pushMatrix();
+		
+		popMatrix();
+	}
+	
+	public void drawObstaculos() {
+		
+	}
+	
 	private void drawFramerate() {
 		fill(125);
 		textSize(16);
