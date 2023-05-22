@@ -5,10 +5,13 @@ import processing.core.PVector;
 public class Obstaculo {
 
 	private PVector posicion;
-	private float ancho, alto;
+	private float ancho, alto, angulo;
 
-	public Obstaculo() {
-		
+	public Obstaculo(PVector posicion, float ancho, float alto, float angulo) {
+		this.posicion = posicion;
+		this.ancho = ancho;
+		this.alto = alto;
+		this.angulo = angulo;
 	}
 	
 	public boolean chocaConEntidad(PVector posEntidad) {

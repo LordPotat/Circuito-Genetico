@@ -1,12 +1,14 @@
 package modelo.entidades;
 
 import modelo.Meta;
+import modelo.Obstaculo;
 import processing.core.PVector;
 
 public class Entidad {
 	
 	private ADN adn;
 	private int genActual;
+	private Poblacion poblacion;
 	
 	private PVector posicion, velocidad, aceleracion;
 	
@@ -16,9 +18,10 @@ public class Entidad {
 	private double distanciaMinima;
 	private int tiempoObtenido;
 	
-	public Entidad(int tiempoVida, PVector posInicial) {
-		adn = new ADN(tiempoVida);
-		posicion = posInicial;
+	public Entidad(Poblacion poblacion) {
+		this.poblacion = poblacion;
+		adn = new ADN(poblacion.getTiempoVida(), poblacion.getNumGeneraciones() == 1);
+		posicion = poblacion.getPosInicial();
 		velocidad = new PVector(0,0);
 		aceleracion = new PVector(0,0);
 		aptitud = genActual = 0;
@@ -43,21 +46,21 @@ public class Entidad {
 		aceleracion.mult(0);
 	}
 	
-	//TODO Crear coleccion de obstaculos para comprobar si se ha chocado con alguno
 	private void comprobarColisiones() {
-//		for (Obstaculo obstaculo : obstaculos) {
-//			if(obstaculo.chocaConEntidad(posicion)) {
-//				haChocado = true;
-//			}
-//		}
+		for (Obstaculo obstaculo : poblacion.getContexto().getObstaculos()) {
+			if(obstaculo.chocaConEntidad(posicion)) {
+				haChocado = true;
+			}
+		}
 	}
 	
 	private void comprobarObjetivo() {
-		double distancia = PVector.dist(posicion, Meta.getPosicion());
+		Meta meta = poblacion.getContexto().getMeta();
+		double distancia = PVector.dist(posicion, meta.getPosicion());
 		if(distancia < distanciaMinima) {
 			distanciaMinima = distancia;
 		}
-		if(Meta.chocaConEntidad(posicion)) {
+		if(meta.chocaConEntidad(posicion)) {
 			haLlegado = true;
 		} else {
 			tiempoObtenido++;

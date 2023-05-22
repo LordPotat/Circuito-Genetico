@@ -1,5 +1,7 @@
 package controlador;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -7,6 +9,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import modelo.Modelo;
+import processing.core.PVector;
 import vista.Vista;
 
 public class Controlador {
@@ -15,32 +18,23 @@ public class Controlador {
 	private Modelo modelo;
 	
 	public Controlador() {
-		initLookAndFeel();
 		vista = new Vista();
-		modelo = new Modelo(10, 1);
+		initModelo();
+	}
+
+	private void initModelo() {
+		HashMap<String, ?> metaParams = (HashMap<String, ?>) Map.of(
+				"Posicion", new PVector(vista.getVentana().width - 10, 10),
+				"Ancho", 10f,
+				"Alto", 10f
+		);
+		modelo = new Modelo(metaParams, 8, null)  ;
 	}
 	
 	public void iniciar() {
 		
 	}
 	
-	private void initLookAndFeel() {
-		try {
-	        for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-	            if ("Nimbus".equals(info.getName())) {
-	                UIManager.setLookAndFeel(info.getClassName());
-	                break;
-	            }
-	        }
-	    } catch (ClassNotFoundException ex) {
-	        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-	    } catch (InstantiationException ex) {
-	        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-	    } catch (IllegalAccessException ex) {
-	        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-	    } catch (UnsupportedLookAndFeelException ex) {
-	        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-	    }
-	}
+	
 }
 

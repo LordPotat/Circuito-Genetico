@@ -4,26 +4,26 @@ import processing.core.PVector;
 
 public class Meta {
 	
-	private static PVector posicion;
-	private static float ancho, alto;
-	private static float semiejeMayor, semiejeMenor;
+	private PVector posicion;
+	private float ancho, alto;
+	private float semiejeMayor, semiejeMenor;
 
-	private Meta(PVector posicion, float ancho, float alto) {
-		Meta.posicion = posicion;
-		Meta.ancho = ancho;
-		Meta.alto = alto;
+	public Meta(PVector posicion, float ancho, float alto) {
+		this.posicion = posicion;
+		this.ancho = ancho;
+		this.alto = alto;
 		calcularSemiejes();
 	}
 	
-	public static boolean chocaConEntidad(PVector posEntidad) {
-		float distanciaCentroX = posEntidad.x - Meta.posicion.x;
-		float distanciaCentroY = posEntidad.y - Meta.posicion.y;
+	public boolean chocaConEntidad(PVector posEntidad) {
+		float distanciaCentroX = posEntidad.x - this.posicion.x;
+		float distanciaCentroY = posEntidad.y - this.posicion.y;
 		double distancia = (Math.pow(distanciaCentroX,2)) / 
 				(Math.pow(semiejeMayor,2)) + (Math.pow(distanciaCentroY,2)) / (Math.pow(semiejeMenor,2));
 		return distancia <= 1;
 	}
 	
-	private static void calcularSemiejes() {
+	private void calcularSemiejes() {
 		if(ancho > alto) {
 			semiejeMayor = ancho / 2;
 			semiejeMenor = alto / 2;
@@ -37,7 +37,7 @@ public class Meta {
 		}
 	}
 	
-	public static PVector getPosicion() {
+	public PVector getPosicion() {
 		return posicion;
 	}
 	

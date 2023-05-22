@@ -1,27 +1,40 @@
 package modelo.entidades;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
+import modelo.Modelo;
 import processing.core.PVector;
 
 public class Poblacion {
 	
-	private static int numGeneraciones;
-	
+	private Modelo contexto;
 	private Entidad[] entidades;
 	private ArrayList<Entidad> poolGenetico;
 	private double tasaMutacion;
 	private int tiempoVida;
+	private int numGeneraciones;
 	private PVector posInicial;
 	
-	public Poblacion(int numEntidades, double tasaMutacion, int tiempoVida, PVector posInicial) {
-		entidades = new Entidad[numEntidades];
+//	public Poblacion(Modelo contexto, int numEntidades, double tasaMutacion, int tiempoVida, PVector posInicial) {
+//		entidades = new Entidad[numEntidades];
+//		poolGenetico = new ArrayList<Entidad>();
+//		this.tasaMutacion = tasaMutacion;
+//		numGeneraciones = 1;
+//		this.tiempoVida = tiempoVida;
+//		this.posInicial = posInicial;
+//		this.contexto = contexto;
+//	}
+	
+	public Poblacion(Modelo contexto, HashMap<String, Integer> poblacionParams, PVector posInicial) {
+		entidades = new Entidad[poblacionParams.get("NumEntidades")];
 		poolGenetico = new ArrayList<Entidad>();
-		this.tasaMutacion = tasaMutacion;
+		this.tasaMutacion = poblacionParams.get("TasaMutacion");
 		numGeneraciones = 1;
-		this.tiempoVida = tiempoVida;
+		this.tiempoVida = poblacionParams.get("TiempoVida");
 		this.posInicial = posInicial;
+		this.contexto = contexto;
 	}
 	
 	public void realizarCiclo() {
@@ -54,7 +67,7 @@ public class Poblacion {
 	
 	private Entidad cruzarEntidades(Entidad pariente1, Entidad pariente2) {
 		Random rng = new Random();
-		Entidad hijo = new Entidad(tiempoVida, posInicial);
+		Entidad hijo = new Entidad(this);
 		PVector[] genesHijo = hijo.getAdn().getGenes();
 		int puntoMedio = rng.nextInt(genesHijo.length);
 		for(int i=0; i < genesHijo.length; i++) {
@@ -85,8 +98,28 @@ public class Poblacion {
 		this.tasaMutacion = tasaMutacion;
 	}
 
-	public static int getNumGeneraciones() {
+	public int getNumGeneraciones() {
 		return numGeneraciones;
+	}
+
+	public PVector getPosInicial() {
+		return posInicial;
+	}
+
+	public void setPosInicial(PVector posInicial) {
+		this.posInicial = posInicial;
+	}
+
+	public int getTiempoVida() {
+		return tiempoVida;
+	}
+
+	public void setTiempoVida(int tiempoVida) {
+		this.tiempoVida = tiempoVida;
+	}
+
+	public Modelo getContexto() {
+		return contexto;
 	}
 	
 }

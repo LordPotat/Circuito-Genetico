@@ -9,9 +9,9 @@ public class ADN {
 	private PVector[] genes;
 	private float fuerzamax = 0.1f;
 
-	public ADN (int numFuerzas) {
+	public ADN (int numFuerzas, boolean esPrimeraGen) {
 		genes = new PVector[numFuerzas];
-		if(Poblacion.getNumGeneraciones() == 1) {
+		if(esPrimeraGen) {
 			for (PVector gen : genes) {
 				generarFuerzaAleatoria(gen);
 			}
