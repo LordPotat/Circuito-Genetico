@@ -1,6 +1,7 @@
 package vista.ventana_grafica;
 
 import controlador.Controlador;
+import modelo.entidades.Entidad;
 import modelo.entidades.Poblacion;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -44,9 +45,13 @@ public class Ventana extends PApplet {
 		background(255);
 		drawFramerate();
 		drawMeta(new PVector(this.width - 50f, 50f), 50f, 50f);
+		if (controlador.getModelo().getPoblacionEntidades() == null) {
+			return;
+		}
 		Poblacion poblacionEntidades = controlador.getModelo().getPoblacionEntidades();
 		if(numFramesGen < poblacionEntidades.getTiempoVida()) {
 			poblacionEntidades.realizarCiclo();
+			drawPoblacion(poblacionEntidades.getEntidades());
 			numFramesGen++;
 		} else {
 			numFramesGen = 0;
@@ -63,10 +68,21 @@ public class Ventana extends PApplet {
 		ellipse(0, 0, ancho, alto);
 		popMatrix();
 	}
+
+	public void drawPoblacion(Entidad[] entidades) {
+		for(Entidad entidad: entidades) {
+			drawEntidad(entidad.getPosicion(), entidad.getVelocidad());
+		}
+	}
 	
-	public void drawEntidades() {
+	private void drawEntidad(PVector posicion, PVector velocidad) {
+		System.out.println(posicion);
 		pushMatrix();
-		
+		translate(posicion.x, posicion.y);
+		fill(0, 0, 255);
+		shapeMode(CENTER);
+		triangle(posicion.x - 10, posicion.y - 25, posicion.x, posicion.y, posicion.x + 10, posicion.y - 25);
+		rotate(velocidad.heading());
 		popMatrix();
 	}
 	

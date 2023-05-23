@@ -2,7 +2,9 @@ package modelo.entidades;
 
 import modelo.Meta;
 import modelo.Obstaculo;
+import processing.core.PApplet;
 import processing.core.PVector;
+import vista.ventana_grafica.Ventana;
 
 public class Entidad {
 	
@@ -15,26 +17,33 @@ public class Entidad {
 	private boolean haChocado, haLlegado;
 	
 	private double aptitud;
+	private double probReproduccion;
+	private double probAcumulada;
 	private double distanciaMinima;
 	private int tiempoObtenido;
 	
-	public Entidad(Poblacion poblacion) {
+	public Entidad(Poblacion poblacion, ADN adn) {
 		this.poblacion = poblacion;
-		adn = new ADN(poblacion.getTiempoVida(), poblacion.getNumGeneraciones() == 1);
 		posicion = poblacion.getPosInicial();
 		velocidad = new PVector(0,0);
 		aceleracion = new PVector(0,0);
 		aptitud = genActual = 0;
 		haChocado = haLlegado = false;
-		comprobarObjetivo();
+		distanciaMinima = PVector.dist(posicion, poblacion.getContexto().getMeta().getPosicion());
+		if(adn != null) {
+			this.adn = adn;
+		} else {
+			this.adn = new ADN(poblacion.getTiempoVida());
+		}
 	}
 	
 	public void actuar() {
 		if (!haChocado && !haLlegado) {
 			PVector fuerzaGenética = adn.getGenes()[genActual];
+			genActual++;
 			moverEntidad(fuerzaGenética);
-			comprobarColisiones();
 			comprobarObjetivo();
+			//comprobarColisiones();
 		}
 		
 	}
@@ -67,7 +76,10 @@ public class Entidad {
 		}
 	}
 	
-	public void evaluarAptitud() {
+	public double evaluarAptitud() {
+		if (distanciaMinima < 1) {
+			distanciaMinima = 1;
+		}
 		aptitud = Math.pow(1 / (tiempoObtenido * distanciaMinima), 2);
 		if(haChocado) {
 			aptitud *= 0.1;
@@ -75,6 +87,7 @@ public class Entidad {
 		if (haLlegado) {
 			aptitud *= 2;
 		}
+		return aptitud;
 	}
 
 	
@@ -102,5 +115,26 @@ public class Entidad {
 	public double getDistanciaMinima() {
 		return distanciaMinima;
 	}
+
+	public double getProbReproduccion() {
+		return probReproduccion;
+	}
+
+	public void setProbReproduccion(double probReproduccion) {
+		this.probReproduccion = probReproduccion;
+	}
+
+	public double getProbAcumulada() {
+		return probAcumulada;
+	}
+
+	public void setProbAcumulada(double probAcumulada) {
+		this.probAcumulada = probAcumulada;
+	}
+
+	public void setAptitud(double aptitud) {
+		this.aptitud = aptitud;
+	}
+	
 	
 }
