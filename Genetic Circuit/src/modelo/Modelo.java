@@ -3,17 +3,21 @@ package modelo;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import controlador.Controlador;
 import modelo.entidades.Poblacion;
 import processing.core.PVector;
 
 public class Modelo {
 	
+	private Controlador controlador;
 	private Poblacion poblacionEntidades;
 	private Meta meta;
 	private Obstaculo[] obstaculos;
 	
-	public Modelo(HashMap<String, Object> metaParams, int numObstaculos, ArrayList<HashMap<String, Object>> obstaculosParams) {
+	public Modelo(Controlador controlador, HashMap<String, Object> metaParams, 
+			int numObstaculos, ArrayList<HashMap<String, Object>> obstaculosParams) {
 		
+		this.controlador = controlador;
 		meta = new Meta(
 				(PVector) metaParams.get("Posicion"),
 				(float) metaParams.get("Ancho"), 
@@ -54,5 +58,10 @@ public class Modelo {
 	public Obstaculo[] getObstaculos() {
 		return obstaculos;
 	}
+
+	public Controlador getControlador() {
+		return controlador;
+	}
+	
 	
 }

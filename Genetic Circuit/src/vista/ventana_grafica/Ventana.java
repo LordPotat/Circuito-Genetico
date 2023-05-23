@@ -39,19 +39,16 @@ public class Ventana extends PApplet {
 		frameRate(60);
 		stroke(0);
 		background(255);
+		numFramesGen = 0;
 	}
 	
 	public void draw() {
 		background(255);
 		drawFramerate();
 		drawMeta(new PVector(this.width - 50f, 50f), 50f, 50f);
-		if (controlador.getModelo().getPoblacionEntidades() == null) {
-			return;
-		}
 		Poblacion poblacionEntidades = controlador.getModelo().getPoblacionEntidades();
 		if(numFramesGen < poblacionEntidades.getTiempoVida()) {
 			poblacionEntidades.realizarCiclo();
-			drawPoblacion(poblacionEntidades.getEntidades());
 			numFramesGen++;
 		} else {
 			numFramesGen = 0;
@@ -68,21 +65,14 @@ public class Ventana extends PApplet {
 		ellipse(0, 0, ancho, alto);
 		popMatrix();
 	}
-
-	public void drawPoblacion(Entidad[] entidades) {
-		for(Entidad entidad: entidades) {
-			drawEntidad(entidad.getPosicion(), entidad.getVelocidad());
-		}
-	}
 	
-	private void drawEntidad(PVector posicion, PVector velocidad) {
-		System.out.println(posicion);
+	public void drawEntidad(PVector posicion, PVector velocidad) {
 		pushMatrix();
 		translate(posicion.x, posicion.y);
-		fill(0, 0, 255);
-		shapeMode(CENTER);
-		triangle(posicion.x - 10, posicion.y - 25, posicion.x, posicion.y, posicion.x + 10, posicion.y - 25);
 		rotate(velocidad.heading());
+		fill(0, 0, 255);
+		triangle(-10, 25, 0, 0, 10, 25);
+		line(0, 0, 0, -(velocidad.mag()* 20));
 		popMatrix();
 	}
 	

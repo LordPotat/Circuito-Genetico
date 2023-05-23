@@ -17,15 +17,7 @@ public class Poblacion {
 	private int numGeneraciones;
 	private PVector posInicial;
 	
-//	public Poblacion(Modelo contexto, int numEntidades, double tasaMutacion, int tiempoVida, PVector posInicial) {
-//		entidades = new Entidad[numEntidades];
-//		poolGenetico = new ArrayList<Entidad>();
-//		this.tasaMutacion = tasaMutacion;
-//		numGeneraciones = 1;
-//		this.tiempoVida = tiempoVida;
-//		this.posInicial = posInicial;
-//		this.contexto = contexto;
-//	}
+	private Random rng = new Random();
 	
 	public Poblacion(Modelo contexto, HashMap<String, Integer> poblacionParams, PVector posInicial) {
 		this.contexto = contexto;
@@ -49,7 +41,9 @@ public class Poblacion {
 	public void realizarCiclo() {
 		for(int i=0; i < entidades.length; i++) {
 			entidades[i].actuar();
+			contexto.getControlador().mostrarEntidad(entidades[i]);
 		}
+		
 	}
 	
 	public void seleccionar() {
@@ -83,7 +77,6 @@ public class Poblacion {
 
 	
 	public void reproducir() {
-		Random rng = new Random();
 		Entidad[] nuevaGeneracion = new Entidad[entidades.length];
 		for(int i=0; i < entidades.length; i++) {
 			Entidad pariente1 = poolGenetico.get(rng.nextInt(poolGenetico.size()));
@@ -97,7 +90,6 @@ public class Poblacion {
 	}
 	
 	private ADN cruzarEntidades(Entidad pariente1, Entidad pariente2) {
-		Random rng = new Random();
 		PVector[] genesHijo = new PVector[getTiempoVida()];
 		int puntoMedio = rng.nextInt(genesHijo.length);
 		for(int i=0; i < genesHijo.length; i++) {
@@ -111,7 +103,6 @@ public class Poblacion {
 	}
 	
 	private void mutar(ADN adnHijo) {
-		Random rng = new Random();
 		for(PVector gen : adnHijo.getGenes()) {
 			if(rng.nextDouble(1) < tasaMutacion) {
 				adnHijo.generarFuerzaAleatoria(gen);

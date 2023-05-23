@@ -2,6 +2,7 @@ package controlador;
 
 import java.util.HashMap;
 import modelo.Modelo;
+import modelo.entidades.Entidad;
 import processing.core.PVector;
 import vista.Vista;
 import vista.ventana_grafica.Ventana;
@@ -19,16 +20,17 @@ public class Controlador {
 	private void initModelo() {
 		Ventana ventana = vista.getVentana();
 		HashMap<String, Object> metaParams = setupMeta(ventana);		
-		modelo = new Modelo(metaParams, 8, null);
+		modelo = new Modelo(this, metaParams, 8, null);
 		HashMap<String, Integer> poblacionParams = setupPoblacion();	
-		modelo.setPoblacionEntidades(poblacionParams, new PVector(10, ventana.height-10));
+//		modelo.setPoblacionEntidades(poblacionParams, new PVector(10, ventana.height-10));
+		modelo.setPoblacionEntidades(poblacionParams, new PVector(ventana.width/2, ventana.height/2));
 	}
 
 	private HashMap<String, Integer> setupPoblacion() {
 		HashMap<String, Integer> poblacionParams = new HashMap<String, Integer>();
-		poblacionParams.put("NumEntidades", 300);
-		poblacionParams.put("TasaMutacion", 2);	
-		poblacionParams.put("TiempoVida", 200);
+		poblacionParams.put("NumEntidades", 10);
+		poblacionParams.put("TasaMutacion", 1);	
+		poblacionParams.put("TiempoVida", 100);
 		return poblacionParams;
 	}
 
@@ -44,6 +46,10 @@ public class Controlador {
 		
 	}
 
+	public void mostrarEntidad(Entidad entidad) {
+		vista.getVentana().drawEntidad(entidad.getPosicion(), entidad.getVelocidad());
+	}
+	
 	public Vista getVista() {
 		return vista;
 	}

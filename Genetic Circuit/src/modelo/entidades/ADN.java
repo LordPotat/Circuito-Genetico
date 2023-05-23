@@ -1,34 +1,35 @@
 package modelo.entidades;
 
-import java.util.Random;
-
 import processing.core.PVector;
+import vista.ventana_grafica.Ventana;
+
+import java.util.Random;
 
 public class ADN {
 	
 	private PVector[] genes;
-	private float fuerzamax = 0.1f;
-
+	private float fuerzaMax = 1f;
+	private float fuerzaMin = 0.1f;
+	private Random rng = new Random();
+	
 	public ADN (int numFuerzas) {
-		this.genes = new PVector[numFuerzas];
-		for (int i=0; i < this.genes.length; i++) {
-			generarFuerzaAleatoria(i);
+		genes = new PVector[numFuerzas];
+		for (int i=0; i < genes.length; i++) {
+//			genes[i] = PVector.random2D();
+			genes[i] = PVector.fromAngle(rng.nextFloat(0, Ventana.TWO_PI));
+			genes[i].mult(rng.nextFloat(fuerzaMin, fuerzaMax));
 		}
 	}
 
 	public ADN (PVector[] genes) {
 		this.genes = genes;
 	}
-	
-	private void generarFuerzaAleatoria(int numGen) {
-		genes[numGen] = PVector.random2D();
-		genes[numGen].mult(new Random().nextFloat(0, fuerzamax));
-	}
 
 	
 	public void generarFuerzaAleatoria(PVector gen) {
-		gen = PVector.random2D();
-		gen.mult(new Random().nextFloat(0, fuerzamax));
+		//gen = PVector.random2D();
+		gen = PVector.fromAngle(rng.nextFloat(0, Ventana.TWO_PI));
+		gen.mult(rng.nextFloat(fuerzaMin, fuerzaMax));
 	}
 
 	public PVector[] getGenes() {

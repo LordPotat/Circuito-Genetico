@@ -2,9 +2,7 @@ package modelo.entidades;
 
 import modelo.Meta;
 import modelo.Obstaculo;
-import processing.core.PApplet;
 import processing.core.PVector;
-import vista.ventana_grafica.Ventana;
 
 public class Entidad {
 	
@@ -23,6 +21,7 @@ public class Entidad {
 	private int tiempoObtenido;
 	
 	public Entidad(Poblacion poblacion, ADN adn) {
+		
 		this.poblacion = poblacion;
 		posicion = poblacion.getPosInicial();
 		velocidad = new PVector(0,0);
@@ -50,8 +49,11 @@ public class Entidad {
 
 	private void moverEntidad(PVector fuerza) {
 		aceleracion.add(fuerza);
+		System.out.println("Aceleracion: " + aceleracion);
 		velocidad.add(aceleracion);
+		System.out.println("Velocidad: " + velocidad);
 		posicion.add(velocidad);
+		System.out.println("Posicion: " + posicion);
 		aceleracion.mult(0);
 	}
 	
