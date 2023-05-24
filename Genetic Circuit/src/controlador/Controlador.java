@@ -28,7 +28,7 @@ public class Controlador {
 	private HashMap<String, Integer> setupPoblacion() {
 		HashMap<String, Integer> poblacionParams = new HashMap<String, Integer>();
 		poblacionParams.put("NumEntidades", 150);
-		poblacionParams.put("TasaMutacion", 3);	
+		poblacionParams.put("TasaMutacion", 10);	
 		poblacionParams.put("TiempoVida", 400);
 		return poblacionParams;
 	}

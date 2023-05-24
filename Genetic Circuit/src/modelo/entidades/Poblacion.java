@@ -78,8 +78,13 @@ public class Poblacion {
 	public void reproducir() {
 		Entidad[] nuevaGeneracion = new Entidad[entidades.length];
 		for(int i=0; i < entidades.length; i++) {
-			Entidad pariente1 = poolGenetico.get(rng.nextInt(poolGenetico.size()));
-			Entidad pariente2 = poolGenetico.get(rng.nextInt(poolGenetico.size()));
+			int randomInd1 = rng.nextInt(poolGenetico.size());
+			Entidad pariente1 = poolGenetico.get(randomInd1);
+			int randomInd2 = 0; 
+			do {
+				randomInd2 = rng.nextInt(poolGenetico.size());
+			} while(randomInd2 == randomInd1);
+			Entidad pariente2 = poolGenetico.get(randomInd2);
 			ADN adnHijo = cruzarEntidades(pariente1, pariente2);
 			mutar(adnHijo);
 			nuevaGeneracion[i] = new Entidad(this, adnHijo);

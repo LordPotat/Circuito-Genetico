@@ -81,14 +81,15 @@ public class Entidad {
 		if (distanciaMinima < 1) {
 			distanciaMinima = 1;
 		}
-		aptitud = Math.pow(1 / (tiempoObtenido * distanciaMinima), 2);
+		double factorTiempo = 1.0;
+	    if (tiempoObtenido <= CircuitoEjemplo.getTiempoObjetivo()) {
+	        factorTiempo = tiempoObtenido / CircuitoEjemplo.getTiempoObjetivo();
+	    }
+		aptitud = Math.pow(1 / (tiempoObtenido * distanciaMinima), 2) * factorTiempo;
 		if(haChocado) {
 			aptitud *= 0.1;
 		}
 		if (haLlegado) {
-			aptitud *= 2;
-		}
-		if(tiempoObtenido <= CircuitoEjemplo.getTiempoObjetivo()) {
 			aptitud *= 2;
 		}
 		return aptitud;
