@@ -43,13 +43,11 @@ public class Poblacion {
 			entidades[i].actuar();
 			contexto.getControlador().mostrarEntidad(entidades[i]);
 		}
-		
 	}
 	
 	public void seleccionar() {
 		poolGenetico.clear();
 		double mejorAptitud = evaluarEntidades();
-		//Normalizamos las aptitudes
 		for(Entidad entidad : entidades) {
 			entidad.setAptitud(entidad.getAptitud() / mejorAptitud);
 		}
@@ -61,6 +59,7 @@ public class Poblacion {
 		for(Entidad entidad : entidades) {
 			if (entidad.evaluarAptitud() > mejorAptitud) {
 				mejorAptitud = entidad.getAptitud();
+				System.out.println(entidad.getTiempoObtenido());
 			}
 		}
 		return mejorAptitud;

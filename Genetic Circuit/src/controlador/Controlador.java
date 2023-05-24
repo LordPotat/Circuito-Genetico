@@ -22,21 +22,24 @@ public class Controlador {
 		HashMap<String, Object> metaParams = setupMeta(ventana);		
 		modelo = new Modelo(this, metaParams, 8, null);
 		HashMap<String, Integer> poblacionParams = setupPoblacion();	
-//		modelo.setPoblacionEntidades(poblacionParams, new PVector(10, ventana.height-10));
-		modelo.setPoblacionEntidades(poblacionParams, new PVector(ventana.width/2, ventana.height/2));
+		modelo.setPoblacionEntidades(poblacionParams, new PVector(ventana.width/2, ventana.height-10));
+
 	}
 
 	private HashMap<String, Integer> setupPoblacion() {
 		HashMap<String, Integer> poblacionParams = new HashMap<String, Integer>();
-		poblacionParams.put("NumEntidades", 10);
+//		poblacionParams.put("NumEntidades", 50);
+//		poblacionParams.put("TasaMutacion", 1);	
+//		poblacionParams.put("TiempoVida", 800);
+		poblacionParams.put("NumEntidades", 150);
 		poblacionParams.put("TasaMutacion", 1);	
-		poblacionParams.put("TiempoVida", 100);
+		poblacionParams.put("TiempoVida", 800);
 		return poblacionParams;
 	}
 
 	private HashMap<String, Object> setupMeta(Ventana ventana) {
 		HashMap<String, Object> metaParams = new HashMap<String, Object>();
-		metaParams.put("Posicion", new PVector(ventana.width - 10, 10));
+		metaParams.put("Posicion", new PVector(ventana.width/2, 10));
 		metaParams.put("Ancho", 50f);	
 		metaParams.put("Alto", 50f);
 		return metaParams;

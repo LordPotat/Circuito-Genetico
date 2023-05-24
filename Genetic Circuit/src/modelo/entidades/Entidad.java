@@ -3,6 +3,7 @@ package modelo.entidades;
 import modelo.Meta;
 import modelo.Obstaculo;
 import processing.core.PVector;
+import vista.ventana_grafica.Ventana;
 
 public class Entidad {
 	
@@ -23,7 +24,7 @@ public class Entidad {
 	public Entidad(Poblacion poblacion, ADN adn) {
 		
 		this.poblacion = poblacion;
-		posicion = poblacion.getPosInicial();
+		posicion = poblacion.getPosInicial().copy();
 		velocidad = new PVector(0,0);
 		aceleracion = new PVector(0,0);
 		aptitud = genActual = 0;
@@ -42,27 +43,35 @@ public class Entidad {
 			genActual++;
 			moverEntidad(fuerzaGenética);
 			comprobarObjetivo();
-			//comprobarColisiones();
+			comprobarColisiones();
 		}
 		
 	}
 
 	private void moverEntidad(PVector fuerza) {
 		aceleracion.add(fuerza);
-		System.out.println("Aceleracion: " + aceleracion);
 		velocidad.add(aceleracion);
-		System.out.println("Velocidad: " + velocidad);
 		posicion.add(velocidad);
-		System.out.println("Posicion: " + posicion);
 		aceleracion.mult(0);
 	}
 	
 	private void comprobarColisiones() {
-		for (Obstaculo obstaculo : poblacion.getContexto().getObstaculos()) {
-			if(obstaculo.chocaConEntidad(posicion)) {
-				haChocado = true;
-			}
+//		for (Obstaculo obstaculo : poblacion.getContexto().getObstaculos()) {
+//			if(obstaculo.chocaConEntidad(posicion)) {
+//				haChocado = true;
+//			}
+//		}
+		if(colisionaVentana()) {
+			velocidad.mult(-1);
 		}
+	}
+
+	private boolean colisionaVentana() {
+		Ventana ventana = poblacion.getContexto().getControlador().getVista().getVentana();
+		int margen = 1;
+		boolean estaFueraX = posicion.x - 10 <= 0 - margen || posicion.x + 10 >= ventana.width + margen;
+		boolean estaFueraY = posicion.y - 10 <= 0 - margen || posicion.y + 10 >= ventana.height + margen;
+		return estaFueraX || estaFueraY;
 	}
 	
 	private void comprobarObjetivo() {
@@ -136,6 +145,10 @@ public class Entidad {
 
 	public void setAptitud(double aptitud) {
 		this.aptitud = aptitud;
+	}
+
+	public int getTiempoObtenido() {
+		return tiempoObtenido;
 	}
 	
 	

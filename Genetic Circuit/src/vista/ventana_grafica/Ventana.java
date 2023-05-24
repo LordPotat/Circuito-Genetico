@@ -1,7 +1,6 @@
 package vista.ventana_grafica;
 
 import controlador.Controlador;
-import modelo.entidades.Entidad;
 import modelo.entidades.Poblacion;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -44,8 +43,9 @@ public class Ventana extends PApplet {
 	
 	public void draw() {
 		background(255);
+		stroke(0);
 		drawFramerate();
-		drawMeta(new PVector(this.width - 50f, 50f), 50f, 50f);
+		drawMeta(new PVector(this.width/2, 30), 50, 50);
 		Poblacion poblacionEntidades = controlador.getModelo().getPoblacionEntidades();
 		if(numFramesGen < poblacionEntidades.getTiempoVida()) {
 			poblacionEntidades.realizarCiclo();
@@ -69,11 +69,31 @@ public class Ventana extends PApplet {
 	public void drawEntidad(PVector posicion, PVector velocidad) {
 		pushMatrix();
 		translate(posicion.x, posicion.y);
-		rotate(velocidad.heading());
-		fill(0, 0, 255);
-		triangle(-10, 25, 0, 0, 10, 25);
-		line(0, 0, 0, -(velocidad.mag()* 20));
+		rotate(atan2(velocidad.y, velocidad.x));
+		drawHumanoide();
+		drawFlechaDireccion(velocidad);
 		popMatrix();
+	}
+
+	private void drawHumanoide() {
+		stroke(0);
+		fill(0, 0, 255);
+		triangle(-25, -10, 0, 0, -25, 10);
+		ellipseMode(CENTER);
+		ellipse(0, 0, 10, 10);
+		line(-10, -5, 5, -10);
+		line(-10, 5, 5, 10);
+		line(-25, -5, -40, -5);
+		line(-25, 5, -40, 5);
+	}
+
+	private void drawFlechaDireccion(PVector velocidad) {
+		stroke(255, 0, 0);
+		float magVector = velocidad.mag() * 5;
+		line(0, 0, magVector, 0);
+		line(magVector, 0, magVector - 5, -5);
+		line(magVector, 0, magVector - 5, 5);
+		stroke(0);
 	}
 	
 	public void drawObstaculos() {
