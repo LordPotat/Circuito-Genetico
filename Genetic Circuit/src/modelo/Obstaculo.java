@@ -1,6 +1,7 @@
 package modelo;
 
 import processing.core.PVector;
+import vista.ventana_grafica.Ventana;
 
 public class Obstaculo {
 
@@ -11,12 +12,14 @@ public class Obstaculo {
 		this.posicion = posicion;
 		this.ancho = ancho;
 		this.alto = alto;
-		this.angulo = angulo;
+		this.angulo = Ventana.radians(angulo);
 	}
 	
 	public boolean chocaConEntidad(PVector posEntidad) {
-		boolean contieneEnX = posEntidad.x > this.posicion.x && posEntidad.x < this.posicion.x + ancho;
-		boolean contieneEnY = posEntidad.y > this.posicion.y && posEntidad.y < this.posicion.y + alto;
+		float esquinaX = posicion.x - ancho / 2;
+		float esquinaY = posicion.y - alto / 2;
+		boolean contieneEnX = posEntidad.x >= esquinaX && posEntidad.x <= esquinaX + ancho;
+		boolean contieneEnY = posEntidad.y >= esquinaY && posEntidad.y <= esquinaY + alto;
 		return contieneEnX && contieneEnY;
 	}
 	

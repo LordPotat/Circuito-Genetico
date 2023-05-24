@@ -15,7 +15,7 @@ public class Meta {
 		calcularSemiejes();
 	}
 	
-	public boolean chocaConEntidad(PVector posEntidad) {
+	public boolean contieneEntidad(PVector posEntidad) {
 		float distanciaCentroX = posEntidad.x - this.posicion.x;
 		float distanciaCentroY = posEntidad.y - this.posicion.y;
 		double distancia = (Math.pow(distanciaCentroX,2)) / 

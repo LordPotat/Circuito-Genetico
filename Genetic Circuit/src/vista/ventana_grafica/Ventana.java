@@ -49,6 +49,7 @@ public class Ventana extends PApplet {
 		drawFramerate();
 		Modelo modelo = controlador.getModelo();
 		drawMeta(modelo.getMeta().getPosicion(), modelo.getMeta().getAncho(), modelo.getMeta().getAlto());
+		drawObstaculos(modelo.getObstaculos());
 		Poblacion poblacionEntidades = modelo.getPoblacionEntidades();
 		if(numFramesGen < poblacionEntidades.getTiempoVida()) {
 			poblacionEntidades.realizarCiclo();

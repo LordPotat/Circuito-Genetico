@@ -2,8 +2,8 @@ package modelo.entidades;
 
 import modelo.Meta;
 import modelo.Obstaculo;
+import modelo.circuitos.CircuitoEjemplo;
 import processing.core.PVector;
-import vista.ventana_grafica.Ventana;
 
 public class Entidad {
 	
@@ -39,13 +39,14 @@ public class Entidad {
 	
 	public void actuar() {
 		if (!haChocado && !haLlegado) {
-			PVector fuerzaGenética = adn.getGenes()[genActual];
+			PVector fuerzaGenetica = adn.getGenes()[genActual];
 			genActual++;
-			moverEntidad(fuerzaGenética);
+			moverEntidad(fuerzaGenetica);
 			comprobarObjetivo();
 			comprobarColisiones();
+		} else if(haChocado) {
+			tiempoObtenido++;
 		}
-		
 	}
 
 	private void moverEntidad(PVector fuerza) {
@@ -56,22 +57,11 @@ public class Entidad {
 	}
 	
 	private void comprobarColisiones() {
-//		for (Obstaculo obstaculo : poblacion.getContexto().getObstaculos()) {
-//			if(obstaculo.chocaConEntidad(posicion)) {
-//				haChocado = true;
-//			}
-//		}
-		if(colisionaVentana()) {
-			velocidad.mult(-1);
+		for (Obstaculo obstaculo : poblacion.getContexto().getObstaculos()) {
+			if(obstaculo.chocaConEntidad(posicion)) {
+				haChocado = true;
+			}
 		}
-	}
-
-	private boolean colisionaVentana() {
-		Ventana ventana = poblacion.getContexto().getControlador().getVista().getVentana();
-		int margen = 1;
-		boolean estaFueraX = posicion.x - 10 <= 0 - margen || posicion.x + 10 >= ventana.width + margen;
-		boolean estaFueraY = posicion.y - 10 <= 0 - margen || posicion.y + 10 >= ventana.height + margen;
-		return estaFueraX || estaFueraY;
 	}
 	
 	private void comprobarObjetivo() {
@@ -80,7 +70,7 @@ public class Entidad {
 		if(distancia < distanciaMinima) {
 			distanciaMinima = distancia;
 		}
-		if(meta.chocaConEntidad(posicion)) {
+		if(meta.contieneEntidad(posicion)) {
 			haLlegado = true;
 		} else {
 			tiempoObtenido++;
@@ -96,6 +86,9 @@ public class Entidad {
 			aptitud *= 0.1;
 		}
 		if (haLlegado) {
+			aptitud *= 2;
+		}
+		if(tiempoObtenido <= CircuitoEjemplo.getTiempoObjetivo()) {
 			aptitud *= 2;
 		}
 		return aptitud;
