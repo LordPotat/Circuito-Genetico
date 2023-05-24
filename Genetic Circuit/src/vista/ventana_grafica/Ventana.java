@@ -1,6 +1,8 @@
 package vista.ventana_grafica;
 
 import controlador.Controlador;
+import modelo.Modelo;
+import modelo.Obstaculo;
 import modelo.entidades.Poblacion;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -45,8 +47,9 @@ public class Ventana extends PApplet {
 		background(255);
 		stroke(0);
 		drawFramerate();
-		drawMeta(new PVector(this.width/2, 30), 50, 50);
-		Poblacion poblacionEntidades = controlador.getModelo().getPoblacionEntidades();
+		Modelo modelo = controlador.getModelo();
+		drawMeta(modelo.getMeta().getPosicion(), modelo.getMeta().getAncho(), modelo.getMeta().getAlto());
+		Poblacion poblacionEntidades = modelo.getPoblacionEntidades();
 		if(numFramesGen < poblacionEntidades.getTiempoVida()) {
 			poblacionEntidades.realizarCiclo();
 			numFramesGen++;
@@ -96,8 +99,21 @@ public class Ventana extends PApplet {
 		stroke(0);
 	}
 	
-	public void drawObstaculos() {
-		
+	public void drawObstaculos(Obstaculo[] obstaculos) {
+		for(Obstaculo obs: obstaculos) {
+			drawObstaculo(obs.getPosicion(), obs.getAncho(), obs.getAlto(), obs.getAngulo());
+		}
+	}
+	
+	private void drawObstaculo(PVector posicion, float ancho, float alto, float angulo) {
+		pushMatrix();
+		stroke(0);
+		fill(165);
+		translate(posicion.x, posicion.y);
+		rotate(angulo);
+		rectMode(CENTER);
+		rect(0, 0, ancho, alto);
+		popMatrix();
 	}
 	
 	private void drawFramerate() {

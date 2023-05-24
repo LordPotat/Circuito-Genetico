@@ -1,5 +1,6 @@
 package controlador;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import modelo.Modelo;
 import modelo.entidades.Entidad;
@@ -19,19 +20,33 @@ public class Controlador {
 
 	private void initModelo() {
 		Ventana ventana = vista.getVentana();
-		HashMap<String, Object> metaParams = setupMeta(ventana);		
-		modelo = new Modelo(this, metaParams, 8, null);
-		HashMap<String, Integer> poblacionParams = setupPoblacion();	
-		modelo.setPoblacionEntidades(poblacionParams, new PVector(ventana.width/2, ventana.height-10));
+		modelo = new Modelo(this, setupMeta(ventana), setupObstaculos(ventana));
+		modelo.setPoblacionEntidades(setupPoblacion(), new PVector(ventana.width/2, ventana.height-10));
+	}
 
+	private ArrayList<HashMap<String, Object>> setupObstaculos(Ventana ventana) {
+		ArrayList<HashMap<String, Object>> obsParams = new ArrayList<HashMap<String, Object>>(); 
+		HashMap<String, Object>[] colocacionObs = crearCircuito();
+		int numObstaculos = colocacionObs.length;
+		for(int i=0; i < numObstaculos; i++) {
+			
+		}
+		return null;
+	}
+
+	private HashMap<String, Object>[] crearCircuito() {
+		@SuppressWarnings("unchecked")
+		HashMap<String, Object>[] colocacionObs = new HashMap[10];
+		for(int i=0; i < colocacionObs.length; i++) {
+			
+			
+		}
+		return colocacionObs;
 	}
 
 	private HashMap<String, Integer> setupPoblacion() {
 		HashMap<String, Integer> poblacionParams = new HashMap<String, Integer>();
-//		poblacionParams.put("NumEntidades", 50);
-//		poblacionParams.put("TasaMutacion", 1);	
-//		poblacionParams.put("TiempoVida", 800);
-		poblacionParams.put("NumEntidades", 150);
+		poblacionParams.put("NumEntidades", 50);
 		poblacionParams.put("TasaMutacion", 1);	
 		poblacionParams.put("TiempoVida", 800);
 		return poblacionParams;
@@ -39,7 +54,7 @@ public class Controlador {
 
 	private HashMap<String, Object> setupMeta(Ventana ventana) {
 		HashMap<String, Object> metaParams = new HashMap<String, Object>();
-		metaParams.put("Posicion", new PVector(ventana.width/2, 10));
+		metaParams.put("Posicion", new PVector(ventana.width/2, 30));
 		metaParams.put("Ancho", 50f);	
 		metaParams.put("Alto", 50f);
 		return metaParams;

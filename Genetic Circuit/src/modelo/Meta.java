@@ -40,5 +40,13 @@ public class Meta {
 	public PVector getPosicion() {
 		return posicion;
 	}
+
+	public float getAncho() {
+		return ancho;
+	}
+
+	public float getAlto() {
+		return alto;
+	}
 	
 }

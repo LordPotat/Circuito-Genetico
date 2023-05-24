@@ -24,4 +24,16 @@ public class Obstaculo {
 		return posicion;
 	}
 
+	public float getAncho() {
+		return ancho;
+	}
+
+	public float getAlto() {
+		return alto;
+	}
+
+	public float getAngulo() {
+		return angulo;
+	}
+
 }
