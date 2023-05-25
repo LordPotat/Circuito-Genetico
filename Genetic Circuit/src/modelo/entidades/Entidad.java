@@ -2,8 +2,8 @@ package modelo.entidades;
 
 import modelo.Meta;
 import modelo.Obstaculo;
-import modelo.circuitos.CircuitoEjemplo;
 import processing.core.PVector;
+import vista.ventana_grafica.Ventana;
 
 public class Entidad {
 	
@@ -75,20 +75,17 @@ public class Entidad {
 		} else {
 			tiempoObtenido++;
 		}
+		
 	}
 	
 	public double evaluarAptitud() {
-		if (distanciaMinima < 1) {
-			distanciaMinima = 1;
+		float radioMeta = poblacion.getContexto().getMeta().getAlto() / 2;
+		if (distanciaMinima < radioMeta) {
+			distanciaMinima = radioMeta;
 		}
 		double factorTiempo = 1.0;
-	    if (tiempoObtenido <= CircuitoEjemplo.getTiempoObjetivo()) {
-	        factorTiempo = tiempoObtenido / CircuitoEjemplo.getTiempoObjetivo();
-	    }
-		aptitud = Math.pow(1 / (tiempoObtenido * distanciaMinima), 2) * factorTiempo;
-		if(haChocado) {
-			aptitud *= 0.1;
-		}
+	    factorTiempo = (double)poblacion.getContexto().getCircuito().getTiempoObjetivo() / (double)tiempoObtenido;
+		aptitud = Math.pow(factorTiempo,1/100) / (tiempoObtenido * distanciaMinima);
 		if (haLlegado) {
 			aptitud *= 2;
 		}

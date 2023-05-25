@@ -51,6 +51,7 @@ public class Ventana extends PApplet {
 		drawMeta(modelo.getMeta().getPosicion(), modelo.getMeta().getAncho(), modelo.getMeta().getAlto());
 		drawObstaculos(modelo.getObstaculos());
 		Poblacion poblacionEntidades = modelo.getPoblacionEntidades();
+		drawGeneraciones(poblacionEntidades.getNumGeneraciones());
 		if(numFramesGen < poblacionEntidades.getTiempoVida()) {
 			poblacionEntidades.realizarCiclo();
 			numFramesGen++;
@@ -90,7 +91,7 @@ public class Ventana extends PApplet {
 		line(-25, -5, -40, -5);
 		line(-25, 5, -40, 5);
 	}
-
+	
 	private void drawFlechaDireccion(PVector velocidad) {
 		stroke(255, 0, 0);
 		float magVector = velocidad.mag() * 5;
@@ -122,5 +123,12 @@ public class Ventana extends PApplet {
 		textSize(16);
 		textAlign(0, CENTER);
 		text("Framerate: " + round(frameRate), 10, 10);
+	}
+	
+	private void drawGeneraciones(int numGeneraciones) {
+		fill(125);
+		textSize(16);
+		textAlign(0, CENTER);
+		text("Generaciones: " + numGeneraciones, 10, 26);
 	}
 }

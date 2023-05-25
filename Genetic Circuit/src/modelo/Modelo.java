@@ -4,18 +4,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import controlador.Controlador;
+import modelo.circuitos.CircuitoEjemplo;
 import modelo.entidades.Poblacion;
 import processing.core.PVector;
 
 public class Modelo {
 	
 	private Controlador controlador;
+	private CircuitoEjemplo circuito;
 	private Poblacion poblacionEntidades;
 	private Meta meta;
 	private Obstaculo[] obstaculos;
 	
 	public Modelo(Controlador controlador) {
 		this.controlador = controlador;
+		circuito = new CircuitoEjemplo();
 	}
 
 	public Poblacion getPoblacionEntidades() {
@@ -57,6 +60,14 @@ public class Modelo {
 	
 	public Controlador getControlador() {
 		return controlador;
+	}
+
+	public CircuitoEjemplo getCircuito() {
+		return circuito;
+	}
+
+	public void setCircuito(CircuitoEjemplo circuito) {
+		this.circuito = circuito;
 	}
 	
 	

@@ -19,8 +19,8 @@ public class Vista {
 		initLookAndFeel();
 		String[] processingArgs = {"Circuito Genético"};
 		ventana = Ventana.crearVentana(processingArgs, controlador);
-		panelControl = new PanelControl(controlador);
-		panelControl.setVisible(true);
+//		panelControl = new PanelControl(controlador);
+//		panelControl.setVisible(true);
 	}
 
 	public Ventana getVentana() {

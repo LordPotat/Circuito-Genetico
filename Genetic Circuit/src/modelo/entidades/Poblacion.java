@@ -59,7 +59,8 @@ public class Poblacion {
 		for(Entidad entidad : entidades) {
 			if (entidad.evaluarAptitud() > mejorAptitud) {
 				mejorAptitud = entidad.getAptitud();
-				System.out.println(entidad.getTiempoObtenido());
+				System.out.println("Distancia minima: " + entidad.getDistanciaMinima());
+				System.out.println("Tiempo obtenido: " + entidad.getTiempoObtenido());
 			}
 		}
 		return mejorAptitud;
@@ -83,7 +84,7 @@ public class Poblacion {
 			int randomInd2 = 0; 
 			do {
 				randomInd2 = rng.nextInt(poolGenetico.size());
-			} while(randomInd2 == randomInd1);
+			} while(poolGenetico.get(randomInd2).getAptitud() == pariente1.getAptitud());
 			Entidad pariente2 = poolGenetico.get(randomInd2);
 			ADN adnHijo = cruzarEntidades(pariente1, pariente2);
 			mutar(adnHijo);
@@ -95,16 +96,30 @@ public class Poblacion {
 	
 	private ADN cruzarEntidades(Entidad pariente1, Entidad pariente2) {
 		PVector[] genesHijo = new PVector[getTiempoVida()];
-		int puntoMedio = rng.nextInt(genesHijo.length);
+		PVector[] genesPariente1 = pariente1.getAdn().getGenes();
+	    PVector[] genesPariente2 = pariente2.getAdn().getGenes();
 		for(int i=0; i < genesHijo.length; i++) {
-			if (i < puntoMedio) {
-				genesHijo[i] = pariente1.getAdn().getGenes()[i];
+			if (rng.nextBoolean()) {
+				genesHijo[i] = genesPariente1[i];
 			} else {
-				genesHijo[i] = pariente2.getAdn().getGenes()[i];
+				genesHijo[i] = genesPariente2[i];
 			}
 		}
 		return new ADN(genesHijo);
 	}
+	
+//	private ADN cruzarEntidades(Entidad pariente1, Entidad pariente2) {
+//		PVector[] genesHijo = new PVector[getTiempoVida()];
+//		int puntoMedio = rng.nextInt(genesHijo.length);
+//		for(int i=0; i < genesHijo.length; i++) {
+//			if (i < puntoMedio) {
+//				genesHijo[i] = pariente1.getAdn().getGenes()[i];
+//			} else {
+//				genesHijo[i] = pariente2.getAdn().getGenes()[i];
+//			}
+//		}
+//		return new ADN(genesHijo);
+//	}
 	
 	private void mutar(ADN adnHijo) {
 		for(PVector gen : adnHijo.getGenes()) {

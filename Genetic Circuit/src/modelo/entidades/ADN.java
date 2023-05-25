@@ -6,7 +6,7 @@ import java.util.Random;
 public class ADN {
 	
 	private PVector[] genes;
-	private float fuerzaMax = 0.5f;
+	private float fuerzaMax = 0.8f;
 	private float fuerzaMin = 0.1f;
 	private Random rng = new Random();
 	
