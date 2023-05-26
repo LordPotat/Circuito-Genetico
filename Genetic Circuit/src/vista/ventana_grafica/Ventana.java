@@ -50,15 +50,18 @@ public class Ventana extends PApplet {
 		Modelo modelo = controlador.getModelo();
 		drawMeta(modelo.getMeta().getPosicion(), modelo.getMeta().getAncho(), modelo.getMeta().getAlto());
 		drawObstaculos(modelo.getObstaculos());
-		Poblacion poblacionEntidades = modelo.getPoblacionEntidades();
-		drawGeneraciones(poblacionEntidades.getNumGeneraciones());
-		if(numFramesGen < poblacionEntidades.getTiempoVida()) {
-			poblacionEntidades.realizarCiclo();
+		Poblacion entidades = modelo.getPoblacion();
+		drawGeneraciones(entidades.getNumGeneraciones());
+		if(entidades.isObjetivoCumplido()) {
+			controlador.mostrarRutaOptima(entidades.getMejorEntidad());
+			return;
+		}
+		if(numFramesGen < entidades.getTiempoVida()) {
+			entidades.realizarCiclo();
 			numFramesGen++;
 		} else {
 			numFramesGen = 0;
-			poblacionEntidades.seleccionar();
-			poblacionEntidades.reproducir();
+			entidades.evolucionar();
 		}
 	}
 	
@@ -116,6 +119,26 @@ public class Ventana extends PApplet {
 		rectMode(CENTER);
 		rect(0, 0, ancho, alto);
 		popMatrix();
+	}
+	
+	public void drawRutaOptima(PVector[] ruta, int tiempoObtenido) {
+		stroke(255,0,0);
+		strokeWeight(5);
+		PVector posicion = controlador.getModelo().getPoblacion().getPosInicial().copy();
+		ellipseMode(CENTER);
+		fill(255);
+		ellipse(posicion.x, posicion.y, 20, 20);
+		PVector velocidad = new PVector(0,0);
+		PVector aceleracion = new PVector(0,0);
+		for(int i = 0; i < tiempoObtenido - 1; i++) {
+			PVector posicionPrevia = posicion.copy();
+			aceleracion.add(ruta[i]);
+			velocidad.add(aceleracion);
+			posicion.add(velocidad);
+			line(posicionPrevia.x, posicionPrevia.y, posicion.x, posicion.y);
+			aceleracion.mult(0);
+		}
+		strokeWeight(1);
 	}
 	
 	private void drawFramerate() {

@@ -16,7 +16,9 @@ public class Poblacion {
 	private int tiempoVida;
 	private int numGeneraciones;
 	private PVector posInicial;
-	
+	private int mejorTiempo;
+	private boolean objetivoCumplido;
+	private Entidad mejorEntidad;
 	private Random rng = new Random();
 	
 	public Poblacion(Modelo contexto, HashMap<String, Integer> poblacionParams, PVector posInicial) {
@@ -28,6 +30,8 @@ public class Poblacion {
 		this.tiempoVida = poblacionParams.get("TiempoVida");
 		this.posInicial = posInicial;
 		this.contexto = contexto;
+		mejorTiempo = tiempoVida;
+		objetivoCumplido = false;
 		generarPrimeraGen();
 	}
 	
@@ -45,13 +49,31 @@ public class Poblacion {
 		}
 	}
 	
-	public void seleccionar() {
+	public void evolucionar() {
+		seleccionar();
+		if(!objetivoCumplido) {
+			reproducir();
+		} else {
+			contexto.getControlador().mostrarRutaOptima(mejorEntidad);
+		}
+		
+	}
+	
+	private void seleccionar() {
 		poolGenetico.clear();
 		double mejorAptitud = evaluarEntidades();
+		if(comprobarObjetivo()) {
+			objetivoCumplido = true;
+			return;
+		}
 		for(Entidad entidad : entidades) {
 			entidad.setAptitud(entidad.getAptitud() / mejorAptitud);
 		}
-		deterProbabilidad();
+		calcProbabilidadReproduccion();
+	}
+
+	private boolean comprobarObjetivo() {
+		return mejorTiempo <= contexto.getCircuito().getTiempoObjetivo() ? true : false;
 	}
 
 	private double evaluarEntidades() {
@@ -59,14 +81,18 @@ public class Poblacion {
 		for(Entidad entidad : entidades) {
 			if (entidad.evaluarAptitud() > mejorAptitud) {
 				mejorAptitud = entidad.getAptitud();
-				System.out.println("Distancia minima: " + entidad.getDistanciaMinima());
 				System.out.println("Tiempo obtenido: " + entidad.getTiempoObtenido());
+				if(entidad.getTiempoObtenido() < mejorTiempo) {
+					mejorTiempo = entidad.getTiempoObtenido();
+					mejorEntidad = entidad;
+					System.out.println("Nuevo mejor tiempo: " + mejorTiempo);
+				}
 			}
 		}
 		return mejorAptitud;
 	}
 
-	private void deterProbabilidad() {
+	private void calcProbabilidadReproduccion() {
 		for(Entidad entidad : entidades) {
 			int probabilidad = (int) (entidad.getAptitud() * 100);
 			for(int i=0; i < probabilidad; i++) {
@@ -75,8 +101,7 @@ public class Poblacion {
 		}
 	}
 
-	
-	public void reproducir() {
+	private void reproducir() {
 		Entidad[] nuevaGeneracion = new Entidad[entidades.length];
 		for(int i=0; i < entidades.length; i++) {
 			int randomInd1 = rng.nextInt(poolGenetico.size());
@@ -107,19 +132,6 @@ public class Poblacion {
 		}
 		return new ADN(genesHijo);
 	}
-	
-//	private ADN cruzarEntidades(Entidad pariente1, Entidad pariente2) {
-//		PVector[] genesHijo = new PVector[getTiempoVida()];
-//		int puntoMedio = rng.nextInt(genesHijo.length);
-//		for(int i=0; i < genesHijo.length; i++) {
-//			if (i < puntoMedio) {
-//				genesHijo[i] = pariente1.getAdn().getGenes()[i];
-//			} else {
-//				genesHijo[i] = pariente2.getAdn().getGenes()[i];
-//			}
-//		}
-//		return new ADN(genesHijo);
-//	}
 	
 	private void mutar(ADN adnHijo) {
 		for(PVector gen : adnHijo.getGenes()) {
@@ -159,6 +171,14 @@ public class Poblacion {
 
 	public Modelo getContexto() {
 		return contexto;
+	}
+
+	public boolean isObjetivoCumplido() {
+		return objetivoCumplido;
+	}
+
+	public Entidad getMejorEntidad() {
+		return mejorEntidad;
 	}
 	
 }

@@ -21,7 +21,7 @@ public class Modelo {
 		circuito = new CircuitoEjemplo();
 	}
 
-	public Poblacion getPoblacionEntidades() {
+	public Poblacion getPoblacion() {
 		return poblacionEntidades;
 	}
 	

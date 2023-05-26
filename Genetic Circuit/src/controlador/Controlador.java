@@ -36,6 +36,11 @@ public class Controlador {
 		
 	}
 
+	public void mostrarRutaOptima(Entidad mejorEntidad) {
+		vista.getVentana().drawRutaOptima(mejorEntidad.getAdn().getGenes(), mejorEntidad.getTiempoObtenido());
+		vista.getVentana().drawEntidad(mejorEntidad.getPosicion(), mejorEntidad.getVelocidad());
+	}
+	
 	public void mostrarEntidad(Entidad entidad) {
 		vista.getVentana().drawEntidad(entidad.getPosicion(), entidad.getVelocidad());
 	}
