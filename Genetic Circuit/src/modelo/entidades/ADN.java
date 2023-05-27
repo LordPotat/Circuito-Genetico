@@ -8,26 +8,28 @@ public class ADN {
 	private PVector[] genes;
 	private float fuerzaMax = 0.8f;
 	private float fuerzaMin = 0.1f;
-	private Random rng = new Random();
+	private Random random = new Random();
 	
-	public ADN (int numFuerzas) {
-		genes = new PVector[numFuerzas];
-		for (int i=0; i < genes.length; i++) {
-			genes[i] = PVector.random2D();
-			genes[i].mult(rng.nextFloat(fuerzaMin, fuerzaMax));
-		}
-	}
-
 	public ADN (PVector[] genes) {
 		this.genes = genes;
 	}
-
 	
-	public void generarFuerzaAleatoria(PVector gen) {
-		gen = PVector.random2D();
-		gen.mult(rng.nextFloat(fuerzaMin, fuerzaMax));
+	public ADN (int numFuerzas) {
+		genes = generarGenesAleatorios(numFuerzas);
 	}
 
+	public void generarGenAleatorio(PVector gen) {
+		gen = PVector.random2D().mult(random.nextFloat(fuerzaMin, fuerzaMax));
+	}
+	
+	private PVector[] generarGenesAleatorios(int numFuerzas) {
+		PVector[] genesAleatorios = new PVector[numFuerzas];
+		for (int i=0; i < genesAleatorios.length; i++) {
+			genesAleatorios[i] = PVector.random2D().mult(random.nextFloat(fuerzaMin, fuerzaMax));
+		}
+		return genesAleatorios;
+	}
+	
 	public PVector[] getGenes() {
 		return genes;
 	}

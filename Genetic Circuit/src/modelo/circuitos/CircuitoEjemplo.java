@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class CircuitoEjemplo {
 	
-	private int tiempoObjetivo = 135;
+	private int tiempoObjetivo = 100;
 	
 	public PVector setSpawn(Ventana ventana)  {
 		return new PVector(ventana.width/2, ventana.height-30);

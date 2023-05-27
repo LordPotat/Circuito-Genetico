@@ -1,6 +1,7 @@
 package vista.ventana_grafica;
 
 import controlador.Controlador;
+import modelo.Meta;
 import modelo.Modelo;
 import modelo.Obstaculo;
 import modelo.entidades.Poblacion;
@@ -27,7 +28,6 @@ public class Ventana extends PApplet {
 		return instancia;
 	}
 	
-	
 	public void settings() {
 		size(1280, 720);
 		smooth();
@@ -47,10 +47,12 @@ public class Ventana extends PApplet {
 		background(255);
 		stroke(0);
 		drawFramerate();
-		Modelo modelo = controlador.getModelo();
-		drawMeta(modelo.getMeta().getPosicion(), modelo.getMeta().getAncho(), modelo.getMeta().getAlto());
-		drawObstaculos(modelo.getObstaculos());
-		Poblacion entidades = modelo.getPoblacion();
+		drawCircuito();
+		manipularPoblacion();
+	}
+
+	private void manipularPoblacion() {
+		Poblacion entidades = controlador.getModelo().getPoblacion();
 		drawGeneraciones(entidades.getNumGeneraciones());
 		if(entidades.isObjetivoCumplido()) {
 			controlador.mostrarRutaOptima(entidades.getMejorEntidad());
@@ -64,14 +66,37 @@ public class Ventana extends PApplet {
 			entidades.evolucionar();
 		}
 	}
+
+	private void drawCircuito() {
+		Modelo modelo = controlador.getModelo();
+		drawMeta(modelo.getMeta());
+		drawObstaculos(modelo.getObstaculos());
+	}
 	
-	public void drawMeta(PVector posicion, float ancho, float alto) {
+	public void drawMeta(Meta meta) {
 		pushMatrix();
-		translate(posicion.x, posicion.y);
-		fill(0, 255, 0);
-		ellipseMode(CENTER);
-		ellipse(0, 0, ancho, alto);
-		popMatrix();
+		translate(meta.getPosicion().x, meta.getPosicion().y);
+        fill(0, 255, 0);
+        ellipseMode(CENTER);
+        ellipse(0, 0, meta.getAncho(), meta.getAlto());
+        popMatrix();
+	}
+	
+	public void drawObstaculos(Obstaculo[] obstaculos) {
+		for(Obstaculo obs: obstaculos) {
+			drawObstaculo(obs);
+		}
+	}
+	
+	private void drawObstaculo(Obstaculo obstaculo) {
+		pushMatrix();
+        stroke(0);
+        fill(165);
+        translate(obstaculo.getPosicion().x, obstaculo.getPosicion().y);
+        rotate(obstaculo.getAngulo());
+        rectMode(CENTER);
+        rect(0, 0, obstaculo.getAncho(), obstaculo.getAlto());
+        popMatrix();
 	}
 	
 	public void drawEntidad(PVector posicion, PVector velocidad) {
@@ -104,23 +129,6 @@ public class Ventana extends PApplet {
 		stroke(0);
 	}
 	
-	public void drawObstaculos(Obstaculo[] obstaculos) {
-		for(Obstaculo obs: obstaculos) {
-			drawObstaculo(obs.getPosicion(), obs.getAncho(), obs.getAlto(), obs.getAngulo());
-		}
-	}
-	
-	private void drawObstaculo(PVector posicion, float ancho, float alto, float angulo) {
-		pushMatrix();
-		stroke(0);
-		fill(165);
-		translate(posicion.x, posicion.y);
-		rotate(angulo);
-		rectMode(CENTER);
-		rect(0, 0, ancho, alto);
-		popMatrix();
-	}
-	
 	public void drawRutaOptima(PVector[] ruta, int tiempoObtenido) {
 		stroke(255,0,0);
 		strokeWeight(5);
@@ -131,27 +139,31 @@ public class Ventana extends PApplet {
 		PVector velocidad = new PVector(0,0);
 		PVector aceleracion = new PVector(0,0);
 		for(int i = 0; i < tiempoObtenido - 1; i++) {
-			PVector posicionPrevia = posicion.copy();
-			aceleracion.add(ruta[i]);
-			velocidad.add(aceleracion);
-			posicion.add(velocidad);
-			line(posicionPrevia.x, posicionPrevia.y, posicion.x, posicion.y);
-			aceleracion.mult(0);
+			drawLineaRuta(ruta[i], posicion, velocidad, aceleracion);
 		}
 		strokeWeight(1);
+	}
+
+	private void drawLineaRuta(PVector fuerza, PVector posicion, PVector velocidad, PVector aceleracion) {
+		PVector posicionPrevia = posicion.copy();
+		aceleracion.add(fuerza);
+		velocidad.add(aceleracion);
+		posicion.add(velocidad);
+		line(posicionPrevia.x, posicionPrevia.y, posicion.x, posicion.y);
+		aceleracion.mult(0);
 	}
 	
 	private void drawFramerate() {
 		fill(125);
 		textSize(16);
-		textAlign(0, CENTER);
-		text("Framerate: " + round(frameRate), 10, 10);
+		textAlign(LEFT, CENTER);
+		text("Framerate: " + round(frameRate), 10, 15);
 	}
 	
 	private void drawGeneraciones(int numGeneraciones) {
 		fill(125);
 		textSize(16);
-		textAlign(0, CENTER);
-		text("Generaciones: " + numGeneraciones, 10, 26);
+		textAlign(LEFT, CENTER);
+		text("Generaciones: " + numGeneraciones, 10, 31);
 	}
 }

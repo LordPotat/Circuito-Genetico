@@ -19,7 +19,7 @@ public class Poblacion {
 	private int mejorTiempo;
 	private boolean objetivoCumplido;
 	private Entidad mejorEntidad;
-	private Random rng = new Random();
+	private Random random = new Random();
 	
 	public Poblacion(Modelo contexto, HashMap<String, Integer> poblacionParams, PVector posInicial) {
 		this.contexto = contexto;
@@ -29,7 +29,6 @@ public class Poblacion {
 		numGeneraciones = 1;
 		this.tiempoVida = poblacionParams.get("TiempoVida");
 		this.posInicial = posInicial;
-		this.contexto = contexto;
 		mejorTiempo = tiempoVida;
 		objetivoCumplido = false;
 		generarPrimeraGen();
@@ -73,7 +72,7 @@ public class Poblacion {
 	}
 
 	private boolean comprobarObjetivo() {
-		return mejorTiempo <= contexto.getCircuito().getTiempoObjetivo() ? true : false;
+		return mejorTiempo <= contexto.getCircuito().getTiempoObjetivo();
 	}
 
 	private double evaluarEntidades() {
@@ -82,14 +81,18 @@ public class Poblacion {
 			if (entidad.evaluarAptitud() > mejorAptitud) {
 				mejorAptitud = entidad.getAptitud();
 				System.out.println("Tiempo obtenido: " + entidad.getTiempoObtenido());
-				if(entidad.getTiempoObtenido() < mejorTiempo) {
-					mejorTiempo = entidad.getTiempoObtenido();
-					mejorEntidad = entidad;
-					System.out.println("Nuevo mejor tiempo: " + mejorTiempo);
-				}
+				comprobarTiempoRecord(entidad);
 			}
 		}
 		return mejorAptitud;
+	}
+
+	private void comprobarTiempoRecord(Entidad entidad) {
+		if(entidad.getTiempoObtenido() < mejorTiempo) {
+			mejorTiempo = entidad.getTiempoObtenido();
+			mejorEntidad = entidad;
+			System.out.println("Nuevo mejor tiempo: " + mejorTiempo);
+		}
 	}
 
 	private void calcProbabilidadReproduccion() {
@@ -104,13 +107,9 @@ public class Poblacion {
 	private void reproducir() {
 		Entidad[] nuevaGeneracion = new Entidad[entidades.length];
 		for(int i=0; i < entidades.length; i++) {
-			int randomInd1 = rng.nextInt(poolGenetico.size());
-			Entidad pariente1 = poolGenetico.get(randomInd1);
-			int randomInd2 = 0; 
-			do {
-				randomInd2 = rng.nextInt(poolGenetico.size());
-			} while(poolGenetico.get(randomInd2).getAptitud() == pariente1.getAptitud());
-			Entidad pariente2 = poolGenetico.get(randomInd2);
+			int indPariente1 = random.nextInt(poolGenetico.size());
+			Entidad pariente1 = poolGenetico.get(indPariente1);
+			Entidad pariente2 = encontrarParienteDistinto(pariente1);
 			ADN adnHijo = cruzarEntidades(pariente1, pariente2);
 			mutar(adnHijo);
 			nuevaGeneracion[i] = new Entidad(this, adnHijo);
@@ -118,13 +117,22 @@ public class Poblacion {
 		entidades = nuevaGeneracion;
 		numGeneraciones++;
 	}
+
+	private Entidad encontrarParienteDistinto(Entidad pariente1) {
+		int indPariente2;
+		do {
+			indPariente2 = random.nextInt(poolGenetico.size());
+		} while(poolGenetico.get(indPariente2).getAptitud() == pariente1.getAptitud());
+		Entidad pariente2 = poolGenetico.get(indPariente2);
+		return pariente2;
+	}
 	
 	private ADN cruzarEntidades(Entidad pariente1, Entidad pariente2) {
 		PVector[] genesHijo = new PVector[getTiempoVida()];
 		PVector[] genesPariente1 = pariente1.getAdn().getGenes();
 	    PVector[] genesPariente2 = pariente2.getAdn().getGenes();
 		for(int i=0; i < genesHijo.length; i++) {
-			if (rng.nextBoolean()) {
+			if (random.nextBoolean()) {
 				genesHijo[i] = genesPariente1[i];
 			} else {
 				genesHijo[i] = genesPariente2[i];
@@ -135,8 +143,8 @@ public class Poblacion {
 	
 	private void mutar(ADN adnHijo) {
 		for(PVector gen : adnHijo.getGenes()) {
-			if(rng.nextDouble(1) < tasaMutacion) {
-				adnHijo.generarFuerzaAleatoria(gen);
+			if(random.nextDouble(1) < tasaMutacion) {
+				adnHijo.generarGenAleatorio(gen);
 			}
 		}
 	}

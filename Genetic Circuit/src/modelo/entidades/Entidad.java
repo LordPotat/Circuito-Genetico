@@ -3,7 +3,6 @@ package modelo.entidades;
 import modelo.Meta;
 import modelo.Obstaculo;
 import processing.core.PVector;
-import vista.ventana_grafica.Ventana;
 
 public class Entidad {
 	
@@ -22,7 +21,6 @@ public class Entidad {
 	private int tiempoObtenido;
 	
 	public Entidad(Poblacion poblacion, ADN adn) {
-		
 		this.poblacion = poblacion;
 		posicion = poblacion.getPosInicial().copy();
 		velocidad = new PVector(0,0);
@@ -41,15 +39,14 @@ public class Entidad {
 		if (!haChocado && !haLlegado) {
 			PVector fuerzaGenetica = adn.getGenes()[genActual];
 			genActual++;
-			moverEntidad(fuerzaGenetica);
-			comprobarObjetivo();
+			desplazar(fuerzaGenetica);
 			comprobarColisiones();
 		} else if(haChocado) {
 			tiempoObtenido++;
 		}
 	}
 
-	private void moverEntidad(PVector fuerza) {
+	private void desplazar(PVector fuerza) {
 		aceleracion.add(fuerza);
 		velocidad.add(aceleracion);
 		posicion.add(velocidad);
@@ -57,25 +54,25 @@ public class Entidad {
 	}
 	
 	private void comprobarColisiones() {
+		if(colisionaConMeta()) {
+			haLlegado = true;
+			return;
+		}
 		for (Obstaculo obstaculo : poblacion.getContexto().getObstaculos()) {
 			if(obstaculo.chocaConEntidad(posicion)) {
 				haChocado = true;
 			}
 		}
+		tiempoObtenido++;
 	}
 	
-	private void comprobarObjetivo() {
+	private boolean colisionaConMeta() {
 		Meta meta = poblacion.getContexto().getMeta();
 		double distancia = PVector.dist(posicion, meta.getPosicion());
 		if(distancia < distanciaMinima) {
 			distanciaMinima = distancia;
 		}
-		if(meta.contieneEntidad(posicion)) {
-			haLlegado = true;
-		} else {
-			tiempoObtenido++;
-		}
-		
+		return meta.contieneEntidad(posicion) ? true : false;
 	}
 	
 	public double evaluarAptitud() {
@@ -85,14 +82,12 @@ public class Entidad {
 		}
 		double factorTiempo = 1.0;
 	    factorTiempo = (double)poblacion.getContexto().getCircuito().getTiempoObjetivo() / (double)tiempoObtenido;
-		aptitud = Math.pow(factorTiempo,1/100) / (tiempoObtenido * distanciaMinima);
+		aptitud = Math.pow(factorTiempo,1/32) / (tiempoObtenido * distanciaMinima);
 		if (haLlegado) {
 			aptitud *= 2;
 		}
 		return aptitud;
 	}
-
-	
 	
 	public ADN getAdn() {
 		return adn;
