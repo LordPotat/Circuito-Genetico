@@ -3,7 +3,6 @@ package modelo.entidades;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-
 import modelo.Modelo;
 import processing.core.PVector;
 
@@ -38,7 +37,6 @@ public class Poblacion {
 		for (int i=0; i < entidades.length; i++) {
 			entidades[i] = new Entidad(this, null);
 		}
-	
 	}
 
 	public void realizarCiclo() {
@@ -80,7 +78,7 @@ public class Poblacion {
 		for(Entidad entidad : entidades) {
 			if (entidad.evaluarAptitud() > mejorAptitud) {
 				mejorAptitud = entidad.getAptitud();
-				System.out.println("Tiempo obtenido: " + entidad.getTiempoObtenido());
+//				System.out.println("Tiempo obtenido: " + entidad.getTiempoObtenido());
 				comprobarTiempoRecord(entidad);
 			}
 		}
