@@ -185,7 +185,7 @@ public class Ventana extends PApplet {
 	}
 
 	public void keyPressed() {
-		if(key == 'd') {
+		if(key == 'd' || key == 'D') {
 			modoDebug = !modoDebug;
 		}
 	}

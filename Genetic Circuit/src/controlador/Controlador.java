@@ -26,7 +26,7 @@ public class Controlador {
 
 	private HashMap<String, Integer> setupPoblacion() {
 		HashMap<String, Integer> poblacionParams = new HashMap<String, Integer>();
-		poblacionParams.put("NumEntidades", 500);
+		poblacionParams.put("NumEntidades", 1500);
 		poblacionParams.put("TasaMutacion", 20);	
 		poblacionParams.put("TiempoVida", 400);
 		return poblacionParams;
@@ -42,9 +42,7 @@ public class Controlador {
 		}
 		int numFramesGen = ventana.getNumFramesGen();
 		if(numFramesGen < entidades.getTiempoVida()) {
-			try {
-				entidades.realizarCiclo();
-			} catch (InterruptedException e) {}
+			entidades.realizarCiclo();
 			ventana.setNumFramesGen(++numFramesGen);
 		} else {
 			ventana.setNumFramesGen(0);
