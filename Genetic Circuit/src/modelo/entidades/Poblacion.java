@@ -3,6 +3,9 @@ package modelo.entidades;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import modelo.Modelo;
 import processing.core.PVector;
@@ -19,6 +22,7 @@ public class Poblacion {
 	private int mejorTiempo;
 	private boolean objetivoCumplido;
 	private Entidad mejorEntidad;
+	private ExecutorService ejecutorEntidades;
 	private Random random = new Random();
 	
 	public Poblacion(Modelo contexto, HashMap<String, Integer> poblacionParams, PVector posInicial) {
@@ -41,9 +45,17 @@ public class Poblacion {
 	
 	}
 
-	public void realizarCiclo() {
+	public void realizarCiclo() throws InterruptedException {
+		ejecutorEntidades = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors());
 		for(int i=0; i < entidades.length; i++) {
-			entidades[i].actuar();
+			int indEntidad = i;
+			ejecutorEntidades.submit(() -> {
+				entidades[indEntidad].actuar();
+			}); 
+		}
+		ejecutorEntidades.shutdown();
+		ejecutorEntidades.awaitTermination(10, TimeUnit.SECONDS);
+		for(int i=0; i < entidades.length; i++) {
 			contexto.getControlador().mostrarEntidad(entidades[i]);
 		}
 	}
@@ -80,7 +92,7 @@ public class Poblacion {
 		for(Entidad entidad : entidades) {
 			if (entidad.evaluarAptitud() > mejorAptitud) {
 				mejorAptitud = entidad.getAptitud();
-				System.out.println("Tiempo obtenido: " + entidad.getTiempoObtenido());
+//				System.out.println("Tiempo obtenido: " + entidad.getTiempoObtenido());
 				comprobarTiempoRecord(entidad);
 			}
 		}

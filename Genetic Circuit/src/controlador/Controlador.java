@@ -3,6 +3,7 @@ package controlador;
 import java.util.HashMap;
 import modelo.Modelo;
 import modelo.entidades.Entidad;
+import modelo.entidades.Poblacion;
 import vista.Vista;
 import vista.ventana_grafica.Ventana;
 
@@ -13,12 +14,11 @@ public class Controlador {
 	
 	public Controlador() {
 		vista = new Vista(this);
-		initModelo();
+		modelo = new Modelo(this);
 	}
 
-	private void initModelo() {
+	public void iniciar() {
 		Ventana ventana = vista.getVentana();
-		modelo = new Modelo(this);
 		modelo.setMeta(modelo.getCircuito().setupMeta(ventana));
 		modelo.setObstaculos(modelo.getCircuito().setupObstaculos(ventana));
 		modelo.setPoblacionEntidades(setupPoblacion(), modelo.getCircuito().setSpawn(ventana));
@@ -26,16 +26,33 @@ public class Controlador {
 
 	private HashMap<String, Integer> setupPoblacion() {
 		HashMap<String, Integer> poblacionParams = new HashMap<String, Integer>();
-		poblacionParams.put("NumEntidades", 300);
+		poblacionParams.put("NumEntidades", 500);
 		poblacionParams.put("TasaMutacion", 20);	
 		poblacionParams.put("TiempoVida", 400);
 		return poblacionParams;
 	}
-	
-	public void iniciar() {
-		
-	}
 
+	public int manipularPoblacion() {
+
+		Poblacion entidades = modelo.getPoblacion();
+		Ventana ventana = vista.getVentana();
+		if(entidades.isObjetivoCumplido()) {
+			mostrarRutaOptima(entidades.getMejorEntidad());
+			return entidades.getNumGeneraciones();
+		}
+		int numFramesGen = ventana.getNumFramesGen();
+		if(numFramesGen < entidades.getTiempoVida()) {
+			try {
+				entidades.realizarCiclo();
+			} catch (InterruptedException e) {}
+			ventana.setNumFramesGen(++numFramesGen);
+		} else {
+			ventana.setNumFramesGen(0);
+			entidades.evolucionar();
+		}
+		return entidades.getNumGeneraciones();
+	}
+	
 	public void mostrarRutaOptima(Entidad mejorEntidad) {
 		vista.getVentana().drawRutaOptima(mejorEntidad.getAdn().getGenes(), mejorEntidad.getTiempoObtenido());
 		vista.getVentana().drawEntidad(mejorEntidad.getPosicion(), mejorEntidad.getVelocidad());
