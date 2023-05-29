@@ -1,0 +1,1752 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:PapyrusJava="http://www.eclipse.org/papyrus/PapyrusJava/1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:standard="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="_XrSxsP2YEe2ZvNWqEp9IPQ" name="Genetic Circuit">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_Xv9PQP2YEe2ZvNWqEp9IPQ">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:StateMachine" xmi:id="_Xs8XgP2YEe2ZvNWqEp9IPQ" name="StateMachine1">
+      <region xmi:type="uml:Region" xmi:id="_XtVZEP2YEe2ZvNWqEp9IPQ" name="Region1"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Interaction" xmi:id="_XtejAP2YEe2ZvNWqEp9IPQ" name="Interaction2"/>
+    <packagedElement xmi:type="uml:Activity" xmi:id="_Xto7EP2YEe2ZvNWqEp9IPQ" name="Activity3"/>
+    <packagedElement xmi:type="uml:Package" xmi:id="_jmXRAP2iEe2ZvNWqEp9IPQ" name="Genetic Circuit">
+      <packagedElement xmi:type="uml:Package" xmi:id="_jma7YP2iEe2ZvNWqEp9IPQ" name="modelo">
+        <packagedElement xmi:type="uml:Package" xmi:id="_jmbicP2iEe2ZvNWqEp9IPQ" name="entidades">
+          <packagedElement xmi:type="uml:Class" xmi:id="_jmcJgP2iEe2ZvNWqEp9IPQ" name="ADN" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jmhCAP2iEe2ZvNWqEp9IPQ" name="genes" visibility="private" type="_jmd-sP2iEe2ZvNWqEp9IPQ" isUnique="false">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jmiQIP2iEe2ZvNWqEp9IPQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jmi3MP2iEe2ZvNWqEp9IPQ" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jmkFUf2iEe2ZvNWqEp9IPQ" name="fuerzaMax" visibility="private" type="_jmkFUP2iEe2ZvNWqEp9IPQ" isUnique="false">
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_jmksYP2iEe2ZvNWqEp9IPQ" name="defaultValue">
+                <language>JAVA</language>
+                <body>0.8f</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jml6gP2iEe2ZvNWqEp9IPQ" name="fuerzaMin" visibility="private" type="_jmkFUP2iEe2ZvNWqEp9IPQ" isUnique="false">
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_jmmhkP2iEe2ZvNWqEp9IPQ" name="defaultValue">
+                <language>JAVA</language>
+                <body>0.1f</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jmqzAP2iEe2ZvNWqEp9IPQ" name="random" visibility="private" type="_jmoWwP2iEe2ZvNWqEp9IPQ" isUnique="false">
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_jmsBIP2iEe2ZvNWqEp9IPQ" name="defaultValue">
+                <language>JAVA</language>
+                <body>new Random()</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jmw5of2iEe2ZvNWqEp9IPQ" name="ADN" specification="_jmsoMP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.genes = genes;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jm1yIP2iEe2ZvNWqEp9IPQ" name="ADN" specification="_jmyu0P2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    genes = generarGenesAleatorios(numFuerzas);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jm41cP2iEe2ZvNWqEp9IPQ" name="generarGenAleatorio" specification="_jm3AQP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    gen = PVector.random2D().mult(random.nextFloat(fuerzaMin, fuerzaMax));&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jm74wP2iEe2ZvNWqEp9IPQ" name="generarGenesAleatorios" specification="_jm5cgP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    PVector[] genesAleatorios = new PVector[numFuerzas];&#xD;
+    for (int i = 0; i &lt; genesAleatorios.length; i++) {&#xD;
+        genesAleatorios[i] = PVector.random2D().mult(random.nextFloat(fuerzaMin, fuerzaMax));&#xD;
+    }&#xD;
+    return genesAleatorios;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jm_jIP2iEe2ZvNWqEp9IPQ" name="getGenes" specification="_jm9G4P2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return genes;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jmsoMP2iEe2ZvNWqEp9IPQ" name="ADN" visibility="public" method="_jmw5of2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jmvrgP2iEe2ZvNWqEp9IPQ" name="genes" type="_jmd-sP2iEe2ZvNWqEp9IPQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jmwSkP2iEe2ZvNWqEp9IPQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jmw5oP2iEe2ZvNWqEp9IPQ" value="*"/>
+              </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jmyu0P2iEe2ZvNWqEp9IPQ" name="ADN" visibility="public" method="_jm1yIP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jm1LEP2iEe2ZvNWqEp9IPQ" name="numFuerzas" type="_jmyHwP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jm3AQP2iEe2ZvNWqEp9IPQ" name="generarGenAleatorio" visibility="public" method="_jm41cP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jm4OYP2iEe2ZvNWqEp9IPQ" name="gen" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jm5cgP2iEe2ZvNWqEp9IPQ" name="generarGenesAleatorios" visibility="private" method="_jm74wP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jm6DkP2iEe2ZvNWqEp9IPQ" type="_jmd-sP2iEe2ZvNWqEp9IPQ" direction="return">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jm6qoP2iEe2ZvNWqEp9IPQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jm7RsP2iEe2ZvNWqEp9IPQ" value="*"/>
+              </ownedParameter>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jm7Rsf2iEe2ZvNWqEp9IPQ" name="numFuerzas" type="_jmyHwP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jm9G4P2iEe2ZvNWqEp9IPQ" name="getGenes" visibility="public" method="_jm_jIP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jm9t8P2iEe2ZvNWqEp9IPQ" type="_jmd-sP2iEe2ZvNWqEp9IPQ" direction="return">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jm-VAP2iEe2ZvNWqEp9IPQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jm-VAf2iEe2ZvNWqEp9IPQ" value="*"/>
+              </ownedParameter>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_jnDNgP2iEe2ZvNWqEp9IPQ" name="Entidad" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jnD0kP2iEe2ZvNWqEp9IPQ" name="adn" visibility="private" type="_jmcJgP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jnFCsP2iEe2ZvNWqEp9IPQ" name="genActual" visibility="private" type="_jmyHwP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jnGQ0P2iEe2ZvNWqEp9IPQ" name="poblacion" visibility="private" type="_jnFpwP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jnG34P2iEe2ZvNWqEp9IPQ" name="posicion" visibility="private" type="_jmd-sP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jnIGAP2iEe2ZvNWqEp9IPQ" name="velocidad" visibility="private" type="_jmd-sP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jnItEP2iEe2ZvNWqEp9IPQ" name="aceleracion" visibility="private" type="_jmd-sP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jnJ7MP2iEe2ZvNWqEp9IPQ" name="haChocado" visibility="private" type="_jnJUIP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jnKiQP2iEe2ZvNWqEp9IPQ" name="haLlegado" visibility="private" type="_jnJUIP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jnMXcP2iEe2ZvNWqEp9IPQ" name="aptitud" visibility="private" type="_jnLwYP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jnOzsP2iEe2ZvNWqEp9IPQ" name="distanciaMinima" visibility="private" type="_jnLwYP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jnPawP2iEe2ZvNWqEp9IPQ" name="tiempoObtenido" visibility="private" type="_jmyHwP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_q8geQP5JEe2sHukQAgM2oQ" name="adn" type="_jmcJgP2iEe2ZvNWqEp9IPQ" aggregation="composite" association="_q8epEP5JEe2sHukQAgM2oQ"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnUTQP2iEe2ZvNWqEp9IPQ" name="Entidad" specification="_jnQB0P2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.poblacion = poblacion;&#xD;
+    posicion = poblacion.getPosInicial().copy();&#xD;
+    velocidad = new PVector(0, 0);&#xD;
+    aceleracion = new PVector(0, 0);&#xD;
+    aptitud = genActual = 0;&#xD;
+    haChocado = haLlegado = false;&#xD;
+    distanciaMinima = PVector.dist(posicion, poblacion.getContexto().getMeta().getPosicion());&#xD;
+    if (adn != null) {&#xD;
+        this.adn = adn;&#xD;
+    } else {&#xD;
+        this.adn = new ADN(poblacion.getTiempoVida());&#xD;
+    }&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnVhYP2iEe2ZvNWqEp9IPQ" name="actuar" specification="_jnU6UP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    if (!haChocado &amp;&amp; !haLlegado) {&#xD;
+        PVector fuerzaGenetica = adn.getGenes()[genActual];&#xD;
+        genActual++;&#xD;
+        desplazar(fuerzaGenetica);&#xD;
+        comprobarColisiones();&#xD;
+    } else if (haChocado) {&#xD;
+        tiempoObtenido++;&#xD;
+    }&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnX9oP2iEe2ZvNWqEp9IPQ" name="desplazar" specification="_jnWvgP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    aceleracion.add(fuerza);&#xD;
+    velocidad.add(aceleracion);&#xD;
+    posicion.add(velocidad);&#xD;
+    aceleracion.mult(0);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnZLwP2iEe2ZvNWqEp9IPQ" name="comprobarColisiones" specification="_jnYksP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    if (colisionaConMeta()) {&#xD;
+        haLlegado = true;&#xD;
+        return;&#xD;
+    }&#xD;
+    for (Obstaculo obstaculo : poblacion.getContexto().getObstaculos()) {&#xD;
+        if (obstaculo.chocaConEntidad(posicion)) {&#xD;
+            haChocado = true;&#xD;
+        }&#xD;
+    }&#xD;
+    tiempoObtenido++;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnbA8P2iEe2ZvNWqEp9IPQ" name="colisionaConMeta" specification="_jnZy0P2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    Meta meta = poblacion.getContexto().getMeta();&#xD;
+    double distancia = PVector.dist(posicion, meta.getPosicion());&#xD;
+    if (distancia &lt; distanciaMinima) {&#xD;
+        distanciaMinima = distancia;&#xD;
+    }&#xD;
+    return meta.contieneEntidad(posicion) ? true : false;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnboAf2iEe2ZvNWqEp9IPQ" name="evaluarAptitud" specification="_jnbA8f2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    float radioMeta = poblacion.getContexto().getMeta().getAlto() / 2;&#xD;
+    if (distanciaMinima &lt; radioMeta) {&#xD;
+        distanciaMinima = radioMeta;&#xD;
+    }&#xD;
+    double factorTiempo = 1.0;&#xD;
+    factorTiempo = (double) poblacion.getContexto().getCircuito().getTiempoObjetivo() / (double) tiempoObtenido;&#xD;
+    aptitud = Math.pow(factorTiempo, 1 / 32) / (tiempoObtenido * distanciaMinima);&#xD;
+    if (haLlegado) {&#xD;
+        aptitud *= 2;&#xD;
+    }&#xD;
+    return aptitud;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnc2IP2iEe2ZvNWqEp9IPQ" name="getAdn" specification="_jnboAv2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return adn;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnerUP2iEe2ZvNWqEp9IPQ" name="getAptitud" specification="_jneEQP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return aptitud;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnhHkP2iEe2ZvNWqEp9IPQ" name="getPosicion" specification="_jnf5cP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return posicion;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jni8wP2iEe2ZvNWqEp9IPQ" name="getVelocidad" specification="_jnhuoP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return velocidad;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnlZAP2iEe2ZvNWqEp9IPQ" name="getAceleracion" specification="_jnkK4P2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return aceleracion;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnnOMP2iEe2ZvNWqEp9IPQ" name="getDistanciaMinima" specification="_jnmAEP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return distanciaMinima;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnpDYP2iEe2ZvNWqEp9IPQ" name="getProbReproduccion" specification="_jnn1QP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return probReproduccion;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnq4kP2iEe2ZvNWqEp9IPQ" name="setProbReproduccion" specification="_jnpqcP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.probReproduccion = probReproduccion;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnstwP2iEe2ZvNWqEp9IPQ" name="getProbAcumulada" specification="_jnrfoP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return probAcumulada;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnui8P2iEe2ZvNWqEp9IPQ" name="setProbAcumulada" specification="_jntU0P2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.probAcumulada = probAcumulada;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnwYIP2iEe2ZvNWqEp9IPQ" name="setAptitud" specification="_jnvKAP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.aptitud = aptitud;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jnyNUP2iEe2ZvNWqEp9IPQ" name="getTiempoObtenido" specification="_jnw_MP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return tiempoObtenido;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnQB0P2iEe2ZvNWqEp9IPQ" name="Entidad" visibility="public" method="_jnUTQP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnTFIP2iEe2ZvNWqEp9IPQ" name="poblacion" type="_jnFpwP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnTsMP2iEe2ZvNWqEp9IPQ" name="adn" type="_jmcJgP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnU6UP2iEe2ZvNWqEp9IPQ" name="actuar" visibility="public" method="_jnVhYP2iEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnWvgP2iEe2ZvNWqEp9IPQ" name="desplazar" visibility="private" method="_jnX9oP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnXWkP2iEe2ZvNWqEp9IPQ" name="fuerza" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnYksP2iEe2ZvNWqEp9IPQ" name="comprobarColisiones" visibility="private" method="_jnZLwP2iEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnZy0P2iEe2ZvNWqEp9IPQ" name="colisionaConMeta" visibility="private" method="_jnbA8P2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnaZ4P2iEe2ZvNWqEp9IPQ" type="_jnJUIP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnbA8f2iEe2ZvNWqEp9IPQ" name="evaluarAptitud" visibility="public" method="_jnboAf2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnboAP2iEe2ZvNWqEp9IPQ" type="_jnLwYP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnboAv2iEe2ZvNWqEp9IPQ" name="getAdn" visibility="public" method="_jnc2IP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jncPEP2iEe2ZvNWqEp9IPQ" type="_jmcJgP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jneEQP2iEe2ZvNWqEp9IPQ" name="getAptitud" visibility="public" method="_jnerUP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jneEQf2iEe2ZvNWqEp9IPQ" type="_jnLwYP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnf5cP2iEe2ZvNWqEp9IPQ" name="getPosicion" visibility="public" method="_jnhHkP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jngggP2iEe2ZvNWqEp9IPQ" type="_jmd-sP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnhuoP2iEe2ZvNWqEp9IPQ" name="getVelocidad" visibility="public" method="_jni8wP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jniVsP2iEe2ZvNWqEp9IPQ" type="_jmd-sP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnkK4P2iEe2ZvNWqEp9IPQ" name="getAceleracion" visibility="public" method="_jnlZAP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnkx8P2iEe2ZvNWqEp9IPQ" type="_jmd-sP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnmAEP2iEe2ZvNWqEp9IPQ" name="getDistanciaMinima" visibility="public" method="_jnnOMP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnmnIP2iEe2ZvNWqEp9IPQ" type="_jnLwYP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnn1QP2iEe2ZvNWqEp9IPQ" name="getProbReproduccion" visibility="public" method="_jnpDYP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnocUP2iEe2ZvNWqEp9IPQ" type="_jnLwYP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnpqcP2iEe2ZvNWqEp9IPQ" name="setProbReproduccion" visibility="public" method="_jnq4kP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnqRgP2iEe2ZvNWqEp9IPQ" name="probReproduccion" type="_jnLwYP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnrfoP2iEe2ZvNWqEp9IPQ" name="getProbAcumulada" visibility="public" method="_jnstwP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnsGsP2iEe2ZvNWqEp9IPQ" type="_jnLwYP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jntU0P2iEe2ZvNWqEp9IPQ" name="setProbAcumulada" visibility="public" method="_jnui8P2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnt74P2iEe2ZvNWqEp9IPQ" name="probAcumulada" type="_jnLwYP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnvKAP2iEe2ZvNWqEp9IPQ" name="setAptitud" visibility="public" method="_jnwYIP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnvxEP2iEe2ZvNWqEp9IPQ" name="aptitud" type="_jnLwYP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jnw_MP2iEe2ZvNWqEp9IPQ" name="getTiempoObtenido" visibility="public" method="_jnyNUP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jnxmQP2iEe2ZvNWqEp9IPQ" type="_jmyHwP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_G93ssP5JEe2sHukQAgM2oQ" name="normalizarDistanciaMinima()" visibility="private"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_jnFpwP2iEe2ZvNWqEp9IPQ" name="Poblacion" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jn6wMP2iEe2ZvNWqEp9IPQ" name="contexto" visibility="private" type="_noAPkP2kEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jn7-UP2iEe2ZvNWqEp9IPQ" name="entidades" visibility="private" type="_jnDNgP2iEe2ZvNWqEp9IPQ" isUnique="false">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jn8lYP2iEe2ZvNWqEp9IPQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jn9McP2iEe2ZvNWqEp9IPQ" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jn9zgP2iEe2ZvNWqEp9IPQ" name="poolGenetico" visibility="private" type="_jnDNgP2iEe2ZvNWqEp9IPQ" isUnique="false">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jn-akP2iEe2ZvNWqEp9IPQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jn-akf2iEe2ZvNWqEp9IPQ" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jn_BoP2iEe2ZvNWqEp9IPQ" name="tasaMutacion" visibility="private" type="_jnLwYP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_joAPwP2iEe2ZvNWqEp9IPQ" name="tiempoVida" visibility="private" type="_jmyHwP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_joA20P2iEe2ZvNWqEp9IPQ" name="numGeneraciones" visibility="private" type="_jmyHwP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_joCE8P2iEe2ZvNWqEp9IPQ" name="posInicial" visibility="private" type="_jmd-sP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_joDTEP2iEe2ZvNWqEp9IPQ" name="mejorTiempo" visibility="private" type="_jmyHwP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_joD6IP2iEe2ZvNWqEp9IPQ" name="objetivoCumplido" visibility="private" type="_jnJUIP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_joEhMP2iEe2ZvNWqEp9IPQ" name="mejorEntidad" visibility="private" type="_jnDNgP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_joFvUP2iEe2ZvNWqEp9IPQ" name="random" visibility="private" type="_jmoWwP2iEe2ZvNWqEp9IPQ" isUnique="false">
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_joGWYP2iEe2ZvNWqEp9IPQ" name="defaultValue">
+                <language>JAVA</language>
+                <body>new Random()</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_ZI-PAv34Ee216pqYTiEf0Q" name="entidad" type="_jnDNgP2iEe2ZvNWqEp9IPQ" aggregation="shared" association="_ZI9n8P34Ee216pqYTiEf0Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jtxDcP34Ee216pqYTiEf0Q" value="2"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ZI-PBP34Ee216pqYTiEf0Q" value="*"/>
+            </ownedAttribute>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joO5QP2iEe2ZvNWqEp9IPQ" name="Poblacion" specification="_joKAwP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.contexto = contexto;&#xD;
+    entidades = new Entidad[poblacionParams.get(&quot;NumEntidades&quot;)];&#xD;
+    poolGenetico = new ArrayList&lt;Entidad>();&#xD;
+    this.tasaMutacion = ((double) poblacionParams.get(&quot;TasaMutacion&quot;)) / 100;&#xD;
+    numGeneraciones = 1;&#xD;
+    this.tiempoVida = poblacionParams.get(&quot;TiempoVida&quot;);&#xD;
+    this.posInicial = posInicial;&#xD;
+    mejorTiempo = tiempoVida;&#xD;
+    objetivoCumplido = false;&#xD;
+    generarPrimeraGen();&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joQHYf2iEe2ZvNWqEp9IPQ" name="generarPrimeraGen" specification="_joQHYP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    for (int i = 0; i &lt; entidades.length; i++) {&#xD;
+        entidades[i] = new Entidad(this, null);&#xD;
+    }&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joR8kP2iEe2ZvNWqEp9IPQ" name="realizarCiclo" specification="_joRVgP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    for (int i = 0; i &lt; entidades.length; i++) {&#xD;
+        entidades[i].actuar();&#xD;
+        contexto.getControlador().mostrarEntidad(entidades[i]);&#xD;
+    }&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joTKsP2iEe2ZvNWqEp9IPQ" name="evolucionar" specification="_joSjoP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    seleccionar();&#xD;
+    if (!objetivoCumplido) {&#xD;
+        reproducir();&#xD;
+    } else {&#xD;
+        contexto.getControlador().mostrarRutaOptima(mejorEntidad);&#xD;
+    }&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joUY0P2iEe2ZvNWqEp9IPQ" name="seleccionar" specification="_joTxwP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    poolGenetico.clear();&#xD;
+    double mejorAptitud = evaluarEntidades();&#xD;
+    if (comprobarObjetivo()) {&#xD;
+        objetivoCumplido = true;&#xD;
+        return;&#xD;
+    }&#xD;
+    for (Entidad entidad : entidades) {&#xD;
+        entidad.setAptitud(entidad.getAptitud() / mejorAptitud);&#xD;
+    }&#xD;
+    calcProbabilidadReproduccion();&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joWOAP2iEe2ZvNWqEp9IPQ" name="comprobarObjetivo" specification="_joU_4P2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return mejorTiempo &lt;= contexto.getCircuito().getTiempoObjetivo();&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joYDMP2iEe2ZvNWqEp9IPQ" name="evaluarEntidades" specification="_joW1EP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    double mejorAptitud = 0.0;&#xD;
+    for (Entidad entidad : entidades) {&#xD;
+        if (entidad.evaluarAptitud() > mejorAptitud) {&#xD;
+            mejorAptitud = entidad.getAptitud();&#xD;
+            //System.out.println(&quot;Tiempo obtenido: &quot; + entidad.getTiempoObtenido());&#xD;
+            comprobarTiempoRecord(entidad);&#xD;
+        }&#xD;
+    }&#xD;
+    return mejorAptitud;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joZ4YP2iEe2ZvNWqEp9IPQ" name="comprobarTiempoRecord" specification="_joYqQP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    if (entidad.getTiempoObtenido() &lt; mejorTiempo) {&#xD;
+        mejorTiempo = entidad.getTiempoObtenido();&#xD;
+        mejorEntidad = entidad;&#xD;
+        System.out.println(&quot;Nuevo mejor tiempo: &quot; + mejorTiempo);&#xD;
+    }&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jobGgP2iEe2ZvNWqEp9IPQ" name="calcProbabilidadReproduccion" specification="_joafcP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    for (Entidad entidad : entidades) {&#xD;
+        int probabilidad = (int) (entidad.getAptitud() * 100);&#xD;
+        for (int i = 0; i &lt; probabilidad; i++) {&#xD;
+            poolGenetico.add(entidad);&#xD;
+        }&#xD;
+    }&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jocUoP2iEe2ZvNWqEp9IPQ" name="reproducir" specification="_jobtkP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    Entidad[] nuevaGeneracion = new Entidad[entidades.length];&#xD;
+    for (int i = 0; i &lt; entidades.length; i++) {&#xD;
+        int indPariente1 = random.nextInt(poolGenetico.size());&#xD;
+        Entidad pariente1 = poolGenetico.get(indPariente1);&#xD;
+        Entidad pariente2 = encontrarParienteDistinto(pariente1);&#xD;
+        ADN adnHijo = cruzarEntidades(pariente1, pariente2);&#xD;
+        mutar(adnHijo);&#xD;
+        nuevaGeneracion[i] = new Entidad(this, adnHijo);&#xD;
+    }&#xD;
+    entidades = nuevaGeneracion;&#xD;
+    numGeneraciones++;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joew4P2iEe2ZvNWqEp9IPQ" name="encontrarParienteDistinto" specification="_jodiwP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    int indPariente2;&#xD;
+    do {&#xD;
+        indPariente2 = random.nextInt(poolGenetico.size());&#xD;
+    } while (poolGenetico.get(indPariente2).getAptitud() == pariente1.getAptitud());&#xD;
+    Entidad pariente2 = poolGenetico.get(indPariente2);&#xD;
+    return pariente2;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joh0MP2iEe2ZvNWqEp9IPQ" name="cruzarEntidades" specification="_jof_AP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    PVector[] genesHijo = new PVector[getTiempoVida()];&#xD;
+    PVector[] genesPariente1 = pariente1.getAdn().getGenes();&#xD;
+    PVector[] genesPariente2 = pariente2.getAdn().getGenes();&#xD;
+    for (int i = 0; i &lt; genesHijo.length; i++) {&#xD;
+        if (random.nextBoolean()) {&#xD;
+            genesHijo[i] = genesPariente1[i];&#xD;
+        } else {&#xD;
+            genesHijo[i] = genesPariente2[i];&#xD;
+        }&#xD;
+    }&#xD;
+    return new ADN(genesHijo);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jojpYP2iEe2ZvNWqEp9IPQ" name="mutar" specification="_joibQP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    for (PVector gen : adnHijo.getGenes()) {&#xD;
+        if (random.nextDouble(1) &lt; tasaMutacion) {&#xD;
+            adnHijo.generarGenAleatorio(gen);&#xD;
+        }&#xD;
+    }&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jomFoP2iEe2ZvNWqEp9IPQ" name="getEntidades" specification="_jokQcP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return entidades;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jon60P2iEe2ZvNWqEp9IPQ" name="setTasaMutacion" specification="_jomssP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.tasaMutacion = tasaMutacion;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jopwAP2iEe2ZvNWqEp9IPQ" name="getNumGeneraciones" specification="_jooh4P2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return numGeneraciones;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jorlMP2iEe2ZvNWqEp9IPQ" name="getPosInicial" specification="_joqXEP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return posInicial;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jotaYP2iEe2ZvNWqEp9IPQ" name="setPosInicial" specification="_josMQP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.posInicial = posInicial;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_jovPkP2iEe2ZvNWqEp9IPQ" name="getTiempoVida" specification="_jouBcP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return tiempoVida;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joxEwP2iEe2ZvNWqEp9IPQ" name="setTiempoVida" specification="_jov2oP2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.tiempoVida = tiempoVida;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joxr0v2iEe2ZvNWqEp9IPQ" name="getContexto" specification="_joxr0P2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return contexto;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joyS4f2iEe2ZvNWqEp9IPQ" name="isObjetivoCumplido" specification="_joxr0_2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return objetivoCumplido;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_joyS5P2iEe2ZvNWqEp9IPQ" name="getMejorEntidad" specification="_joyS4v2iEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return mejorEntidad;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joKAwP2iEe2ZvNWqEp9IPQ" name="Poblacion" visibility="public" method="_joO5QP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joNEEP2iEe2ZvNWqEp9IPQ" name="contexto" type="_jn4T8P2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joNrIP2iEe2ZvNWqEp9IPQ" name="poblacionParams" type="_joHkgP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joOSMP2iEe2ZvNWqEp9IPQ" name="posInicial" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_npNwgP2kEe2ZvNWqEp9IPQ" name="contexto" type="_noAPkP2kEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joQHYP2iEe2ZvNWqEp9IPQ" name="generarPrimeraGen" visibility="private" method="_joQHYf2iEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joRVgP2iEe2ZvNWqEp9IPQ" name="realizarCiclo" visibility="public" method="_joR8kP2iEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joSjoP2iEe2ZvNWqEp9IPQ" name="evolucionar" visibility="public" method="_joTKsP2iEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joTxwP2iEe2ZvNWqEp9IPQ" name="seleccionar" visibility="private" method="_joUY0P2iEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joU_4P2iEe2ZvNWqEp9IPQ" name="comprobarObjetivo" visibility="private" method="_joWOAP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joVm8P2iEe2ZvNWqEp9IPQ" type="_jnJUIP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joW1EP2iEe2ZvNWqEp9IPQ" name="evaluarEntidades" visibility="private" method="_joYDMP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joXcIP2iEe2ZvNWqEp9IPQ" type="_jnLwYP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joYqQP2iEe2ZvNWqEp9IPQ" name="comprobarTiempoRecord" visibility="private" method="_joZ4YP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joZRUP2iEe2ZvNWqEp9IPQ" name="entidad" type="_jnDNgP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joafcP2iEe2ZvNWqEp9IPQ" name="calcProbabilidadReproduccion" visibility="private" method="_jobGgP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_20DJcP5IEe2sHukQAgM2oQ" name="mejorAptitud" type="_jnLwYP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jobtkP2iEe2ZvNWqEp9IPQ" name="reproducir" visibility="private" method="_jocUoP2iEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jodiwP2iEe2ZvNWqEp9IPQ" name="encontrarParienteDistinto" visibility="private" method="_joew4P2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joeJ0P2iEe2ZvNWqEp9IPQ" type="_jnDNgP2iEe2ZvNWqEp9IPQ" direction="return"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joeJ0f2iEe2ZvNWqEp9IPQ" name="pariente1" type="_jnDNgP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jof_AP2iEe2ZvNWqEp9IPQ" name="cruzarEntidades" visibility="private" method="_joh0MP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jof_Af2iEe2ZvNWqEp9IPQ" type="_jmcJgP2iEe2ZvNWqEp9IPQ" direction="return"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jogmEP2iEe2ZvNWqEp9IPQ" name="pariente1" type="_jnDNgP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_johNIP2iEe2ZvNWqEp9IPQ" name="pariente2" type="_jnDNgP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joibQP2iEe2ZvNWqEp9IPQ" name="mutar" visibility="private" method="_jojpYP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jojCUP2iEe2ZvNWqEp9IPQ" name="adnHijo" type="_jmcJgP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jokQcP2iEe2ZvNWqEp9IPQ" name="getEntidades" visibility="public" method="_jomFoP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jok3gP2iEe2ZvNWqEp9IPQ" type="_jnDNgP2iEe2ZvNWqEp9IPQ" direction="return">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jolekP2iEe2ZvNWqEp9IPQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jolekf2iEe2ZvNWqEp9IPQ" value="*"/>
+              </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jomssP2iEe2ZvNWqEp9IPQ" name="setTasaMutacion" visibility="public" method="_jon60P2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jonTwP2iEe2ZvNWqEp9IPQ" name="tasaMutacion" type="_jnLwYP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jooh4P2iEe2ZvNWqEp9IPQ" name="getNumGeneraciones" visibility="public" method="_jopwAP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jopI8P2iEe2ZvNWqEp9IPQ" type="_jmyHwP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joqXEP2iEe2ZvNWqEp9IPQ" name="getPosInicial" visibility="public" method="_jorlMP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joq-IP2iEe2ZvNWqEp9IPQ" type="_jmd-sP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_josMQP2iEe2ZvNWqEp9IPQ" name="setPosInicial" visibility="public" method="_jotaYP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joszUP2iEe2ZvNWqEp9IPQ" name="posInicial" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jouBcP2iEe2ZvNWqEp9IPQ" name="getTiempoVida" visibility="public" method="_jovPkP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jouogP2iEe2ZvNWqEp9IPQ" type="_jmyHwP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_jov2oP2iEe2ZvNWqEp9IPQ" name="setTiempoVida" visibility="public" method="_joxEwP2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_jowdsP2iEe2ZvNWqEp9IPQ" name="tiempoVida" type="_jmyHwP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joxr0P2iEe2ZvNWqEp9IPQ" name="getContexto" visibility="public" method="_joxr0v2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joxr0f2iEe2ZvNWqEp9IPQ" type="_noAPkP2kEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joxr0_2iEe2ZvNWqEp9IPQ" name="isObjetivoCumplido" visibility="public" method="_joyS4f2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joyS4P2iEe2ZvNWqEp9IPQ" type="_jnJUIP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_joyS4v2iEe2ZvNWqEp9IPQ" name="getMejorEntidad" visibility="public" method="_joyS5P2iEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_joyS4_2iEe2ZvNWqEp9IPQ" type="_jnDNgP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Dependency" xmi:id="_C75BcP37Ee216pqYTiEf0Q" name="!(tiempoVida &lt;= tiempoObjetivo " client="_jnFpwP2iEe2ZvNWqEp9IPQ" supplier="_XrSxsP2YEe2ZvNWqEp9IPQ"/>
+          <packagedElement xmi:type="uml:Dependency" xmi:id="_ovctQP37Ee216pqYTiEf0Q" name="colisiona" client="_jnDNgP2iEe2ZvNWqEp9IPQ" supplier="_qyqJ4P31Ee216pqYTiEf0Q"/>
+          <packagedElement xmi:type="uml:Dependency" xmi:id="_09sy0P37Ee216pqYTiEf0Q" name="colisiona" client="_jnDNgP2iEe2ZvNWqEp9IPQ" supplier="_rPnLoP31Ee216pqYTiEf0Q"/>
+          <packagedElement xmi:type="uml:Dependency" xmi:id="_JqWBAP38Ee216pqYTiEf0Q" name="modifica" client="_jnFpwP2iEe2ZvNWqEp9IPQ" supplier="_jmcJgP2iEe2ZvNWqEp9IPQ"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_noAPkP2kEe2ZvNWqEp9IPQ" name="Modelo" visibility="public">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_noBdsP2kEe2ZvNWqEp9IPQ" name="controlador" visibility="private" type="_nl4IoP2kEe2ZvNWqEp9IPQ" isUnique="false"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_noDS4f2kEe2ZvNWqEp9IPQ" name="circuito" visibility="private" type="_noDS4P2kEe2ZvNWqEp9IPQ" isUnique="false"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_noD58P2kEe2ZvNWqEp9IPQ" name="poblacionEntidades" visibility="private" type="_jnFpwP2iEe2ZvNWqEp9IPQ" isUnique="false" aggregation="composite" association="_5_Ug8P2rEe2ZvNWqEp9IPQ"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_noFIEf2kEe2ZvNWqEp9IPQ" name="meta" visibility="private" isUnique="false"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_noFvIP2kEe2ZvNWqEp9IPQ" name="obstaculos" visibility="private" isUnique="false">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_noG9QP2kEe2ZvNWqEp9IPQ"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_noG9Qf2kEe2ZvNWqEp9IPQ" value="*"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_vTEvIP33Ee216pqYTiEf0Q" name="meta" type="_qyqJ4P31Ee216pqYTiEf0Q" aggregation="shared" association="_vTC58P33Ee216pqYTiEf0Q"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_wnHw8v33Ee216pqYTiEf0Q" name="obstaculo" type="_rPnLoP31Ee216pqYTiEf0Q" aggregation="shared" association="_wnHJ4P33Ee216pqYTiEf0Q">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_wnHw8_33Ee216pqYTiEf0Q"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_wnHw9P33Ee216pqYTiEf0Q" value="1"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_GMsLMv34Ee216pqYTiEf0Q" name="poblacion" type="_jnFpwP2iEe2ZvNWqEp9IPQ" aggregation="shared" association="_GMrkIP34Ee216pqYTiEf0Q"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_JkHaAv34Ee216pqYTiEf0Q" name="circuito" type="_noDS4P2kEe2ZvNWqEp9IPQ" aggregation="shared" association="_JkGy8P34Ee216pqYTiEf0Q"/>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_noL1wP2kEe2ZvNWqEp9IPQ" name="Modelo" specification="_noG9Qv2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    this.controlador = controlador;&#xD;
+    circuito = new Circuito();&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_noND4f2kEe2ZvNWqEp9IPQ" name="getPoblacion" specification="_noMc0P2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    return poblacionEntidades;&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_noPgIf2kEe2ZvNWqEp9IPQ" name="setPoblacionEntidades" specification="_noOSAP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    poblacionEntidades = new Poblacion(this, poblacionParams, posInicial);&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_noQuQP2kEe2ZvNWqEp9IPQ" name="getMeta" specification="_noQHMP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    return meta;&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_noSjcP2kEe2ZvNWqEp9IPQ" name="setMeta" specification="_noR8YP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    meta = new Meta((PVector) metaParams.get(&quot;Posicion&quot;), (float) metaParams.get(&quot;Ancho&quot;), (float) metaParams.get(&quot;Alto&quot;));&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_noTKgP2kEe2ZvNWqEp9IPQ" name="getObstaculos" specification="_noSjcf2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    return obstaculos;&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_noU_sf2kEe2ZvNWqEp9IPQ" name="setObstaculos" specification="_noTxkP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    obstaculos = new Obstaculo[obstaculosParams.size()];&#xD;
+    for (int i = 0; i &lt; obstaculos.length; i++) {&#xD;
+        HashMap&lt;String, Object> params = obstaculosParams.get(i);&#xD;
+        obstaculos[i] = new Obstaculo((PVector) params.get(&quot;Posicion&quot;), (float) params.get(&quot;Ancho&quot;), (float) params.get(&quot;Alto&quot;), (float) params.get(&quot;Angulo&quot;));&#xD;
+    }&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_noVmwv2kEe2ZvNWqEp9IPQ" name="getControlador" specification="_noVmwP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    return controlador;&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_noXb8f2kEe2ZvNWqEp9IPQ" name="getCircuito" specification="_noW04P2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    return circuito;&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_noZRIP2kEe2ZvNWqEp9IPQ" name="setCircuito" specification="_noYDAP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    this.circuito = circuito;&#xD;
+</body>
+          </ownedBehavior>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_noG9Qv2kEe2ZvNWqEp9IPQ" name="Modelo" visibility="public" method="_noL1wP2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_noKnoP2kEe2ZvNWqEp9IPQ" name="controlador" type="_nl4IoP2kEe2ZvNWqEp9IPQ"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_noMc0P2kEe2ZvNWqEp9IPQ" name="getPoblacion" visibility="public" method="_noND4f2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_noND4P2kEe2ZvNWqEp9IPQ" type="_jnFpwP2iEe2ZvNWqEp9IPQ" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_noOSAP2kEe2ZvNWqEp9IPQ" name="setPoblacionEntidades" visibility="public" method="_noPgIf2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_noO5EP2kEe2ZvNWqEp9IPQ" name="poblacionParams" type="_joHkgP2iEe2ZvNWqEp9IPQ"/>
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_noPgIP2kEe2ZvNWqEp9IPQ" name="posInicial" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_noQHMP2kEe2ZvNWqEp9IPQ" name="getMeta" visibility="public" method="_noQuQP2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_noQHMf2kEe2ZvNWqEp9IPQ" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_noR8YP2kEe2ZvNWqEp9IPQ" name="setMeta" visibility="public" method="_noSjcP2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_noR8Yf2kEe2ZvNWqEp9IPQ" name="metaParams" type="_joHkgP2iEe2ZvNWqEp9IPQ"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_noSjcf2kEe2ZvNWqEp9IPQ" name="getObstaculos" visibility="public" method="_noTKgP2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_noSjcv2kEe2ZvNWqEp9IPQ" direction="return">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_noSjc_2kEe2ZvNWqEp9IPQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_noSjdP2kEe2ZvNWqEp9IPQ" value="*"/>
+            </ownedParameter>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_noTxkP2kEe2ZvNWqEp9IPQ" name="setObstaculos" visibility="public" method="_noU_sf2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_noUYoP2kEe2ZvNWqEp9IPQ" name="obstaculosParams" type="_joHkgP2iEe2ZvNWqEp9IPQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_noUYof2kEe2ZvNWqEp9IPQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_noU_sP2kEe2ZvNWqEp9IPQ" value="*"/>
+            </ownedParameter>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_noVmwP2kEe2ZvNWqEp9IPQ" name="getControlador" visibility="public" method="_noVmwv2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_noVmwf2kEe2ZvNWqEp9IPQ" type="_nl4IoP2kEe2ZvNWqEp9IPQ" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_noW04P2kEe2ZvNWqEp9IPQ" name="getCircuito" visibility="public" method="_noXb8f2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_noXb8P2kEe2ZvNWqEp9IPQ" type="_noDS4P2kEe2ZvNWqEp9IPQ" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_noYDAP2kEe2ZvNWqEp9IPQ" name="setCircuito" visibility="public" method="_noZRIP2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_noYqEP2kEe2ZvNWqEp9IPQ" name="circuito" type="_noDS4P2kEe2ZvNWqEp9IPQ"/>
+          </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_noCr0P2kEe2ZvNWqEp9IPQ" name="circuitos">
+          <packagedElement xmi:type="uml:Class" xmi:id="_noDS4P2kEe2ZvNWqEp9IPQ" name="Circuito" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_nosMEP2kEe2ZvNWqEp9IPQ" name="tiempoObjetivo" visibility="private" type="_jmyHwP2iEe2ZvNWqEp9IPQ" isUnique="false">
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_noszIP2kEe2ZvNWqEp9IPQ" name="defaultValue">
+                <language>JAVA</language>
+                <body>100</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nouoUf2kEe2ZvNWqEp9IPQ" name="setSpawn" specification="_notaMP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return new PVector(ventana.width / 2, ventana.height - 30);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nowdgf2kEe2ZvNWqEp9IPQ" name="setupMeta" specification="_nov2cP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    HashMap&lt;String, Object> metaParams = new HashMap&lt;String, Object>();&#xD;
+    metaParams.put(&quot;Posicion&quot;, new PVector(ventana.width / 2, 40));&#xD;
+    metaParams.put(&quot;Ancho&quot;, 50f);&#xD;
+    metaParams.put(&quot;Alto&quot;, 50f);&#xD;
+    return metaParams;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nozg0P2kEe2ZvNWqEp9IPQ" name="setupObstaculos" specification="_noxEkP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    //Inicia una lista con todos los obstáculos que deberá tener el circuito&#xD;
+    ArrayList&lt;HashMap&lt;String, Object>> obsParams = new ArrayList&lt;HashMap&lt;String, Object>>();&#xD;
+    int numObstaculos = 9;&#xD;
+    for (int i = 0; i &lt; numObstaculos; i++) {&#xD;
+        obsParams.add(new HashMap&lt;String, Object>());&#xD;
+    }&#xD;
+    //Ajusta los parámetros para cada uno de los obstáculos individualmente&#xD;
+    obsParams.get(0).put(&quot;Posicion&quot;, new PVector(ventana.width / 2, ventana.height / 2));&#xD;
+    obsParams.get(0).put(&quot;Ancho&quot;, 200f);&#xD;
+    obsParams.get(0).put(&quot;Alto&quot;, 50f);&#xD;
+    obsParams.get(0).put(&quot;Angulo&quot;, 0f);&#xD;
+    obsParams.get(1).put(&quot;Posicion&quot;, new PVector(ventana.width / 2 - 200, ventana.height / 2 + 200));&#xD;
+    obsParams.get(1).put(&quot;Ancho&quot;, 200f);&#xD;
+    obsParams.get(1).put(&quot;Alto&quot;, 50f);&#xD;
+    obsParams.get(1).put(&quot;Angulo&quot;, 0f);&#xD;
+    obsParams.get(2).put(&quot;Posicion&quot;, new PVector(ventana.width / 2 + 200, ventana.height / 2 + 200));&#xD;
+    obsParams.get(2).put(&quot;Ancho&quot;, 200f);&#xD;
+    obsParams.get(2).put(&quot;Alto&quot;, 50f);&#xD;
+    obsParams.get(2).put(&quot;Angulo&quot;, 0f);&#xD;
+    obsParams.get(3).put(&quot;Posicion&quot;, new PVector(ventana.width / 2 - 200, ventana.height / 2 - 200));&#xD;
+    obsParams.get(3).put(&quot;Ancho&quot;, 200f);&#xD;
+    obsParams.get(3).put(&quot;Alto&quot;, 50f);&#xD;
+    obsParams.get(3).put(&quot;Angulo&quot;, 0f);&#xD;
+    obsParams.get(4).put(&quot;Posicion&quot;, new PVector(ventana.width / 2 + 200, ventana.height / 2 - 200));&#xD;
+    obsParams.get(4).put(&quot;Ancho&quot;, 200f);&#xD;
+    obsParams.get(4).put(&quot;Alto&quot;, 50f);&#xD;
+    obsParams.get(4).put(&quot;Angulo&quot;, 0f);&#xD;
+    obsParams.get(5).put(&quot;Posicion&quot;, new PVector(ventana.width / 2 - 300, ventana.height / 2));&#xD;
+    obsParams.get(5).put(&quot;Ancho&quot;, 50f);&#xD;
+    obsParams.get(5).put(&quot;Alto&quot;, (float) ventana.height);&#xD;
+    obsParams.get(5).put(&quot;Angulo&quot;, 0f);&#xD;
+    obsParams.get(6).put(&quot;Posicion&quot;, new PVector(ventana.width / 2 + 300, ventana.height / 2));&#xD;
+    obsParams.get(6).put(&quot;Ancho&quot;, 50f);&#xD;
+    obsParams.get(6).put(&quot;Alto&quot;, (float) ventana.height);&#xD;
+    obsParams.get(6).put(&quot;Angulo&quot;, 0f);&#xD;
+    obsParams.get(7).put(&quot;Posicion&quot;, new PVector(ventana.width / 2, ventana.height + 5));&#xD;
+    obsParams.get(7).put(&quot;Ancho&quot;, (float) ventana.width);&#xD;
+    obsParams.get(7).put(&quot;Alto&quot;, 20f);&#xD;
+    obsParams.get(7).put(&quot;Angulo&quot;, 0f);&#xD;
+    obsParams.get(8).put(&quot;Posicion&quot;, new PVector(ventana.width / 2, 0));&#xD;
+    obsParams.get(8).put(&quot;Ancho&quot;, (float) ventana.width);&#xD;
+    obsParams.get(8).put(&quot;Alto&quot;, 10f);&#xD;
+    obsParams.get(8).put(&quot;Angulo&quot;, 0f);&#xD;
+    return obsParams;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_no0H4f2kEe2ZvNWqEp9IPQ" name="getTiempoObjetivo" specification="_nozg0f2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return tiempoObjetivo;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_notaMP2kEe2ZvNWqEp9IPQ" name="setSpawn" visibility="public" method="_nouoUf2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nouBQP2kEe2ZvNWqEp9IPQ" type="_jmd-sP2iEe2ZvNWqEp9IPQ" direction="return"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nouoUP2kEe2ZvNWqEp9IPQ" name="ventana" type="_noszIv2kEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_nov2cP2kEe2ZvNWqEp9IPQ" name="setupMeta" visibility="public" method="_nowdgf2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nov2cf2kEe2ZvNWqEp9IPQ" type="_joHkgP2iEe2ZvNWqEp9IPQ" direction="return"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nowdgP2kEe2ZvNWqEp9IPQ" name="ventana" type="_noszIv2kEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_noxEkP2kEe2ZvNWqEp9IPQ" name="setupObstaculos" visibility="public" method="_nozg0P2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_noxroP2kEe2ZvNWqEp9IPQ" type="_joHkgP2iEe2ZvNWqEp9IPQ" direction="return">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_noySsP2kEe2ZvNWqEp9IPQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_noySsf2kEe2ZvNWqEp9IPQ" value="*"/>
+              </ownedParameter>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_noy5wP2kEe2ZvNWqEp9IPQ" name="ventana" type="_noszIv2kEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_nozg0f2kEe2ZvNWqEp9IPQ" name="getTiempoObjetivo" visibility="public" method="_no0H4f2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_no0H4P2kEe2ZvNWqEp9IPQ" type="_jmyHwP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Dependency" xmi:id="_ZgZ6wP38Ee216pqYTiEf0Q" name="posiciones" client="_noDS4P2kEe2ZvNWqEp9IPQ" supplier="_noszIv2kEe2ZvNWqEp9IPQ"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_5_Ug8P2rEe2ZvNWqEp9IPQ" name="A_poblacionEntidades_modelo" memberEnd="_noD58P2kEe2ZvNWqEp9IPQ _5_VvEP2rEe2ZvNWqEp9IPQ">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_5_VvEP2rEe2ZvNWqEp9IPQ" name="modelo" type="_noAPkP2kEe2ZvNWqEp9IPQ" association="_5_Ug8P2rEe2ZvNWqEp9IPQ">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5_VvEf2rEe2ZvNWqEp9IPQ"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5_VvEv2rEe2ZvNWqEp9IPQ" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_aVLVsP3zEe216pqYTiEf0Q" name="componentes">
+          <packagedElement xmi:type="uml:Class" xmi:id="_aVRcUP3zEe216pqYTiEf0Q" name="Colisionable" visibility="public" isAbstract="true">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_aVWU0P3zEe216pqYTiEf0Q" name="posicion" visibility="protected" type="_jmd-sP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_aV1dAP3zEe216pqYTiEf0Q" name="ancho" visibility="protected" type="_jmkFUP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_aV2rIP3zEe216pqYTiEf0Q" name="alto" visibility="protected" type="_jmkFUP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_aaQC8P3zEe216pqYTiEf0Q" name="Colisionable" specification="_aV5HYP3zEe216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.posicion = posicion;&#xD;
+    this.ancho = ancho;&#xD;
+    this.alto = alto;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_aaWwoP3zEe216pqYTiEf0Q" name="getPosicion" specification="_aaVigP3zEe216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    return posicion;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_aaZz8P3zEe216pqYTiEf0Q" name="setPosicion" specification="_aaX-wP3zEe216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.posicion = posicion;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_aabpIP3zEe216pqYTiEf0Q" name="getAncho" specification="_aaabAP3zEe216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    return ancho;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_aaeFYP3zEe216pqYTiEf0Q" name="setAncho" specification="_aac3QP3zEe216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.ancho = ancho;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_aaghoP3zEe216pqYTiEf0Q" name="getAlto" specification="_aaescP3zEe216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    return alto;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_aajk8P3zEe216pqYTiEf0Q" name="setAlto" specification="_aahvwP3zEe216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.alto = alto;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_aV5HYP3zEe216pqYTiEf0Q" name="Colisionable" visibility="protected" method="_aaQC8P3zEe216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_aaLxgP3zEe216pqYTiEf0Q" name="posicion" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_aaO00P3zEe216pqYTiEf0Q" name="ancho" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_aaPb4P3zEe216pqYTiEf0Q" name="alto" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_aaR4IP3zEe216pqYTiEf0Q" name="chocaConEntidad" visibility="public" isAbstract="true">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_aaTGQP3zEe216pqYTiEf0Q" type="_jnJUIP2iEe2ZvNWqEp9IPQ" direction="return"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_aaU7cP3zEe216pqYTiEf0Q" name="posEntidad" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_aaVigP3zEe216pqYTiEf0Q" name="getPosicion" visibility="public" method="_aaWwoP3zEe216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_aaWJkP3zEe216pqYTiEf0Q" type="_jmd-sP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_aaX-wP3zEe216pqYTiEf0Q" name="setPosicion" visibility="public" method="_aaZz8P3zEe216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_aaZM4P3zEe216pqYTiEf0Q" name="posicion" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_aaabAP3zEe216pqYTiEf0Q" name="getAncho" visibility="public" method="_aabpIP3zEe216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_aabCEP3zEe216pqYTiEf0Q" type="_jmkFUP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_aac3QP3zEe216pqYTiEf0Q" name="setAncho" visibility="public" method="_aaeFYP3zEe216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_aadeUP3zEe216pqYTiEf0Q" name="ancho" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_aaescP3zEe216pqYTiEf0Q" name="getAlto" visibility="public" method="_aaghoP3zEe216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_aaf6kP3zEe216pqYTiEf0Q" type="_jmkFUP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_aahvwP3zEe216pqYTiEf0Q" name="setAlto" visibility="public" method="_aajk8P3zEe216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_aaiW0P3zEe216pqYTiEf0Q" name="alto" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_qyqJ4P31Ee216pqYTiEf0Q" name="Meta" visibility="public">
+            <generalization xmi:type="uml:Generalization" xmi:id="_qyubUP31Ee216pqYTiEf0Q" general="_aVRcUP3zEe216pqYTiEf0Q"/>
+            <generalization xmi:type="uml:Generalization" xmi:id="_go1IQP33Ee216pqYTiEf0Q" general="_aVRcUP3zEe216pqYTiEf0Q"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_qyvpcP31Ee216pqYTiEf0Q" name="semiejeHorizontal" visibility="private" type="_jmkFUP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_qyw3kP31Ee216pqYTiEf0Q" name="semiejeVertical" visibility="private" type="_jmkFUP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_qy4MUP31Ee216pqYTiEf0Q" name="Meta" specification="_qyyFsP31Ee216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    super(posicion, ancho, alto);&#xD;
+    semiejeHorizontal = ancho / 2;&#xD;
+    semiejeVertical = alto / 2;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_qy72sP31Ee216pqYTiEf0Q" name="chocaConEntidad" specification="_qy5acP31Ee216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    //Distancia de la entidad al centro de la elipse en ambos ejes&#xD;
+    float distanciaCentroX = posEntidad.x - this.posicion.x;&#xD;
+    float distanciaCentroY = posEntidad.y - this.posicion.y;&#xD;
+    /* Obtiene la distancia real de la entidad respecto a la superficie de la elipse.
+		 * La fórmula se basa en la ecuación de la elipse
+		 * https://es.wikipedia.org/wiki/Semieje_mayor_y_semieje_menor
+		 * Sustitye x-h por distanciaCentroX e y-k por distanciaCentroY, y a por el 
+		 * semieje horizontal y b el semieje vertical,
+		 */&#xD;
+    double distancia = (Math.pow(distanciaCentroX, 2)) / (Math.pow(semiejeHorizontal, 2)) + (Math.pow(distanciaCentroY, 2)) / (Math.pow(semiejeVertical, 2));&#xD;
+    /* Si la distancia es menor o igual que 1, quiere decir que está contenido en la elipse,
+		 * ya que la fórmula sirve para calcular todos los puntos que forman la elipse tanto 
+		 * en el borde como en su superficie
+		 */&#xD;
+    return distancia &lt;= 1;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_qy-S8P31Ee216pqYTiEf0Q" name="getSemiejeHorizontal" specification="_qy9E0P31Ee216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    return semiejeHorizontal;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_qzAIIP31Ee216pqYTiEf0Q" name="getSemiejeVertical" specification="_qy-6AP31Ee216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    return semiejeVertical;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_qzB9UP31Ee216pqYTiEf0Q" name="setAncho" specification="_qzAvMP31Ee216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.ancho = ancho;&#xD;
+    semiejeHorizontal = ancho / 2;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_qzDygP31Ee216pqYTiEf0Q" name="setAlto" specification="_qzDLcP31Ee216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.alto = alto;&#xD;
+    semiejeVertical = alto / 2;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_qyyFsP31Ee216pqYTiEf0Q" name="Meta" visibility="public" method="_qy4MUP31Ee216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_qy1wEP31Ee216pqYTiEf0Q" name="posicion" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_qy2XIP31Ee216pqYTiEf0Q" name="ancho" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_qy2-MP31Ee216pqYTiEf0Q" name="alto" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_qy5acP31Ee216pqYTiEf0Q" name="chocaConEntidad" visibility="public" method="_qy72sP31Ee216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_qy6BgP31Ee216pqYTiEf0Q" type="_jnJUIP2iEe2ZvNWqEp9IPQ" direction="return"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_qy6okP31Ee216pqYTiEf0Q" name="posEntidad" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_qy9E0P31Ee216pqYTiEf0Q" name="getSemiejeHorizontal" visibility="public" method="_qy-S8P31Ee216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_qy9r4P31Ee216pqYTiEf0Q" type="_jmkFUP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_qy-6AP31Ee216pqYTiEf0Q" name="getSemiejeVertical" visibility="public" method="_qzAIIP31Ee216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_qy_hEP31Ee216pqYTiEf0Q" type="_jmkFUP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_qzAvMP31Ee216pqYTiEf0Q" name="setAncho" visibility="public" method="_qzB9UP31Ee216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_qzBWQP31Ee216pqYTiEf0Q" name="ancho" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_qzDLcP31Ee216pqYTiEf0Q" name="setAlto" visibility="public" method="_qzDygP31Ee216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_qzDLcf31Ee216pqYTiEf0Q" name="alto" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_rPnLoP31Ee216pqYTiEf0Q" name="Obstaculo" visibility="public">
+            <generalization xmi:type="uml:Generalization" xmi:id="_rPnysP31Ee216pqYTiEf0Q" general="_aVRcUP3zEe216pqYTiEf0Q"/>
+            <generalization xmi:type="uml:Generalization" xmi:id="_dzQpUP33Ee216pqYTiEf0Q" general="_aVRcUP3zEe216pqYTiEf0Q"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_rPnysf31Ee216pqYTiEf0Q" name="angulo" visibility="private" type="_jmkFUP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_rPsEIv31Ee216pqYTiEf0Q" name="Obstaculo" specification="_rPoZwP31Ee216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    super(posicion, ancho, alto);&#xD;
+    //Convierte grados en radianes&#xD;
+    this.angulo = Ventana.radians(angulo);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_rPtSQf31Ee216pqYTiEf0Q" name="chocaConEntidad" specification="_rPsrMP31Ee216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    //TODO Mejorar las colisiones para que pueda detectarlas estando rotado en un ángulo&#xD;
+    float esquinaX = posicion.x - ancho / 2;&#xD;
+    float esquinaY = posicion.y - alto / 2;&#xD;
+    boolean contieneEnX = posEntidad.x >= esquinaX &amp;&amp; posEntidad.x &lt;= esquinaX + ancho;&#xD;
+    boolean contieneEnY = posEntidad.y >= esquinaY &amp;&amp; posEntidad.y &lt;= esquinaY + alto;&#xD;
+    return contieneEnX &amp;&amp; contieneEnY;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_rPt5UP31Ee216pqYTiEf0Q" name="getAngulo" specification="_rPtSQv31Ee216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    return angulo;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_rPt5U_31Ee216pqYTiEf0Q" name="setAngulo" specification="_rPt5Uf31Ee216pqYTiEf0Q">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.angulo = angulo;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_rPoZwP31Ee216pqYTiEf0Q" name="Obstaculo" visibility="public" method="_rPsEIv31Ee216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_rPrdEP31Ee216pqYTiEf0Q" name="posicion" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_rPrdEf31Ee216pqYTiEf0Q" name="ancho" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_rPsEIP31Ee216pqYTiEf0Q" name="alto" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_rPsEIf31Ee216pqYTiEf0Q" name="angulo" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_rPsrMP31Ee216pqYTiEf0Q" name="chocaConEntidad" visibility="public" method="_rPtSQf31Ee216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_rPsrMf31Ee216pqYTiEf0Q" type="_jnJUIP2iEe2ZvNWqEp9IPQ" direction="return"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_rPtSQP31Ee216pqYTiEf0Q" name="posEntidad" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_rPtSQv31Ee216pqYTiEf0Q" name="getAngulo" visibility="public" method="_rPt5UP31Ee216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_rPtSQ_31Ee216pqYTiEf0Q" type="_jmkFUP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_rPt5Uf31Ee216pqYTiEf0Q" name="setAngulo" visibility="public" method="_rPt5U_31Ee216pqYTiEf0Q">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_rPt5Uv31Ee216pqYTiEf0Q" name="angulo" type="_jmkFUP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Dependency" xmi:id="_S63moP37Ee216pqYTiEf0Q" client="_rPnLoP31Ee216pqYTiEf0Q" supplier="_noDS4P2kEe2ZvNWqEp9IPQ"/>
+          <packagedElement xmi:type="uml:Dependency" xmi:id="_Uo8SAP37Ee216pqYTiEf0Q" client="_qyqJ4P31Ee216pqYTiEf0Q" supplier="_noDS4P2kEe2ZvNWqEp9IPQ"/>
+        </packagedElement>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_nl26gP2kEe2ZvNWqEp9IPQ" name="controlador">
+        <packagedElement xmi:type="uml:Class" xmi:id="_nl4IoP2kEe2ZvNWqEp9IPQ" name="Controlador" visibility="public">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_nl5Wwf2kEe2ZvNWqEp9IPQ" name="vista" visibility="private" type="_nl5WwP2kEe2ZvNWqEp9IPQ" isUnique="false" aggregation="composite" association="_xZ2f8P2rEe2ZvNWqEp9IPQ"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_nl590P2kEe2ZvNWqEp9IPQ" name="modelo" visibility="private" type="_jn4T8P2iEe2ZvNWqEp9IPQ" isUnique="false" aggregation="composite" association="_ihRiIP2rEe2ZvNWqEp9IPQ"/>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nnFCgP2kEe2ZvNWqEp9IPQ" name="Controlador" specification="_nl6k4P2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    vista = new Vista(this);&#xD;
+    modelo = new Modelo(this);&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nnGQoP2kEe2ZvNWqEp9IPQ" name="iniciar" specification="_nnFpkP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    Ventana ventana = vista.getVentana();&#xD;
+    Circuito circuito = modelo.getCircuito();&#xD;
+    modelo.setMeta(circuito.setupMeta(ventana));&#xD;
+    modelo.setObstaculos(circuito.setupObstaculos(ventana));&#xD;
+    modelo.setPoblacionEntidades(setupPoblacion(), circuito.setSpawn(ventana));&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nnHewP2kEe2ZvNWqEp9IPQ" name="setupPoblacion" specification="_nnG3sP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    HashMap&lt;String, Integer> poblacionParams = new HashMap&lt;String, Integer>();&#xD;
+    poblacionParams.put(&quot;NumEntidades&quot;, 1000);&#xD;
+    poblacionParams.put(&quot;TasaMutacion&quot;, 20);&#xD;
+    poblacionParams.put(&quot;TiempoVida&quot;, 400);&#xD;
+    return poblacionParams;&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nnSd4P2kEe2ZvNWqEp9IPQ" name="manipularPoblacion" specification="_nnIF0P2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    Poblacion entidades = modelo.getPoblacion();&#xD;
+    Ventana ventana = vista.getVentana();&#xD;
+    /* Comprueba si las población ha cumplido el objetivo y sale de la función 
+		 * si es el caso después de mostrar la ruta óptima, para no continuar el proceso
+		 */&#xD;
+    if (entidades.isObjetivoCumplido()) {&#xD;
+        mostrarRutaOptima(entidades.getMejorEntidad());&#xD;
+        return entidades.getNumGeneraciones();&#xD;
+    }&#xD;
+    //Número de frames que han pasado desde el inicio de su ciclo de vida&#xD;
+    int numFramesGen = ventana.getNumFramesGen();&#xD;
+    //Si todavía le queda tiempo de vida a la población, realiza un ciclo de ejecución&#xD;
+    if (numFramesGen &lt; entidades.getTiempoVida()) {&#xD;
+        entidades.realizarCiclo();&#xD;
+        ventana.setNumFramesGen(++numFramesGen);&#xD;
+    } else //De lo contrario, la población debe evolucionar y reiniciar su ciclo de vida&#xD;
+    {&#xD;
+        ventana.setNumFramesGen(0);&#xD;
+        entidades.evolucionar();&#xD;
+    }&#xD;
+    return entidades.getNumGeneraciones();&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nnVhMP2kEe2ZvNWqEp9IPQ" name="mostrarRutaOptima" specification="_nnTsAP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    vista.getVentana().drawRutaOptima(mejorEntidad.getAdn().getGenes(), mejorEntidad.getTiempoObtenido());&#xD;
+    vista.getVentana().drawEntidad(mejorEntidad.getPosicion(), mejorEntidad.getVelocidad());&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nnXWYP2kEe2ZvNWqEp9IPQ" name="mostrarEntidad" specification="_nnWIQP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    vista.getVentana().drawEntidad(entidad.getPosicion(), entidad.getVelocidad());&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nnYkgf2kEe2ZvNWqEp9IPQ" name="getVista" specification="_nnX9cP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    return vista;&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nnaZsP2kEe2ZvNWqEp9IPQ" name="getModelo" specification="_nnZLkP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    return modelo;&#xD;
+</body>
+          </ownedBehavior>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_nl6k4P2kEe2ZvNWqEp9IPQ" name="Controlador" visibility="public" method="_nnFCgP2kEe2ZvNWqEp9IPQ"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_nnFpkP2kEe2ZvNWqEp9IPQ" name="iniciar" visibility="public" method="_nnGQoP2kEe2ZvNWqEp9IPQ"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_nnG3sP2kEe2ZvNWqEp9IPQ" name="setupPoblacion" visibility="private" method="_nnHewP2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_nnG3sf2kEe2ZvNWqEp9IPQ" type="_joHkgP2iEe2ZvNWqEp9IPQ" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_nnIF0P2kEe2ZvNWqEp9IPQ" name="manipularPoblacion" visibility="public" method="_nnSd4P2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_nnR20P2kEe2ZvNWqEp9IPQ" type="_jmyHwP2iEe2ZvNWqEp9IPQ" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_nnTsAP2kEe2ZvNWqEp9IPQ" name="mostrarRutaOptima" visibility="public" method="_nnVhMP2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_nnU6IP2kEe2ZvNWqEp9IPQ" name="mejorEntidad" type="_jnDNgP2iEe2ZvNWqEp9IPQ"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_nnWIQP2kEe2ZvNWqEp9IPQ" name="mostrarEntidad" visibility="public" method="_nnXWYP2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_nnWvUP2kEe2ZvNWqEp9IPQ" name="entidad" type="_jnDNgP2iEe2ZvNWqEp9IPQ"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_nnX9cP2kEe2ZvNWqEp9IPQ" name="getVista" visibility="public" method="_nnYkgf2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_nnYkgP2kEe2ZvNWqEp9IPQ" type="_nl5WwP2kEe2ZvNWqEp9IPQ" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_nnZLkP2kEe2ZvNWqEp9IPQ" name="getModelo" visibility="public" method="_nnaZsP2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_nnZyoP2kEe2ZvNWqEp9IPQ" type="_jn4T8P2iEe2ZvNWqEp9IPQ" direction="return"/>
+          </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_ihRiIP2rEe2ZvNWqEp9IPQ" name="A_modelo_controlador" memberEnd="_nl590P2kEe2ZvNWqEp9IPQ _ihT-YP2rEe2ZvNWqEp9IPQ">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_ihT-YP2rEe2ZvNWqEp9IPQ" name="controlador" type="_nl4IoP2kEe2ZvNWqEp9IPQ" association="_ihRiIP2rEe2ZvNWqEp9IPQ">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ihUlcP2rEe2ZvNWqEp9IPQ"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ihUlcf2rEe2ZvNWqEp9IPQ" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_xZ2f8P2rEe2ZvNWqEp9IPQ" name="A_vista_controlador" memberEnd="_nl5Wwf2kEe2ZvNWqEp9IPQ _xZ3uEP2rEe2ZvNWqEp9IPQ">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_xZ3uEP2rEe2ZvNWqEp9IPQ" name="controlador" type="_nl4IoP2kEe2ZvNWqEp9IPQ" association="_xZ2f8P2rEe2ZvNWqEp9IPQ">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xZ3uEf2rEe2ZvNWqEp9IPQ"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xZ3uEv2rEe2ZvNWqEp9IPQ" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_nl4vsP2kEe2ZvNWqEp9IPQ" name="vista">
+        <packagedElement xmi:type="uml:Class" xmi:id="_nl5WwP2kEe2ZvNWqEp9IPQ" name="Vista" visibility="public">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_npXhgP2kEe2ZvNWqEp9IPQ" name="ventana" visibility="private" type="_noszIv2kEe2ZvNWqEp9IPQ" isUnique="false"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_npYvof2kEe2ZvNWqEp9IPQ" name="panelControl" visibility="private" type="_npYvoP2kEe2ZvNWqEp9IPQ" isUnique="false"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_o38Mcv2vEe2ZvNWqEp9IPQ" name="ventana" type="_noszIv2kEe2ZvNWqEp9IPQ" aggregation="shared" association="_o37lYP2vEe2ZvNWqEp9IPQ"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_jjPmYP20Ee2ZvNWqEp9IPQ" name="panelcontrol" type="_npYvoP2kEe2ZvNWqEp9IPQ" aggregation="shared" association="_jjO_UP20Ee2ZvNWqEp9IPQ"/>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_npcaAP2kEe2ZvNWqEp9IPQ" name="Vista" specification="_npZWsP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    initLookAndFeel();&#xD;
+    String[] processingArgs = { &quot;Circuito Genético&quot; };&#xD;
+    ventana = Ventana.crearVentana(processingArgs, controlador);&#xD;
+//		panelControl = new PanelControl(controlador);&#xD;
+//		panelControl.setVisible(true);&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_npdBEf2kEe2ZvNWqEp9IPQ" name="getVentana" specification="_npcaAf2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    return ventana;&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_npdoIf2kEe2ZvNWqEp9IPQ" name="getPanelControl" specification="_npdBEv2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    return panelControl;&#xD;
+</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_npePMP2kEe2ZvNWqEp9IPQ" name="initLookAndFeel" specification="_npdoIv2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    try {&#xD;
+        for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {&#xD;
+            if (&quot;Nimbus&quot;.equals(info.getName())) {&#xD;
+                UIManager.setLookAndFeel(info.getClassName());&#xD;
+                break;&#xD;
+            }&#xD;
+        }&#xD;
+    } catch (ClassNotFoundException ex) {&#xD;
+        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);&#xD;
+    } catch (InstantiationException ex) {&#xD;
+        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);&#xD;
+    } catch (IllegalAccessException ex) {&#xD;
+        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);&#xD;
+    } catch (UnsupportedLookAndFeelException ex) {&#xD;
+        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);&#xD;
+    }&#xD;
+</body>
+          </ownedBehavior>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_npZWsP2kEe2ZvNWqEp9IPQ" name="Vista" visibility="public" method="_npcaAP2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_npby8P2kEe2ZvNWqEp9IPQ" name="controlador" type="_nl4IoP2kEe2ZvNWqEp9IPQ"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_npcaAf2kEe2ZvNWqEp9IPQ" name="getVentana" visibility="public" method="_npdBEf2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_npdBEP2kEe2ZvNWqEp9IPQ" type="_noszIv2kEe2ZvNWqEp9IPQ" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_npdBEv2kEe2ZvNWqEp9IPQ" name="getPanelControl" visibility="public" method="_npdoIf2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_npdoIP2kEe2ZvNWqEp9IPQ" type="_npYvoP2kEe2ZvNWqEp9IPQ" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_npdoIv2kEe2ZvNWqEp9IPQ" name="initLookAndFeel" visibility="private" method="_npePMP2kEe2ZvNWqEp9IPQ"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_noszIf2kEe2ZvNWqEp9IPQ" name="ventana_grafica">
+          <packagedElement xmi:type="uml:Class" xmi:id="_noszIv2kEe2ZvNWqEp9IPQ" name="Ventana" visibility="public">
+            <generalization xmi:type="uml:Generalization" xmi:id="_npyYQP2kEe2ZvNWqEp9IPQ" general="_npvU8P2kEe2ZvNWqEp9IPQ"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_npyYQf2kEe2ZvNWqEp9IPQ" name="instancia" visibility="private" isStatic="true" type="_noszIv2kEe2ZvNWqEp9IPQ" isUnique="false" aggregation="composite" association="_dPlCMP2vEe2ZvNWqEp9IPQ">
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_npyYQv2kEe2ZvNWqEp9IPQ" name="defaultValue">
+                <language>JAVA</language>
+                <body>null</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_npy_UP2kEe2ZvNWqEp9IPQ" name="controlador" visibility="private" type="_nl4IoP2kEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_npy_Uf2kEe2ZvNWqEp9IPQ" name="numFramesGen" visibility="private" type="_jmyHwP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_np1bkP2kEe2ZvNWqEp9IPQ" name="humanoide" visibility="private" type="_npzmYP2kEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_np2CoP2kEe2ZvNWqEp9IPQ" name="modoDebug" visibility="private" type="_jnJUIP2iEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_np5F8P2kEe2ZvNWqEp9IPQ" name="Ventana" specification="_np2Cof2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.controlador = controlador;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_np6UFP2kEe2ZvNWqEp9IPQ" name="crearVentana" specification="_np5tAP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    if (instancia == null) {&#xD;
+        instancia = new Ventana(controlador);&#xD;
+    }&#xD;
+    PApplet.runSketch(processingArgs, instancia);&#xD;
+    return instancia;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_np67IP2kEe2ZvNWqEp9IPQ" name="settings" specification="_np6UFf2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    size(1280, 720, P2D);&#xD;
+    PJOGL.setIcon(&quot;gene_icon.png&quot;);&#xD;
+    smooth(16);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_np67Iv2kEe2ZvNWqEp9IPQ" name="setup" specification="_np67If2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    windowTitle(&quot;Circuito Genético&quot;);&#xD;
+    //		GraphicsDevice pantalla = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];&#xD;
+    //		int tasaRefresco = pantalla.getDisplayMode().getRefreshRate();&#xD;
+    frameRate(60);&#xD;
+    stroke(0);&#xD;
+    background(255);&#xD;
+    humanoide = crearFormaEntidad();&#xD;
+    numFramesGen = 0;&#xD;
+    modoDebug = false;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_np67JP2kEe2ZvNWqEp9IPQ" name="draw" specification="_np67I_2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    background(255);&#xD;
+    stroke(0);&#xD;
+    drawFramerate();&#xD;
+    drawCircuito();&#xD;
+    int numGeneraciones = controlador.manipularPoblacion();&#xD;
+    drawGeneraciones(numGeneraciones);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_np67Jv2kEe2ZvNWqEp9IPQ" name="drawCircuito" specification="_np67Jf2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    Modelo modelo = controlador.getModelo();&#xD;
+    drawMeta(modelo.getMeta());&#xD;
+    drawObstaculos(modelo.getObstaculos());&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_np8JQP2kEe2ZvNWqEp9IPQ" name="drawMeta" specification="_np7iMP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    pushMatrix();&#xD;
+    translate(meta.getPosicion().x, meta.getPosicion().y);&#xD;
+    fill(0, 255, 0);&#xD;
+    strokeWeight(4);&#xD;
+    ellipseMode(CENTER);&#xD;
+    ellipse(0, 0, meta.getAncho(), meta.getAlto());&#xD;
+    popMatrix();&#xD;
+    strokeWeight(1);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_np8wU_2kEe2ZvNWqEp9IPQ" name="drawObstaculos" specification="_np8JQf2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    for (Obstaculo obs : obstaculos) {&#xD;
+        drawObstaculo(obs);&#xD;
+    }&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_np9XYv2kEe2ZvNWqEp9IPQ" name="drawObstaculo" specification="_np9XYP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    pushMatrix();&#xD;
+    stroke(0);&#xD;
+    fill(165);&#xD;
+    translate(obstaculo.getPosicion().x, obstaculo.getPosicion().y);&#xD;
+    rotate(obstaculo.getAngulo());&#xD;
+    rectMode(CENTER);&#xD;
+    rect(0, 0, obstaculo.getAncho(), obstaculo.getAlto());&#xD;
+    popMatrix();&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_np_MkP2kEe2ZvNWqEp9IPQ" name="drawEntidad" specification="_np9-cP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    pushMatrix();&#xD;
+    translate(posicion.x, posicion.y);&#xD;
+    rotate(atan2(velocidad.y, velocidad.x));&#xD;
+    shape(humanoide);&#xD;
+    if (modoDebug == true) {&#xD;
+        drawFlechaDireccion(velocidad);&#xD;
+    }&#xD;
+    popMatrix();&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_np_zoP2kEe2ZvNWqEp9IPQ" name="drawFlechaDireccion" specification="_np_Mkf2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    float magnitudVelocidad = velocidad.mag() * 5;&#xD;
+    stroke(255, 0, 0);&#xD;
+    line(0, 0, magnitudVelocidad, 0);&#xD;
+    line(magnitudVelocidad, 0, magnitudVelocidad - 5, -5);&#xD;
+    line(magnitudVelocidad, 0, magnitudVelocidad - 5, 5);&#xD;
+    stroke(0);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nqBBwP2kEe2ZvNWqEp9IPQ" name="crearFormaEntidad" specification="_nqAasP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    PShape humanoide = createShape(GROUP);&#xD;
+    PShape cuerpo = createShape(TRIANGLE, -25, -10, 0, 0, -25, 10);&#xD;
+    cuerpo.setFill(color(0, 0, 255));&#xD;
+    cuerpo.setStroke(color(0));&#xD;
+    cuerpo.setStrokeWeight(2);&#xD;
+    humanoide.addChild(cuerpo);&#xD;
+    PShape cabeza = createShape(ELLIPSE, 0, 0, 10, 10);&#xD;
+    cabeza.setFill(color(0, 0, 255));&#xD;
+    cabeza.setStroke(color(0));&#xD;
+    cabeza.setStrokeWeight(2);&#xD;
+    humanoide.addChild(cabeza);&#xD;
+    PShape extremidades = createShape();&#xD;
+    extremidades.beginShape(LINES);&#xD;
+    extremidades.stroke(0, 0, 255);&#xD;
+    extremidades.vertex(-10, -5);&#xD;
+    extremidades.vertex(5, -10);&#xD;
+    extremidades.vertex(-10, 5);&#xD;
+    extremidades.vertex(5, 10);&#xD;
+    extremidades.vertex(-25, -5);&#xD;
+    extremidades.vertex(-40, -5);&#xD;
+    extremidades.vertex(-25, 5);&#xD;
+    extremidades.vertex(-40, 5);&#xD;
+    extremidades.endShape();&#xD;
+    humanoide.addChild(extremidades);&#xD;
+    return humanoide;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nqC28f2kEe2ZvNWqEp9IPQ" name="drawRutaOptima" specification="_nqBo0P2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    stroke(255, 0, 0);&#xD;
+    strokeWeight(5);&#xD;
+    PVector posicion = controlador.getModelo().getPoblacion().getPosInicial().copy();&#xD;
+    ellipseMode(CENTER);&#xD;
+    fill(255);&#xD;
+    ellipse(posicion.x, posicion.y, 20, 20);&#xD;
+    PVector velocidad = new PVector(0, 0);&#xD;
+    PVector aceleracion = new PVector(0, 0);&#xD;
+    for (int i = 0; i &lt; tiempoObtenido - 1; i++) {&#xD;
+        drawLineaRuta(ruta[i], posicion, velocidad, aceleracion);&#xD;
+    }&#xD;
+    strokeWeight(1);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nqFTMP2kEe2ZvNWqEp9IPQ" name="drawLineaRuta" specification="_nqDeAP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    PVector posicionPrevia = posicion.copy();&#xD;
+    aceleracion.add(fuerza);&#xD;
+    velocidad.add(aceleracion);&#xD;
+    posicion.add(velocidad);&#xD;
+    line(posicionPrevia.x, posicionPrevia.y, posicion.x, posicion.y);&#xD;
+    aceleracion.mult(0);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nqFTMv2kEe2ZvNWqEp9IPQ" name="drawFramerate" specification="_nqFTMf2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    fill(125);&#xD;
+    textSize(16);&#xD;
+    textAlign(LEFT, CENTER);&#xD;
+    text(&quot;Framerate: &quot; + round(frameRate), 10, 15);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nqF6Qv2kEe2ZvNWqEp9IPQ" name="drawGeneraciones" specification="_nqF6QP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    pushMatrix();&#xD;
+    fill(125);&#xD;
+    textSize(16);&#xD;
+    textAlign(LEFT, CENTER);&#xD;
+    text(&quot;Generaciones: &quot; + numGeneraciones, 10, 31);&#xD;
+    popMatrix();&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nqHIYf2kEe2ZvNWqEp9IPQ" name="keyPressed" specification="_nqHIYP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    if (key == 'd' || key == 'D') {&#xD;
+        modoDebug = !modoDebug;&#xD;
+    }&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nqHvcf2kEe2ZvNWqEp9IPQ" name="getNumFramesGen" specification="_nqHIYv2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    return numFramesGen;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nqIWgP2kEe2ZvNWqEp9IPQ" name="setNumFramesGen" specification="_nqHvcv2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.numFramesGen = numFramesGen;&#xD;
+</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_np2Cof2kEe2ZvNWqEp9IPQ" name="Ventana" visibility="private" method="_np5F8P2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_np4e4P2kEe2ZvNWqEp9IPQ" name="controlador" type="_nl4IoP2kEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_np5tAP2kEe2ZvNWqEp9IPQ" name="crearVentana" visibility="public" isStatic="true" method="_np6UFP2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_np5tAf2kEe2ZvNWqEp9IPQ" type="_noszIv2kEe2ZvNWqEp9IPQ" direction="return"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_np6UEP2kEe2ZvNWqEp9IPQ" name="processingArgs" type="_nneEEf2kEe2ZvNWqEp9IPQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_np6UEf2kEe2ZvNWqEp9IPQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_np6UEv2kEe2ZvNWqEp9IPQ" value="*"/>
+              </ownedParameter>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_np6UE_2kEe2ZvNWqEp9IPQ" name="controlador" type="_nl4IoP2kEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_np6UFf2kEe2ZvNWqEp9IPQ" name="settings" visibility="public" method="_np67IP2kEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_np67If2kEe2ZvNWqEp9IPQ" name="setup" visibility="public" method="_np67Iv2kEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_np67I_2kEe2ZvNWqEp9IPQ" name="draw" visibility="public" method="_np67JP2kEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_np67Jf2kEe2ZvNWqEp9IPQ" name="drawCircuito" visibility="private" method="_np67Jv2kEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_np7iMP2kEe2ZvNWqEp9IPQ" name="drawMeta" visibility="public" method="_np8JQP2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_np7iMf2kEe2ZvNWqEp9IPQ" name="meta"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_np8JQf2kEe2ZvNWqEp9IPQ" name="drawObstaculos" visibility="public" method="_np8wU_2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_np8wUP2kEe2ZvNWqEp9IPQ" name="obstaculos">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_np8wUf2kEe2ZvNWqEp9IPQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_np8wUv2kEe2ZvNWqEp9IPQ" value="*"/>
+              </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_np9XYP2kEe2ZvNWqEp9IPQ" name="drawObstaculo" visibility="private" method="_np9XYv2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_np9XYf2kEe2ZvNWqEp9IPQ" name="obstaculo"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_np9-cP2kEe2ZvNWqEp9IPQ" name="drawEntidad" visibility="public" method="_np_MkP2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_np9-cf2kEe2ZvNWqEp9IPQ" name="posicion" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_np-lgP2kEe2ZvNWqEp9IPQ" name="velocidad" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_np_Mkf2kEe2ZvNWqEp9IPQ" name="drawFlechaDireccion" visibility="private" method="_np_zoP2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_np_Mkv2kEe2ZvNWqEp9IPQ" name="velocidad" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_nqAasP2kEe2ZvNWqEp9IPQ" name="crearFormaEntidad" visibility="private" method="_nqBBwP2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nqAasf2kEe2ZvNWqEp9IPQ" type="_npzmYP2kEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_nqBo0P2kEe2ZvNWqEp9IPQ" name="drawRutaOptima" visibility="public" method="_nqC28f2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nqBo0f2kEe2ZvNWqEp9IPQ" name="ruta" type="_jmd-sP2iEe2ZvNWqEp9IPQ">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nqCP4P2kEe2ZvNWqEp9IPQ"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nqCP4f2kEe2ZvNWqEp9IPQ" value="*"/>
+              </ownedParameter>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nqC28P2kEe2ZvNWqEp9IPQ" name="tiempoObtenido" type="_jmyHwP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_nqDeAP2kEe2ZvNWqEp9IPQ" name="drawLineaRuta" visibility="private" method="_nqFTMP2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nqDeAf2kEe2ZvNWqEp9IPQ" name="fuerza" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nqEFEP2kEe2ZvNWqEp9IPQ" name="posicion" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nqEsIP2kEe2ZvNWqEp9IPQ" name="velocidad" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nqEsIf2kEe2ZvNWqEp9IPQ" name="aceleracion" type="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_nqFTMf2kEe2ZvNWqEp9IPQ" name="drawFramerate" visibility="private" method="_nqFTMv2kEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_nqF6QP2kEe2ZvNWqEp9IPQ" name="drawGeneraciones" visibility="public" method="_nqF6Qv2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nqF6Qf2kEe2ZvNWqEp9IPQ" name="numGeneraciones" type="_jmyHwP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_nqHIYP2kEe2ZvNWqEp9IPQ" name="keyPressed" visibility="public" method="_nqHIYf2kEe2ZvNWqEp9IPQ"/>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_nqHIYv2kEe2ZvNWqEp9IPQ" name="getNumFramesGen" visibility="public" method="_nqHvcf2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nqHvcP2kEe2ZvNWqEp9IPQ" type="_jmyHwP2iEe2ZvNWqEp9IPQ" direction="return"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_nqHvcv2kEe2ZvNWqEp9IPQ" name="setNumFramesGen" visibility="public" method="_nqIWgP2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_nqHvc_2kEe2ZvNWqEp9IPQ" name="numFramesGen" type="_jmyHwP2iEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_dPlCMP2vEe2ZvNWqEp9IPQ" name="A_instancia_ventana" memberEnd="_npyYQf2kEe2ZvNWqEp9IPQ _dPmQUP2vEe2ZvNWqEp9IPQ">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_dPmQUP2vEe2ZvNWqEp9IPQ" name="ventana" type="_noszIv2kEe2ZvNWqEp9IPQ" association="_dPlCMP2vEe2ZvNWqEp9IPQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dPm3YP2vEe2ZvNWqEp9IPQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dPm3Yf2vEe2ZvNWqEp9IPQ" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_npYIkP2kEe2ZvNWqEp9IPQ" name="panel_control">
+          <packagedElement xmi:type="uml:Class" xmi:id="_npYvoP2kEe2ZvNWqEp9IPQ" name="PanelControl" visibility="public">
+            <generalization xmi:type="uml:Generalization" xmi:id="_npjHsP2kEe2ZvNWqEp9IPQ" general="_npgEYv2kEe2ZvNWqEp9IPQ"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_npjuwf2kEe2ZvNWqEp9IPQ" name="serialVersionUID" visibility="private" isLeaf="true" isStatic="true" type="_npjuwP2kEe2ZvNWqEp9IPQ" isUnique="false">
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_npkV0P2kEe2ZvNWqEp9IPQ" name="defaultValue">
+                <language>JAVA</language>
+                <body>1L</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_npk84P2kEe2ZvNWqEp9IPQ" name="controlador" visibility="private" type="_nl4IoP2kEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_npnZIP2kEe2ZvNWqEp9IPQ" name="contentPane" visibility="private" type="_nplj8P2kEe2ZvNWqEp9IPQ" isUnique="false"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nprDgP2kEe2ZvNWqEp9IPQ" name="PanelControl" specification="_npoAMP2kEe2ZvNWqEp9IPQ">
+              <language>JAVA</language>
+              <body>&#xD;
+    this.controlador = controlador;&#xD;
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);&#xD;
+    setBounds(100, 100, 450, 300);&#xD;
+    contentPane = new JPanel();&#xD;
+    contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));&#xD;
+    contentPane.setLayout(new BorderLayout(0, 0));&#xD;
+    setContentPane(contentPane);&#xD;
+</body>
+            </ownedBehavior>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_npoAMP2kEe2ZvNWqEp9IPQ" name="PanelControl" visibility="public" method="_nprDgP2kEe2ZvNWqEp9IPQ">
+              <ownedParameter xmi:type="uml:Parameter" xmi:id="_npqccP2kEe2ZvNWqEp9IPQ" name="controlador" type="_nl4IoP2kEe2ZvNWqEp9IPQ"/>
+            </ownedOperation>
+          </packagedElement>
+        </packagedElement>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_nncO4P2kEe2ZvNWqEp9IPQ" name="main">
+        <packagedElement xmi:type="uml:Class" xmi:id="_nnddAP2kEe2ZvNWqEp9IPQ" name="Main" visibility="public">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_7dP6s_2vEe2ZvNWqEp9IPQ" name="controlador" type="_nl4IoP2kEe2ZvNWqEp9IPQ">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7dQhwP2vEe2ZvNWqEp9IPQ"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7dQhwf2vEe2ZvNWqEp9IPQ" value="1"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_tgOJsv2wEe2ZvNWqEp9IPQ" name="controlador" type="_nl4IoP2kEe2ZvNWqEp9IPQ" association="_tgNioP2wEe2ZvNWqEp9IPQ">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_tgOJs_2wEe2ZvNWqEp9IPQ"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_tgOJtP2wEe2ZvNWqEp9IPQ" value="1"/>
+          </ownedAttribute>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_nnjjoP2kEe2ZvNWqEp9IPQ" name="main" specification="_nnhucP2kEe2ZvNWqEp9IPQ">
+            <language>JAVA</language>
+            <body>&#xD;
+    //Introduce todo el flujo de ejecución en la cola de eventos&#xD;
+    EventQueue.invokeLater(new Runnable() {&#xD;
+&#xD;
+        public void run() {&#xD;
+            try {&#xD;
+                //El controlador se encarga de iniciar y realizar todo&#xD;
+                Controlador controlador = new Controlador();&#xD;
+                controlador.iniciar();&#xD;
+            } catch (Exception e) {&#xD;
+                e.printStackTrace();&#xD;
+            }&#xD;
+        }&#xD;
+    });&#xD;
+</body>
+          </ownedBehavior>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_nnhucP2kEe2ZvNWqEp9IPQ" name="main" visibility="public" isStatic="true" method="_nnjjoP2kEe2ZvNWqEp9IPQ">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_nniVgP2kEe2ZvNWqEp9IPQ" name="args" type="_nneEEf2kEe2ZvNWqEp9IPQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nni8kP2kEe2ZvNWqEp9IPQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nni8kf2kEe2ZvNWqEp9IPQ" value="*"/>
+            </ownedParameter>
+          </ownedOperation>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_jmcwkP2iEe2ZvNWqEp9IPQ" name="importedTypes">
+      <packagedElement xmi:type="uml:Package" xmi:id="_jmdXoP2iEe2ZvNWqEp9IPQ" name="processing">
+        <packagedElement xmi:type="uml:Package" xmi:id="_jmdXof2iEe2ZvNWqEp9IPQ" name="core">
+          <packagedElement xmi:type="uml:Class" xmi:id="_jmd-sP2iEe2ZvNWqEp9IPQ" name="PVector"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_npvU8P2kEe2ZvNWqEp9IPQ" name="PApplet"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_npzmYP2kEe2ZvNWqEp9IPQ" name="PShape"/>
+        </packagedElement>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_jmjeQP2iEe2ZvNWqEp9IPQ" name="primitivetype">
+        <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_jmkFUP2iEe2ZvNWqEp9IPQ" name="Float"/>
+        <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_jmyHwP2iEe2ZvNWqEp9IPQ" name="Integer"/>
+        <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_jnJUIP2iEe2ZvNWqEp9IPQ" name="Boolean"/>
+        <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_jnLwYP2iEe2ZvNWqEp9IPQ" name="Double"/>
+        <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_npjuwP2kEe2ZvNWqEp9IPQ" name="Long"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_jn3s4P2iEe2ZvNWqEp9IPQ" name="modelo">
+        <packagedElement xmi:type="uml:Class" xmi:id="_jn4T8P2iEe2ZvNWqEp9IPQ" name="Modelo"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_npgEYP2kEe2ZvNWqEp9IPQ" name="javax">
+        <packagedElement xmi:type="uml:Package" xmi:id="_npgEYf2kEe2ZvNWqEp9IPQ" name="swing">
+          <packagedElement xmi:type="uml:Class" xmi:id="_npgEYv2kEe2ZvNWqEp9IPQ" name="JFrame"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_nplj8P2kEe2ZvNWqEp9IPQ" name="JPanel"/>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_jmnIoP2iEe2ZvNWqEp9IPQ" name="java">
+      <packagedElement xmi:type="uml:Package" xmi:id="_jmnvsP2iEe2ZvNWqEp9IPQ" name="java">
+        <packagedElement xmi:type="uml:Package" xmi:id="_jmnvsf2iEe2ZvNWqEp9IPQ" name="util">
+          <packagedElement xmi:type="uml:Class" xmi:id="_jmoWwP2iEe2ZvNWqEp9IPQ" name="Random"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_joHkgP2iEe2ZvNWqEp9IPQ" name="HashMap"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_nneEEP2kEe2ZvNWqEp9IPQ" name="lang">
+          <packagedElement xmi:type="uml:Class" xmi:id="_nneEEf2kEe2ZvNWqEp9IPQ" name="String"/>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_it0T4P2sEe2ZvNWqEp9IPQ"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="_o37lYP2vEe2ZvNWqEp9IPQ" memberEnd="_o38Mcv2vEe2ZvNWqEp9IPQ _o38Mdf2vEe2ZvNWqEp9IPQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_o38McP2vEe2ZvNWqEp9IPQ" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_o38Mcf2vEe2ZvNWqEp9IPQ" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_o38Mdf2vEe2ZvNWqEp9IPQ" name="vista" type="_nl5WwP2kEe2ZvNWqEp9IPQ" association="_o37lYP2vEe2ZvNWqEp9IPQ"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_tgNioP2wEe2ZvNWqEp9IPQ" memberEnd="_tgOJsv2wEe2ZvNWqEp9IPQ _tgOwwP2wEe2ZvNWqEp9IPQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_tgOJsP2wEe2ZvNWqEp9IPQ" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_tgOJsf2wEe2ZvNWqEp9IPQ" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_tgOwwP2wEe2ZvNWqEp9IPQ" name="main" type="_nnddAP2kEe2ZvNWqEp9IPQ" association="_tgNioP2wEe2ZvNWqEp9IPQ"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_jjO_UP20Ee2ZvNWqEp9IPQ" memberEnd="_jjPmYP20Ee2ZvNWqEp9IPQ _jjPmY_20Ee2ZvNWqEp9IPQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_jjO_Uf20Ee2ZvNWqEp9IPQ" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_jjO_Uv20Ee2ZvNWqEp9IPQ" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_jjPmY_20Ee2ZvNWqEp9IPQ" name="vista" type="_nl5WwP2kEe2ZvNWqEp9IPQ" association="_jjO_UP20Ee2ZvNWqEp9IPQ"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_4GAf0P20Ee2ZvNWqEp9IPQ" memberEnd="_4GBG4v20Ee2ZvNWqEp9IPQ _4GBG4_20Ee2ZvNWqEp9IPQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_4GBG4P20Ee2ZvNWqEp9IPQ" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4GBG4f20Ee2ZvNWqEp9IPQ" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_4GBG4v20Ee2ZvNWqEp9IPQ" name="vista" type="_nl5WwP2kEe2ZvNWqEp9IPQ" association="_4GAf0P20Ee2ZvNWqEp9IPQ"/>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_4GBG4_20Ee2ZvNWqEp9IPQ" name="controlador" type="_nl4IoP2kEe2ZvNWqEp9IPQ" association="_4GAf0P20Ee2ZvNWqEp9IPQ"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_vTC58P33Ee216pqYTiEf0Q" memberEnd="_vTEvIP33Ee216pqYTiEf0Q _vTKOsP33Ee216pqYTiEf0Q">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vTEIEP33Ee216pqYTiEf0Q" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vTEIEf33Ee216pqYTiEf0Q" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_vTKOsP33Ee216pqYTiEf0Q" name="modelo" type="_noAPkP2kEe2ZvNWqEp9IPQ" association="_vTC58P33Ee216pqYTiEf0Q"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_wnHJ4P33Ee216pqYTiEf0Q" memberEnd="_wnHw8v33Ee216pqYTiEf0Q _wnIYAP33Ee216pqYTiEf0Q">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_wnHw8P33Ee216pqYTiEf0Q" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_wnHw8f33Ee216pqYTiEf0Q" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_wnIYAP33Ee216pqYTiEf0Q" name="modelo" type="_noAPkP2kEe2ZvNWqEp9IPQ" association="_wnHJ4P33Ee216pqYTiEf0Q"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_GMrkIP34Ee216pqYTiEf0Q" memberEnd="_GMsLMv34Ee216pqYTiEf0Q _GMsLNf34Ee216pqYTiEf0Q">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GMsLMP34Ee216pqYTiEf0Q" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GMsLMf34Ee216pqYTiEf0Q" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_GMsLNf34Ee216pqYTiEf0Q" name="modelo" type="_noAPkP2kEe2ZvNWqEp9IPQ" association="_GMrkIP34Ee216pqYTiEf0Q"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_JkGy8P34Ee216pqYTiEf0Q" memberEnd="_JkHaAv34Ee216pqYTiEf0Q _JkIBEP34Ee216pqYTiEf0Q">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_JkHaAP34Ee216pqYTiEf0Q" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_JkHaAf34Ee216pqYTiEf0Q" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_JkIBEP34Ee216pqYTiEf0Q" name="modelo" type="_noAPkP2kEe2ZvNWqEp9IPQ" association="_JkGy8P34Ee216pqYTiEf0Q"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_ZI9n8P34Ee216pqYTiEf0Q" memberEnd="_ZI-PAv34Ee216pqYTiEf0Q _ZI-PBf34Ee216pqYTiEf0Q">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ZI-PAP34Ee216pqYTiEf0Q" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ZI-PAf34Ee216pqYTiEf0Q" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_ZI-PBf34Ee216pqYTiEf0Q" name="poblacion" type="_jnFpwP2iEe2ZvNWqEp9IPQ" association="_ZI9n8P34Ee216pqYTiEf0Q"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_BM6FMP39Ee216pqYTiEf0Q" memberEnd="_BM7TUP39Ee216pqYTiEf0Q _BM7TUf39Ee216pqYTiEf0Q">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BM6sQP39Ee216pqYTiEf0Q" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BM6sQf39Ee216pqYTiEf0Q" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_BM7TUP39Ee216pqYTiEf0Q" name="poblacion" type="_jnFpwP2iEe2ZvNWqEp9IPQ" association="_BM6FMP39Ee216pqYTiEf0Q"/>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_BM7TUf39Ee216pqYTiEf0Q" name="controlador" type="_nl4IoP2kEe2ZvNWqEp9IPQ" association="_BM6FMP39Ee216pqYTiEf0Q"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_q8epEP5JEe2sHukQAgM2oQ" memberEnd="_q8geQP5JEe2sHukQAgM2oQ _q8hFUv5JEe2sHukQAgM2oQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_q8f3MP5JEe2sHukQAgM2oQ" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_q8f3Mf5JEe2sHukQAgM2oQ" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_q8hFUv5JEe2sHukQAgM2oQ" name="entidad" type="_jnDNgP2iEe2ZvNWqEp9IPQ" association="_q8epEP5JEe2sHukQAgM2oQ"/>
+    </packagedElement>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_jmYfIP2iEe2ZvNWqEp9IPQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_jmYfIf2iEe2ZvNWqEp9IPQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/PapyrusJava/1#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://PapyrusJava_PROFILES/PapyrusJava.profile.uml#_j9REUByGEduN1bTiWJ0lyw"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_jmZGMP2iEe2ZvNWqEp9IPQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_jmZGMf2iEe2ZvNWqEp9IPQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/Codegen/1#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://Codegen_PROFILES/Codegen.profile.uml#_fPDsIBa-EearhdjjJ6cVzQ"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_jmZGMv2iEe2ZvNWqEp9IPQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_jmZGM_2iEe2ZvNWqEp9IPQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_PROFILES/Standard.profile.uml#_0"/>
+    </profileApplication>
+  </uml:Model>
+  <PapyrusJava:External xmi:id="_jmfz4P2iEe2ZvNWqEp9IPQ" name="processing.core.PVector" base_Classifier="_jmd-sP2iEe2ZvNWqEp9IPQ"/>
+  <PapyrusJava:External xmi:id="_jmqL8P2iEe2ZvNWqEp9IPQ" name="java.util.Random" base_Classifier="_jmoWwP2iEe2ZvNWqEp9IPQ"/>
+  <standard:Create xmi:id="_jmudYP2iEe2ZvNWqEp9IPQ" base_BehavioralFeature="_jmsoMP2iEe2ZvNWqEp9IPQ"/>
+  <standard:Create xmi:id="_jmz88P2iEe2ZvNWqEp9IPQ" base_BehavioralFeature="_jmyu0P2iEe2ZvNWqEp9IPQ"/>
+  <standard:Create xmi:id="_jnR3AP2iEe2ZvNWqEp9IPQ" base_BehavioralFeature="_jnQB0P2iEe2ZvNWqEp9IPQ"/>
+  <PapyrusJava:External xmi:id="_jn5iEP2iEe2ZvNWqEp9IPQ" name="modelo.Modelo" base_Classifier="_jn4T8P2iEe2ZvNWqEp9IPQ"/>
+  <PapyrusJava:External xmi:id="_joIyoP2iEe2ZvNWqEp9IPQ" name="java.util.HashMap" base_Classifier="_joHkgP2iEe2ZvNWqEp9IPQ"/>
+  <standard:Create xmi:id="_joL18P2iEe2ZvNWqEp9IPQ" base_BehavioralFeature="_joKAwP2iEe2ZvNWqEp9IPQ"/>
+  <standard:Create xmi:id="_nnDNUP2kEe2ZvNWqEp9IPQ" base_BehavioralFeature="_nl6k4P2kEe2ZvNWqEp9IPQ"/>
+  <PapyrusJava:External xmi:id="_nnggUP2kEe2ZvNWqEp9IPQ" name="java.lang.String" base_Classifier="_nneEEf2kEe2ZvNWqEp9IPQ"/>
+  <standard:Create xmi:id="_noJZgP2kEe2ZvNWqEp9IPQ" base_BehavioralFeature="_noG9Qv2kEe2ZvNWqEp9IPQ"/>
+  <standard:Create xmi:id="_npak0P2kEe2ZvNWqEp9IPQ" base_BehavioralFeature="_npZWsP2kEe2ZvNWqEp9IPQ"/>
+  <PapyrusJava:External xmi:id="_nph5kP2kEe2ZvNWqEp9IPQ" name="javax.swing.JFrame" base_Classifier="_npgEYv2kEe2ZvNWqEp9IPQ"/>
+  <PapyrusJava:External xmi:id="_npmyEP2kEe2ZvNWqEp9IPQ" name="javax.swing.JPanel" base_Classifier="_nplj8P2kEe2ZvNWqEp9IPQ"/>
+  <standard:Create xmi:id="_nponQP2kEe2ZvNWqEp9IPQ" base_BehavioralFeature="_npoAMP2kEe2ZvNWqEp9IPQ"/>
+  <PapyrusJava:External xmi:id="_npxKIP2kEe2ZvNWqEp9IPQ" name="processing.core.PApplet" base_Classifier="_npvU8P2kEe2ZvNWqEp9IPQ"/>
+  <PapyrusJava:External xmi:id="_np00gP2kEe2ZvNWqEp9IPQ" name="processing.core.PShape" base_Classifier="_npzmYP2kEe2ZvNWqEp9IPQ"/>
+  <standard:Create xmi:id="_np3QwP2kEe2ZvNWqEp9IPQ" base_BehavioralFeature="_np2Cof2kEe2ZvNWqEp9IPQ"/>
+  <standard:Create xmi:id="_aaG5AP3zEe216pqYTiEf0Q" base_BehavioralFeature="_aV5HYP3zEe216pqYTiEf0Q"/>
+  <PapyrusJava:External xmi:id="_qysmIP31Ee216pqYTiEf0Q" name="Colisionable" base_Classifier="_aVRcUP3zEe216pqYTiEf0Q"/>
+  <standard:Create xmi:id="_qyz64P31Ee216pqYTiEf0Q" base_BehavioralFeature="_qyyFsP31Ee216pqYTiEf0Q"/>
+  <standard:Create xmi:id="_rPqO8P31Ee216pqYTiEf0Q" base_BehavioralFeature="_rPoZwP31Ee216pqYTiEf0Q"/>
+</xmi:XMI>

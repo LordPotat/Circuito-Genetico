@@ -6,14 +6,32 @@ import processing.core.PVector;
 import vista.ventana_grafica.Ventana;
 import java.util.ArrayList;
 
-public class CircuitoEjemplo {
+/**
+ * Almacena todos los datos que determinan en qué posición se encontrarán los elementos
+ * del sistema, así como que atributos tendrán para mostrarse e interactuar entre ellos
+ * @author Alberto
+ */
+public class Circuito {
 	
-	private int tiempoObjetivo = 100;
+	/**
+	 * Tiempo que tienen que alcanzar las entidades para terminar el proceso
+	 */
+	private int tiempoObjetivo = 70;
 	
+	/**
+	 * Establece el punto de spawn (punto inicial) en el que aparecen las entidades
+	 * @param ventana gráfica para determinar la posición relativa del spawn
+	 * @return el vector de posición del spawn
+	 */
 	public PVector setSpawn(Ventana ventana)  {
 		return new PVector(ventana.width/2, ventana.height-30);
 	}
 	
+	/**
+	 * Establece los parámetros de inicialización de la meta
+	 * @param ventana gráfica para determinar la posición relativa de la meta
+	 * @return el mapa con los parámetros
+	 */
 	public HashMap<String, Object> setupMeta(Ventana ventana) {
 		HashMap<String, Object> metaParams = new HashMap<String, Object>();
 		metaParams.put("Posicion", new PVector(ventana.width/2, 40));
@@ -22,12 +40,19 @@ public class CircuitoEjemplo {
 		return metaParams;
 	}
 	
+	/**
+	 * Establece los parámetros de inicialización de los obstáculosa
+	 * @param ventana gráfica para determinar la posición relativa de los obstáculos
+	 * @return el mapa con los parámetros
+	 */
 	public ArrayList<HashMap<String, Object>> setupObstaculos(Ventana ventana) {
+		//Inicia una lista con todos los obstáculos que deberá tener el circuito
 		ArrayList<HashMap<String, Object>> obsParams = new ArrayList<HashMap<String, Object>>();
 		int numObstaculos = 9;
 		for(int i=0; i < numObstaculos; i++) {
 			obsParams.add(new HashMap<String, Object>());
 		}
+		//Ajusta los parámetros para cada uno de los obstáculos individualmente
 		obsParams.get(0).put("Posicion", new PVector(ventana.width/2, ventana.height/2));
 		obsParams.get(0).put("Ancho", 200f);	
 		obsParams.get(0).put("Alto", 50f);

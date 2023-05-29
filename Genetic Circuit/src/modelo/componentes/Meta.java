@@ -1,52 +1,73 @@
-package modelo;
+package modelo.componentes;
 
 import processing.core.PVector;
 
-public class Meta {
+/**
+ * El elemento del circuito que actuará como objetivo a alcanzar por las entidades.
+ * Contiene colisiones para detectar cuando alguna entidad ha llegado a ella
+ * @author Alberto
+ */
+public class Meta extends Colisionable{
 	
-	private PVector posicion;
-	private float ancho, alto;
-	private float semiejeMayor, semiejeMenor;
+	private float semiejeHorizontal, semiejeVertical;
 
+	/**
+	 * Constructor
+	 * @param posicion en la que se sitúa en la ventana
+	 * @param ancho: tamaño del eje horizontal 
+	 * @param alto: tamaño del eje vertical
+	 */
 	public Meta(PVector posicion, float ancho, float alto) {
-		this.posicion = posicion;
-		this.ancho = ancho;
-		this.alto = alto;
-		calcularSemiejes();
+		super(posicion, ancho, alto);
+		//Los semiejes son equivalentes a la mitad de los ejes (ancho y alto)
+		semiejeHorizontal = ancho / 2;
+		semiejeVertical = alto / 2;
 	}
 	
-	public boolean contieneEntidad(PVector posEntidad) {
+	/**
+	 * Determina si la meta contiene la posición actual de una entidad, para saber si colisiona
+	 * o no con ella.
+	 * @param posEntidad: el vector de posición de la entidad
+	 * @return si contiene o no la posicion de la entidad
+	 */
+	@Override
+	public boolean chocaConEntidad(PVector posEntidad) {
+		//Distancia de la entidad al centro de la elipse en ambos ejes
 		float distanciaCentroX = posEntidad.x - this.posicion.x;
 		float distanciaCentroY = posEntidad.y - this.posicion.y;
-		double distancia = (Math.pow(distanciaCentroX,2)) / 
-				(Math.pow(semiejeMayor,2)) + (Math.pow(distanciaCentroY,2)) / (Math.pow(semiejeMenor,2));
+		/* Obtiene la distancia real de la entidad respecto a la superficie de la elipse.
+		 * La fórmula se basa en la ecuación de la elipse
+		 * https://es.wikipedia.org/wiki/Semieje_mayor_y_semieje_menor
+		 * Sustitye x-h por distanciaCentroX e y-k por distanciaCentroY, y a por el 
+		 * semieje horizontal y b el semieje vertical,
+		 */
+		double distancia = (Math.pow(distanciaCentroX,2)) / (Math.pow(semiejeHorizontal,2))
+				+ (Math.pow(distanciaCentroY,2)) / (Math.pow(semiejeVertical,2));
+		/* Si la distancia es menor o igual que 1, quiere decir que está contenido en la elipse,
+		 * ya que la fórmula sirve para calcular todos los puntos que forman la elipse tanto 
+		 * en el borde como en su superficie
+		 */
 		return distancia <= 1;
 	}
-	
-	private void calcularSemiejes() {
-		if(ancho > alto) {
-			semiejeMayor = ancho / 2;
-			semiejeMenor = alto / 2;
-		} else if(ancho < alto) {
-			semiejeMayor = alto / 2;
-			semiejeMenor = ancho / 2;
-		} else {
-			float semieje = ancho / 2;
-			semiejeMayor = semieje;
-			semiejeMenor = semieje;
-		}
-	}
-	
-	public PVector getPosicion() {
-		return posicion;
+
+	public float getSemiejeHorizontal() {
+		return semiejeHorizontal;
 	}
 
-	public float getAncho() {
-		return ancho;
+	public float getSemiejeVertical() {
+		return semiejeVertical;
 	}
 
-	public float getAlto() {
-		return alto;
+	@Override
+	public void setAncho(float ancho) {
+		this.ancho = ancho;
+		semiejeHorizontal = ancho/2;
+	}
+
+	@Override
+	public void setAlto(float alto) {
+		this.alto = alto;
+		semiejeVertical = alto/2;
 	}
 	
 }

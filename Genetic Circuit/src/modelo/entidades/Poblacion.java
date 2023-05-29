@@ -6,85 +6,174 @@ import java.util.Random;
 import modelo.Modelo;
 import processing.core.PVector;
 
+/**
+ * Agrupación de entidades que se encarga de iniciarlas con unos parámetros en común,
+ * y de llevar a cabo el proceso evolutivo de éstas paso por paso
+ * @author Alberto
+ */
 public class Poblacion {
 	
 	private Modelo contexto;
+	
+	/**
+	 * Colección de entidades que forman parte de la población
+	 */
 	private Entidad[] entidades;
+	/**
+	 * Colección que contiene entidades repetidas x veces de acuerdo a la probabilidad
+	 * que tiene de reproducirse dependiendo de su aptitud
+	 */
 	private ArrayList<Entidad> poolGenetico;
+	
+	/** 
+	 * Probabilidad de que un gen mute tras el cruce de entidades en la reproducción
+	 */
 	private double tasaMutacion;
+	/**
+	 * Número de frames que tienen las entidades para realizar sus funciones
+	 */
 	private int tiempoVida;
+	/**
+	 * Contador de generaciones que se han reproducido 
+	 */
 	private int numGeneraciones;
+	/*
+	 * Punto de "spawn" donde aparecen todas las entidades al inicio de cada generación
+	 */
 	private PVector posInicial;
+	/*
+	 * Tiempo más cercano al objetivo obtenido por alguna entidad a lo largo de todas las generaciones
+	 */
 	private int mejorTiempo;
+	/**
+	 * Flag que indica si el objetivo de las entidades se ha cumplido 
+	 */
 	private boolean objetivoCumplido;
+	/**
+	 * La entidad que más cerca se ha quedado de cumplir o de haber cumplido el objetivo
+	 */
 	private Entidad mejorEntidad;
+	
 	private Random random = new Random();
 	
+	/**
+	 * Constructor que inicializa la población a través de una serie de parámetros iniciales
+	 * y crea las colecciones de datos necesarias
+	 * @param contexto: el modelo de datos que contiene el resto de elementos del sistema
+	 * @param poblacionParams: mapa con los parámetors que dictan el comportamiento de las entidades
+	 * @param posInicial: posición en la que aparecen todas las entidades al inicio de su generación
+	 */
 	public Poblacion(Modelo contexto, HashMap<String, Integer> poblacionParams, PVector posInicial) {
 		this.contexto = contexto;
+		//Crea un array con tantas entidades como se indique desde el controlador
 		entidades = new Entidad[poblacionParams.get("NumEntidades")];
+		//Inicia el pool genético vacío para rellenarlo cada vez que se seleccionen las entidades
 		poolGenetico = new ArrayList<Entidad>();
+		//La tasa de mutación viene como porcentaje así que se convierte a valor decimal
 		this.tasaMutacion = ((double) poblacionParams.get("TasaMutacion")) / 100;
-		numGeneraciones = 1;
+		numGeneraciones = 1; //Empieza como la primera generación
 		this.tiempoVida = poblacionParams.get("TiempoVida");
 		this.posInicial = posInicial;
-		mejorTiempo = tiempoVida;
+		//El "record" de tiempo irá bajando a partir del tiempo de vida, que es el peor resultado
+		mejorTiempo = tiempoVida; 
 		objetivoCumplido = false;
 		generarPrimeraGen();
 	}
 	
+	/**
+	 * Inicializa tantas entidades como vengan establecidas en el tamaño de población
+	 */
 	private void generarPrimeraGen() {
 		for (int i=0; i < entidades.length; i++) {
+			/* Como la primera generación no es producto de un cruce, se le pasa null
+			 * para que se inicialice un ADN nuevo con genes aleatorios
+			 */
 			entidades[i] = new Entidad(this, null);
 		}
 	}
 
+	/**
+	 * Ejecuta para todas las entidades la función que deben realizar en cada frame
+	 * y llama al controlador para que de la orden de actualizarlas en la ventana gráfica
+	 */
 	public void realizarCiclo() {
 		for(int i=0; i < entidades.length; i++) {
+			//La entidad se encontrará en otra posición y mirando a otra dirección tras actuar
 			entidades[i].actuar();
+			//Le comunica a la vista que muestre la entidad a través del controlador
 			contexto.getControlador().mostrarEntidad(entidades[i]);
 		}
 	}
 	
+	/**
+	 * Realiza todos los pasos del algoritmo genético para que las entidades evolucionen
+	 * hasta que tras evaluarlas se compruebe que se ha completado el objetivo
+	 */
 	public void evolucionar() {
 		seleccionar();
 		if(!objetivoCumplido) {
-			reproducir();
+			/* Si no ha cumplido aún el objetivo, pasa a reproducir a las entidades para
+			 * producir una nueva generación a partir de la anterior
+			 */
+			reproducir();	
 		} else {
+			/* Tras cumplir el objetivo da la orden a la vista de que muestre la ruta
+			 * tomada por la mejor entidad, pasándole ésta para que la mantenga en pantalla
+			 */
 			contexto.getControlador().mostrarRutaOptima(mejorEntidad);
 		}
-		
 	}
 	
+	/**
+	 * Evalúa a todas las entidades, y si todavía ninguna cumple el objetivo, pasa
+	 * a calcular la proporción de las aptitudes respecto a la mejor de la generación
+	 * para poder determinar que probabilidad tienen de reproducirse.
+	 */
 	private void seleccionar() {
-		poolGenetico.clear();
+		poolGenetico.clear(); //Limpia el pool genético para que lo rellene en la reproducción
 		double mejorAptitud = evaluarEntidades();
+		/* Si tras evaluar alguna cumple el objetivo actualiza la flag y no continúa
+		 * calculando sus probabilidades de reproducción al no ser necesario 
+		 */
 		if(comprobarObjetivo()) {
 			objetivoCumplido = true;
 			return;
 		}
-		for(Entidad entidad : entidades) {
-			entidad.setAptitud(entidad.getAptitud() / mejorAptitud);
-		}
-		calcProbabilidadReproduccion();
+		calcProbabilidadReproduccion(mejorAptitud);
 	}
 
+	/**
+	 * Comprueba si se ha cumplido el objetivo de las entidades de llegar al meta
+	 * del circuito en el tiempo establecido.
+	 * @return si el mejor tiempo hasta el momento pasa el tiempo objetivo 
+	 */
 	private boolean comprobarObjetivo() {
 		return mejorTiempo <= contexto.getCircuito().getTiempoObjetivo();
 	}
 
+	/** 
+	 * Calcula la aptitud para todas las entidades y comprueba cuál es la mejor
+	 * calificada y si se ha superado el tiempo record
+	 * @return la mejor aptitud obtenida en la generación actual
+	 */
 	private double evaluarEntidades() {
 		double mejorAptitud = 0.0;
 		for(Entidad entidad : entidades) {
+			//Si la aptitud obtenida es mejor que alguna anterior, la sustituye
 			if (entidad.evaluarAptitud() > mejorAptitud) {
 				mejorAptitud = entidad.getAptitud();
-//				System.out.println("Tiempo obtenido: " + entidad.getTiempoObtenido());
 				comprobarTiempoRecord(entidad);
 			}
 		}
 		return mejorAptitud;
 	}
 
+	/**
+	 * Compara si el tiempo obtenido por una entidad que ha obtenido la mejor aptitud
+	 * de la generación hasta el momento, ha superado el record de tiempo
+	 * actual y almacena el tiempo y la entidad que lo ha conseguido
+	 * @param entidad cuyo tiempo debe ser comparado
+	 */
 	private void comprobarTiempoRecord(Entidad entidad) {
 		if(entidad.getTiempoObtenido() < mejorTiempo) {
 			mejorTiempo = entidad.getTiempoObtenido();
@@ -93,43 +182,111 @@ public class Poblacion {
 		}
 	}
 
-	private void calcProbabilidadReproduccion() {
+	/**
+	 * Determina la probabilidad que tiene cada entidad de reproducirse con otra según
+	 * la proporción entre su aptitud y la mejor aptitud
+	 * @param mejorAptitud obtenida esta generación
+	 */
+	private void calcProbabilidadReproduccion(double mejorAptitud) {
+		/* Normaliza la aptitud para todas las entidades de forma que que se obtenga
+		 * un valor equivalente a la proporción entre su aptitud y la mejor de la generación
+		 */
+		for(Entidad entidad : entidades) {
+			entidad.setAptitud(entidad.getAptitud() / mejorAptitud);
+		}
+		/* Los valores normalizados son las probabilidades que tiene cada entidad
+		 * de reproducirse. Se multiplica por 100 para saber cuantas veces se debe
+		 * añadir la entidad al pool genético 
+		 */
 		for(Entidad entidad : entidades) {
 			int probabilidad = (int) (entidad.getAptitud() * 100);
+			/* Funciona como un saco con canicas dentro. Suponiendo que tienes canicas
+			 * de varios colores repetidos x veces, si metes la mano tienes tantas 
+			 * probabilidades de sacar la de un color como veces aparezca en el saco.
+			 * En este caso las veces que aparecen las entidades en el "saco" vendrán
+			 * determinadas por su aptitud
+			 */
 			for(int i=0; i < probabilidad; i++) {
-				poolGenetico.add(entidad);
+				poolGenetico.add(entidad); 
 			}
 		}
 	}
 
+	/**
+	 * Realiza el proceso de reproducción de las entidades para producir la siguiente
+	 * generación a partir de la anterior. Deberán generarse el mismo número de
+	 * entidades hijas que en la actual, y se obtendrán a partir de escoger
+	 * aleatoriamente dos parientes del pool genético seleccionado anteriormente.
+	 * Despúes se cruzará el ADN de los parientes con el algoritmo adecuado para 
+	 * crear la entidad nueva con ese ADN asignado, y se le aplicarán unas posibles
+	 * mutaciones aleatorias en su genotipo para aumentar la variabilidad de la población
+	 */
 	private void reproducir() {
+		//Se crea una colección nueva de entidades con el mismo tamaño a la actual
 		Entidad[] nuevaGeneracion = new Entidad[entidades.length];
+		/* Se añaden nuevas entidades hijas a la colección creadas tras "reproducirse"
+		 * dos parientes aleatorios del pool genético
+		 */
 		for(int i=0; i < entidades.length; i++) {
+			//El primer pariente se obtiene del primer indice aleatorio que escoge
 			int indPariente1 = random.nextInt(poolGenetico.size());
 			Entidad pariente1 = poolGenetico.get(indPariente1);
+			//El segundo pariente deberá ser uno con una aptitud distinta al primero
 			Entidad pariente2 = encontrarParienteDistinto(pariente1);
+			//Se obtiene el ADN que tendrá el hijo tras cruzar el de ambos parientes
 			ADN adnHijo = cruzarEntidades(pariente1, pariente2);
-			mutar(adnHijo);
+			mutar(adnHijo); //Se le aplican las mutaciones que surjan aleatoriametne
+			/* Como creamos una nueva entidad a partir de un genotipo ya construido,
+			 * le pasamos el ADN como argumento a su constructor, y ya no generará
+			 * genes aleatoriamente (excluyendo aquellos que han mutado)
+			 */
 			nuevaGeneracion[i] = new Entidad(this, adnHijo);
 		}
-		entidades = nuevaGeneracion;
-		numGeneraciones++;
+		entidades = nuevaGeneracion; //Se sustituyen las entidades actuales por las nuevas
+		numGeneraciones++; //Se incrementa el contador de generaciones
 	}
-
+	
+	/**
+	 * Busca un pariente aleatorio en el pool genético cuya aptitud no sea igual a
+	 * la del primer pariente escogido para reproducirse.
+	 * Sirve para evitar que un pariente se reproduzca consigo mismo, ya que no tendría
+	 * mucho sentido en este contexto, y para que no se cruce con alguno con la misma
+	 * aptitud, puesto que eso disminuiría considerablemente la variación de genes en
+	 * los hijos obtenidos para la siguiente generación, evitando que evolucionen
+	 * @param pariente1: primer pariente que se ha elegido para cruzarse
+	 * @return el segundo pariente que se cruzará con el primero
+	 */
 	private Entidad encontrarParienteDistinto(Entidad pariente1) {
 		int indPariente2;
+		/* Hasta que no salga un pariente con una aptitud distinta, continúa sacando
+		 * parientes aleatoriamente del pool genético
+		 */
 		do {
 			indPariente2 = random.nextInt(poolGenetico.size());
 		} while(poolGenetico.get(indPariente2).getAptitud() == pariente1.getAptitud());
+		//Una vez ha obtenido el que buscaba, puede devolver el pariente para que se crucen
 		Entidad pariente2 = poolGenetico.get(indPariente2);
 		return pariente2;
 	}
 	
+	/**
+	 * Produce un ADN a partir de juntar los genes de dos parientes haciendo
+	 * una "tirada al aire de una moneda" con cada gen que deberá tener
+	 * @param pariente1
+	 * @param pariente2
+	 * @return el ADN (genotipo) con los genes obtenidos del cruce
+	 */
 	private ADN cruzarEntidades(Entidad pariente1, Entidad pariente2) {
+		//Inicia un array de vectores cuyo tamaño son los frames de vida de la entidad
 		PVector[] genesHijo = new PVector[getTiempoVida()];
+		//Obtiene los genes de ambos parientes
 		PVector[] genesPariente1 = pariente1.getAdn().getGenes();
 	    PVector[] genesPariente2 = pariente2.getAdn().getGenes();
+	    /* Asigna a cada elemento del array el gen cuyo índice corresponde al de uno de los
+	     * dos parientes según el que toque aleatoriamente
+	     */
 		for(int i=0; i < genesHijo.length; i++) {
+			//En cada gen tendrá un 50% de posibilidades de elegir el de un pariente u otro
 			if (random.nextBoolean()) {
 				genesHijo[i] = genesPariente1[i];
 			} else {
@@ -139,6 +296,12 @@ public class Poblacion {
 		return new ADN(genesHijo);
 	}
 	
+	/**
+	 * Recorre todos los genes del ADN de una entidad y por cada uno existirá 
+	 * la posibilidad (determinada por la probabilidad de la tasa de mutación)
+	 * de que mute transformándose en un vector completamente aleatorio
+	 * @param adnHijo que podrá ser alterado
+	 */
 	private void mutar(ADN adnHijo) {
 		for(PVector gen : adnHijo.getGenes()) {
 			if(random.nextDouble(1) < tasaMutacion) {
