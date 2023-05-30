@@ -22,11 +22,10 @@ public class Ventana extends PApplet {
 		this.controlador = controlador;
 	}
 	
-	public static Ventana crearVentana(String[] processingArgs, Controlador controlador) {
+	public static Ventana crearVentana(Controlador controlador) {
 		if (instancia == null) {
 			instancia = new Ventana(controlador);
 		}
-		PApplet.runSketch(processingArgs, instancia);
 		return instancia;
 	}
 	
@@ -146,7 +145,7 @@ public class Ventana extends PApplet {
 	
 	public void drawRutaOptima(PVector[] ruta, int tiempoObtenido) {
 		stroke(255,0,0);
-		strokeWeight(5);
+		strokeWeight(3);
 		PVector posicion = controlador.getModelo().getPoblacion().getPosInicial().copy();
 		ellipseMode(CENTER);
 		fill(255);
@@ -160,12 +159,30 @@ public class Ventana extends PApplet {
 	}
 
 	private void drawLineaRuta(PVector fuerza, PVector posicion, PVector velocidad, PVector aceleracion) {
+		PVector posicionPrevia = simularMovimiento(fuerza, posicion, velocidad, aceleracion);
+		line(posicionPrevia.x, posicionPrevia.y, posicion.x, posicion.y);
+		pushMatrix();
+		drawFlechaDireccion(velocidad, posicionPrevia);
+		popMatrix();
+		stroke(255,0,0);
+		aceleracion.mult(0);
+	}
+
+	private void drawFlechaDireccion(PVector velocidad, PVector posicionPrevia) {
+		translate(posicionPrevia.x, posicionPrevia.y);
+		rotate(atan2(velocidad.y, velocidad.x));
+		stroke(204, 0, 255);
+		float magnitudVelocidad = velocidad.mag() * 5;
+		line(magnitudVelocidad, 0, magnitudVelocidad - 5, -5);
+		line(magnitudVelocidad, 0, magnitudVelocidad - 5, 5);
+	}
+
+	private PVector simularMovimiento(PVector fuerza, PVector posicion, PVector velocidad, PVector aceleracion) {
 		PVector posicionPrevia = posicion.copy();
 		aceleracion.add(fuerza);
 		velocidad.add(aceleracion);
 		posicion.add(velocidad);
-		line(posicionPrevia.x, posicionPrevia.y, posicion.x, posicion.y);
-		aceleracion.mult(0);
+		return posicionPrevia;
 	}
 	
 	private void drawFramerate() {

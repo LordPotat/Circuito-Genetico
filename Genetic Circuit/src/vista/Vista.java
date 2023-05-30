@@ -3,6 +3,7 @@ package vista;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -17,10 +18,17 @@ public class Vista {
 	
 	public Vista(Controlador controlador) {
 		initLookAndFeel();
+		
+		SwingUtilities.invokeLater(() -> {
+			panelControl = new PanelControl(controlador);
+	    });
+		
 		String[] processingArgs = {"Circuito Genético"};
-		ventana = Ventana.crearVentana(processingArgs, controlador);
-//		panelControl = new PanelControl(controlador);
-//		panelControl.setVisible(true);
+		ventana = Ventana.crearVentana(controlador);
+	    Thread hiloProcessing = new Thread(() -> {
+	    	Ventana.runSketch(processingArgs, ventana);
+	    });
+	    hiloProcessing.start();
 	}
 
 	public Ventana getVentana() {

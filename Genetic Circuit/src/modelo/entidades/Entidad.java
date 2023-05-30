@@ -246,6 +246,10 @@ public class Entidad {
 	public int getTiempoObtenido() {
 		return tiempoObtenido;
 	}
+
+	public boolean isHaChocado() {
+		return haChocado;
+	}
 	
 	
 }

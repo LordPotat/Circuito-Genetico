@@ -100,8 +100,12 @@ public class Poblacion {
 		for(int i=0; i < entidades.length; i++) {
 			//La entidad se encontrará en otra posición y mirando a otra dirección tras actuar
 			entidades[i].actuar();
-			//Le comunica a la vista que muestre la entidad a través del controlador
-			contexto.getControlador().mostrarEntidad(entidades[i]);
+			//Si la entidad choca, no debe mostrarla (mejora condiderablemente el rendimiento)
+			if(!entidades[i].isHaChocado()) {
+				//Le comunica a la vista que muestre la entidad a través del controlador
+				contexto.getControlador().mostrarEntidad(entidades[i]);
+			}
+			
 		}
 	}
 	

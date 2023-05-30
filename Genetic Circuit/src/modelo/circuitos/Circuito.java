@@ -16,7 +16,7 @@ public class Circuito {
 	/**
 	 * Tiempo que tienen que alcanzar las entidades para terminar el proceso
 	 */
-	private int tiempoObjetivo = 70;
+	private int tiempoObjetivo = 140;
 	
 	/**
 	 * Establece el punto de spawn (punto inicial) en el que aparecen las entidades
@@ -57,22 +57,22 @@ public class Circuito {
 		obsParams.get(0).put("Ancho", 200f);	
 		obsParams.get(0).put("Alto", 50f);
 		obsParams.get(0).put("Angulo", 0f);
-		obsParams.get(1).put("Posicion", new PVector(ventana.width/2 - 200, ventana.height/2 + 200));
+		obsParams.get(1).put("Posicion", new PVector(ventana.width/2 - 150, ventana.height/2 + 200));
 		obsParams.get(1).put("Ancho", 200f);	
 		obsParams.get(1).put("Alto", 50f);
-		obsParams.get(1).put("Angulo", 0f);
-		obsParams.get(2).put("Posicion", new PVector(ventana.width/2 + 200, ventana.height/2 + 200));
+		obsParams.get(1).put("Angulo", -45f);
+		obsParams.get(2).put("Posicion", new PVector(ventana.width/2 + 150, ventana.height/2 + 200));
 		obsParams.get(2).put("Ancho", 200f);	
 		obsParams.get(2).put("Alto", 50f);
-		obsParams.get(2).put("Angulo", 0f);
-		obsParams.get(3).put("Posicion", new PVector(ventana.width/2 - 200, ventana.height/2 - 200));
+		obsParams.get(2).put("Angulo", 45f);
+		obsParams.get(3).put("Posicion", new PVector(ventana.width/2 - 150, ventana.height/2 - 200));
 		obsParams.get(3).put("Ancho", 200f);	
 		obsParams.get(3).put("Alto", 50f);
-		obsParams.get(3).put("Angulo", 0f);
-		obsParams.get(4).put("Posicion", new PVector(ventana.width/2 + 200, ventana.height/2 - 200));
+		obsParams.get(3).put("Angulo", 45f);
+		obsParams.get(4).put("Posicion", new PVector(ventana.width/2 + 150, ventana.height/2 - 200));
 		obsParams.get(4).put("Ancho", 200f);	
 		obsParams.get(4).put("Alto", 50f);
-		obsParams.get(4).put("Angulo", 0f);
+		obsParams.get(4).put("Angulo", -45f);
 		obsParams.get(5).put("Posicion", new PVector(ventana.width/2 - 300, ventana.height/2));
 		obsParams.get(5).put("Ancho", 50f);	
 		obsParams.get(5).put("Alto", (float)ventana.height);

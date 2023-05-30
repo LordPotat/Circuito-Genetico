@@ -20,9 +20,11 @@ public class Controlador {
 	
 	/** 
 	 * Inicia el modelo de datos y la vista con la propia instancia para que accedan al controlador
+	 * @throws InterruptedException 
 	 */
-	public Controlador() {
+	public Controlador() throws InterruptedException {
 		vista = new Vista(this);
+		Thread.sleep(1000); //Para que de tiempo de cargar la ventana antes de iniciar los datos
 		modelo = new Modelo(this);
 	}
 
@@ -47,7 +49,7 @@ public class Controlador {
 		HashMap<String, Integer> poblacionParams = new HashMap<String, Integer>();
 		poblacionParams.put("NumEntidades", 5000);
 		poblacionParams.put("TasaMutacion", 20);	
-		poblacionParams.put("TiempoVida", 200); //TODO controlar que tiempoVida !<= tiempoObjetivo
+		poblacionParams.put("TiempoVida", 400); //TODO controlar que tiempoVida !<= tiempoObjetivo
 		return poblacionParams;
 	}
 
