@@ -3,8 +3,11 @@ package controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 
 import modelo.Modelo;
 import modelo.circuitos.Circuito;
@@ -25,29 +28,32 @@ public class Controlador {
 	private Modelo modelo;
 	
 	/**
-	 * Flag que indica si el proceso evolutivo debe comenzar
+	 * Flag que indica si el modo automático está activado y las generaciones suceden solas
 	 */
-	private boolean iniciado = false;
+	private boolean modoAutomatico = false;
 	/**
 	 * Flag que indica si el proceso evolutivo está parado hasta que se reactive
 	 */
 	private boolean parado = true;
 	
 	/** 
-	 * Inicia el modelo de datos y la vista con la propia instancia para que accedan al controlador
+	 * Inicia la vista con la propia instancia para que las interfaces accedan al controlador
 	 * @throws InterruptedException 
 	 */
-	public Controlador() throws InterruptedException {
+	public void iniciarVista() throws InterruptedException  {
 		vista = new Vista(this);
-		Thread.sleep(250); //Para que de tiempo de cargar la ventana antes de iniciar los datos
-		modelo = new Modelo(this);
+		//Espera a que de tiempo a que se cargue la ventana
+		Thread.sleep(300);
+		//Cuando la ventana esté correctamente iniciada se pueden iniciar los datos
+		iniciarCircuito();
 	}
 
 	/** 
-	 * Inicia los objetos del modelo de datos: la meta, obstaculos y población
+	 * Inicia los objetos del modelo de datos presentes en el circuito: la meta, obstaculos 
 	 * Obtiene los datos almacenados en el circuito escogido para configurar sus parámetros
 	 */
-	public void iniciar() {
+	public void iniciarCircuito() {
+		modelo = new Modelo(this);
 		Ventana ventana = vista.getVentana();
 		Circuito circuito = modelo.getCircuito();
 		modelo.setMeta(circuito.setupMeta(ventana));
@@ -70,6 +76,7 @@ public class Controlador {
 		 * si es el caso después de mostrar la ruta óptima, para no continuar el proceso
 		 */
 		if(entidades.isObjetivoCumplido()) {
+			
 			panelControl.setValor("Generacion", entidades.getNumGeneraciones());
 			mostrarRutaOptima(entidades.getMejorEntidad());
 			return;
@@ -85,10 +92,24 @@ public class Controlador {
 		else {
 			ventana.setNumFramesGen(0);
 			entidades.evolucionar();
-			//Desabilita el botón de pausa para que no pueda iniciar otra generación por error
-			vista.getPanelControl().getBtnPausar().setEnabled(false);
-			//Para el ciclo hasta que se reanude pulsando el botón o con el modo automático
-			parado = true; 
+			/* Si el modo automático no está activado, para el proceso hasta que se pulse
+			 * el botón de "siguiente". Si está activado, deja que continúe por su cuenta.
+			 */
+			if(!modoAutomatico) {
+				parado = true; 
+				//Desabilita el botón de pausa para que no pueda iniciar otra generación por error
+				vista.getPanelControl().getBtnPausar().setEnabled(false);
+				/* Habilita el botón de "siguiente" para que pueda pasar a la siguiente generación
+				 * Lo hace con un delay para que se actualice correctamente el contador de generaciones
+				 */
+				new Timer().schedule(new TimerTask() {
+					@Override
+					public void run() {
+						vista.getPanelControl().getBtnProceder().setEnabled(true);
+					}
+				}, 5);
+			}
+			
 		}
 		panelControl.setValor("Generacion", entidades.getNumGeneraciones());
 		return;
@@ -117,17 +138,16 @@ public class Controlador {
 	}
 	
 	/**
-	 * Implementa el evento desencadenado al pulsar el botón de empezar. Se actualizará el estado a
-	 * iniciado y se iniciará la población de entidades a partir de los parámetros introducidos en el
-	 * panel de control para que de comienzo al proceso evolutivo. Una vez iniciado cambia el botón 
-	 * de "Empezar" a un botón de "Siguiente" y cambiará su comportamiento. 
+	 * Implementa el evento desencadenado al pulsar el botón de empezar. se iniciará la población 
+	 * de entidades a partir de los parámetros introducidos en el panel de control para que de
+	 * comienzo al proceso evolutivo. Una vez iniciado cambia el botón de "Empezar" a un botón
+	 * de "Siguiente" y cambiará su comportamiento. 
 	 * @author Alberto
 	 */
 	public class BtnEmpezarListener implements ActionListener {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			iniciado = true;
 			//Iniciamos la población con los parámetros iniciales, incluido el punto de spawn del circuito
 			modelo.setPoblacionEntidades(setupPoblacion(), modelo.getCircuito().setSpawn(vista.getVentana()));
 			/* Actualizamos la flag de parado para que la ventana pueda empezar a llamar a la función de
@@ -142,6 +162,8 @@ public class Controlador {
 			btnProceder.setText("Siguiente");
 			btnProceder.addActionListener(new BtnSiguienteListener()); //añadimos el otro listener
 			btnProceder.removeActionListener(this); //eliminamos el actual
+			//Deshabilitamos el botón hasta que se pueda avanzar de generación
+			btnProceder.setEnabled(false); 
 			//Habilita también los demás botones que ahora tendrán sentido utilizar
 			panelControl.getBtnReiniciar().setEnabled(true);
 			panelControl.getBtnPausar().setEnabled(true);
@@ -174,6 +196,8 @@ public class Controlador {
 			parado = false;
 			//Habilita el botón de pausa ya que ya no provocaría que iniciase otro ciclo
 			vista.getPanelControl().getBtnPausar().setEnabled(true);
+			//Desactiva el propio botón hasta que se pueda pasar a la siguiente generación
+			vista.getPanelControl().getBtnProceder().setEnabled(false);
 		}
 	}
 	
@@ -188,8 +212,6 @@ public class Controlador {
 		public void actionPerformed(ActionEvent e) {
 			parado = !parado; //Invierte el estado de la flag
 			PanelControl panelControl = vista.getPanelControl();
-			//Deshabilita el botón de "Siguiente" si está parado y lo habilita si no lo está
-			panelControl.getBtnProceder().setEnabled(!parado);
 			//Actualiza el texto a "Reanudar" o "pausar" según está parado o no
 			String textoBtn = (parado) ? "Reanudar" : "Pausar";
 			panelControl.getBtnPausar().setText(textoBtn);
@@ -207,26 +229,94 @@ public class Controlador {
 		}
 	}
 	
-	//TODO 
+	/**
+	 * Para el actual proceso evolutivo y restaura el panel de control al estado inicial
+	 * del programa para poder iniciar de nuevo otra ejecución de cero
+	 * @author Alberto
+	 */
 	public class BtnReiniciarListener implements ActionListener {
 		
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//Impide que la ventana siga actualizando hasta que volvamos a empezar
+			parado = true; 
+			/* Si se ha pausado antes el proceso, la ventana deja de actualizarse, por
+			 * tanto, al reiniciar debe comprobar si lo está haciendo y de lo contrario
+			 * activar el bucle de refrescar la ventana
+			 */
+			Ventana ventana = vista.getVentana();
+			if(!ventana.isLooping()) {
+				ventana.loop();
+			}
+			//Dejamos activado sólo el botón de empezar
 			PanelControl panelControl = vista.getPanelControl();
-			
+			panelControl.getBtnReiniciar().setEnabled(false);
+			panelControl.getBtnPausar().setEnabled(false);
+			JButton btnProceder = panelControl.getBtnProceder();
+			btnProceder.setEnabled(true);
+			/* Cambiamos el botón de "Siguiente" por "Empezar" y sustituimos su listener
+			 * por el que le corresponde ahora
+			 */
+			btnProceder.setText("Empezar");
+			btnProceder.removeActionListener(btnProceder.getActionListeners()[0]);
+			btnProceder.addActionListener(new BtnEmpezarListener());
+			//Reseteamos la información mostrada en el panel de control
+			reiniciarInfoPanel(panelControl);
+		}
+		
+		/* Reinicia todos los valores de información del panel de control sobre el 
+		 * anterior proceso a cero pero deja los parámetros editables sin alterar
+		 * por si quiere repetir un proceso igual que antes
+		 */
+		private void reiniciarInfoPanel(PanelControl panelControl) {
+			panelControl.setValor("TiempoRecord", 0);
+			panelControl.setValor("MejorAptitud", 0);
+			panelControl.setValor("Metas", 0);
+			panelControl.setValor("Colisiones", 0);
+			panelControl.setValor("Generacion", 0);
 		}
 	}
 	
-	//TODO
+	/**
+	 * Activa o desactiva según se marque la checkbox el modo automático. Si se activa
+	 * las generaciones se sucederán sólas sin necesidad del input del usuario para
+	 * continuar su ciclo de vida. Si se desactiva el usuario deberá pulsar el botón
+	 * de "Siguiente" para avanzar de generación.
+	 * @author Alberto
+	 */
 	public class CbModoAutoListener implements ActionListener {
-		
-		
+	
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			//Obtenemos si el checkbox que lanza el evento está o no activado
+			JCheckBox cbModoAuto = (JCheckBox) e.getSource();
+			boolean activado = cbModoAuto.isSelected();
+			//Activa o desactiva el modo automático según esté seleccionado
+			modoAutomatico = activado;
+			
+			JButton btnProceder = vista.getPanelControl().getBtnProceder();
+			/* Comprueba si el botón proceder es ahora mismo "Siguiente" ya que no debe
+			 * modificarlo si está en modo "Empezar, ya que solo debe comenzar una población
+			 * de esa manera.
+			 */
+			if(btnProceder.getText().equals("Siguiente")) {
+				/* Si el botón "Siguiente" está habilitado, implica que la generación actual
+				 * ha terminado su ciclo y que está esperando a que se pulse para continuar.
+				 * Por tanto, nos interesa que cuando activemos el modo automático inicie
+				 * la siguiente generación directamente
+				 */
+				if(btnProceder.isEnabled()) {
+					parado = false;
+					/* Deshabilita el botón de "Siguiente" solo si el proceso estaba parado,
+					 * para que en el siguiente ciclo ya no permita avanzar manualmente
+					 */
+					btnProceder.setEnabled(!activado);
+				} 
+			}
 			
 		}
+		
 	}
 	
 	public Vista getVista() {
@@ -238,7 +328,7 @@ public class Controlador {
 	}
 
 	public boolean isIniciado() {
-		return iniciado;
+		return modoAutomatico;
 	}
 
 	public boolean isParado() {

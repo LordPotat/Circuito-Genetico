@@ -13,11 +13,11 @@ public class Main {
 		//Introduce todo el flujo de ejecución en la cola de eventos
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				//El controlador se encarga de iniciar y realizar todo
+				Controlador controlador = new Controlador();
 				try {
-					//El controlador se encarga de iniciar y realizar todo
-					Controlador controlador = new Controlador();
-					controlador.iniciar();
-				} catch (Exception e) {
+					controlador.iniciarVista();
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
