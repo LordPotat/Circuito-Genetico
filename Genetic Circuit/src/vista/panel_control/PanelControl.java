@@ -102,19 +102,27 @@ public class PanelControl extends JFrame {
         panel.add(seccion2);
 
         seccion2.add(new JLabel("Población total"));
-        spPoblacion = new JSpinner(new SpinnerNumberModel(1000, 2, 10000, 1));
+        spPoblacion = new JSpinner(new SpinnerNumberModel(1000, 4, 15000, 50));
+        spPoblacion.setName("NumEntidades");
+        spPoblacion.addChangeListener(controlador.new SpParamListener());
         seccion2.add(spPoblacion);
 
         seccion2.add(new JLabel("Tasa de mutación (%)"));
         spMutacion = new JSpinner(new SpinnerNumberModel(20, 0, 100, 1));
+        spMutacion.setName("TasaMutacion");
+        spMutacion.addChangeListener(controlador.new SpParamListener());
         seccion2.add(spMutacion);
 
         seccion2.add(new JLabel("Tiempo objetivo (frames)"));
-        spTiempoObjetivo = new JSpinner(new SpinnerNumberModel(140, 0, 10000, 1));
+        spTiempoObjetivo = new JSpinner(new SpinnerNumberModel(140, 2, 2000, 1));
+        spTiempoObjetivo.setName("TiempoObjetivo");
+        spTiempoObjetivo.addChangeListener(controlador.new SpParamListener());
         seccion2.add(spTiempoObjetivo);
 
         seccion2.add(new JLabel("Tiempo de vida (frames)"));
-        spTiempoVida = new JSpinner(new SpinnerNumberModel(400, 1, 10000, 1));
+        spTiempoVida = new JSpinner(new SpinnerNumberModel(400, 10, 2001, 5));
+        spTiempoVida.setName("TiempoVida");
+        spTiempoVida.addChangeListener(controlador.new SpParamListener());
         seccion2.add(spTiempoVida);
 
         // Tercera sección
@@ -249,5 +257,10 @@ public class PanelControl extends JFrame {
 	public JButton getBtnPausar() {
 		return btnPausar;
 	}
+
+	public JSpinner getSpTiempoObjetivo() {
+		return spTiempoObjetivo;
+	}
 	
+	 
 }

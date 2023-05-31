@@ -8,6 +8,9 @@ import java.util.TimerTask;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JSpinner;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import modelo.Modelo;
 import modelo.circuitos.Circuito;
@@ -35,6 +38,10 @@ public class Controlador {
 	 * Flag que indica si el proceso evolutivo está parado hasta que se reactive
 	 */
 	private boolean parado = true;
+	/**
+	 * Almacena temporalmente el tiempo de vida actualizado
+	 */
+	private int tiempoVidaCache;
 	
 	/** 
 	 * Inicia la vista con la propia instancia para que las interfaces accedan al controlador
@@ -76,7 +83,8 @@ public class Controlador {
 		 * si es el caso después de mostrar la ruta óptima, para no continuar el proceso
 		 */
 		if(entidades.isObjetivoCumplido()) {
-			
+			//Deshabilita el botón de pausa ya que no está en el proceso ya
+			panelControl.getBtnPausar().setEnabled(false);
 			panelControl.setValor("Generacion", entidades.getNumGeneraciones());
 			mostrarRutaOptima(entidades.getMejorEntidad());
 			return;
@@ -84,7 +92,7 @@ public class Controlador {
 		//Número de frames que han pasado desde el inicio de su ciclo de vida
 		int numFramesGen = ventana.getNumFramesGen();
 		//Si todavía le queda tiempo de vida a la población, realiza un ciclo de ejecución
-		if(numFramesGen < entidades.getTiempoVida()) {
+		if(numFramesGen < tiempoVidaCache) {
 			entidades.realizarCiclo();
 			ventana.setNumFramesGen(++numFramesGen);
 		} 
@@ -92,6 +100,11 @@ public class Controlador {
 		else {
 			ventana.setNumFramesGen(0);
 			entidades.evolucionar();
+			/* Almacena temporalmente el valor del tiempo de vida modificado en medio del proceso,
+			 * para que no intenten aplicar genes que están fuera de su rango y espere a que se
+			 * reproduzcan para aplicarle el cambio
+			 */
+			tiempoVidaCache = entidades.getTiempoVida();
 			/* Si el modo automático no está activado, para el proceso hasta que se pulse
 			 * el botón de "siguiente". Si está activado, deja que continúe por su cuenta.
 			 */
@@ -138,10 +151,9 @@ public class Controlador {
 	}
 	
 	/**
-	 * Implementa el evento desencadenado al pulsar el botón de empezar. se iniciará la población 
-	 * de entidades a partir de los parámetros introducidos en el panel de control para que de
-	 * comienzo al proceso evolutivo. Una vez iniciado cambia el botón de "Empezar" a un botón
-	 * de "Siguiente" y cambiará su comportamiento. 
+	 * Iniciará la población de entidades a partir de los parámetros introducidos en el 
+	 * panel de control para que de comienzo al proceso evolutivo. Una vez iniciado 
+	 * cambia el botón de "Empezar" a un botón de "Siguiente" y cambiará su comportamiento. 
 	 * @author Alberto
 	 */
 	public class BtnEmpezarListener implements ActionListener {
@@ -157,6 +169,8 @@ public class Controlador {
 			/* Cambiamos el texto del botón a "Siguiente", y le cambiamos el action listener por otro para
 			 * que se dispare un evento distinto cuando se interactúe con él
 			 */
+			//Guardamos el tiempo de vida en la cache para que pueda iniciar el proceso
+			tiempoVidaCache = modelo.getPoblacion().getTiempoVida();
 			PanelControl panelControl = vista.getPanelControl();
 			JButton btnProceder = panelControl.getBtnProceder();
 			btnProceder.setText("Siguiente");
@@ -186,8 +200,7 @@ public class Controlador {
 	}
 	
 	/**
-	 * Implementa el evento desencadenado por el botón "Siguiente". Actualiza la flag
-	 * de parado a false para que pueda realizar el ciclo de vida de las entidades
+	 * Actualiza la flag de parado a false para que pueda realizar el ciclo de vida de las entidades 
 	 * @author Alberto
 	 */
 	public class BtnSiguienteListener implements ActionListener {
@@ -202,9 +215,8 @@ public class Controlador {
 	}
 	
 	/**
-	 * Implementa el evento desencadenado por el botón "Pausar". Actualiza la flag
-	 * de parado a true para que pause el ciclo de vida de las entidades hasta reanudar
-	 * pulsando el mismo botón (actualizando la flag de nuevo)
+	 * Actualiza la flag de parado a true para que pause el ciclo de vida de las entidades
+	 * hasta reanudar pulsando el mismo botón (actualizando la flag de nuevo)
 	 * @author Alberto
 	 */
 	public class BtnPausarListener implements ActionListener {
@@ -253,6 +265,7 @@ public class Controlador {
 			PanelControl panelControl = vista.getPanelControl();
 			panelControl.getBtnReiniciar().setEnabled(false);
 			panelControl.getBtnPausar().setEnabled(false);
+			panelControl.getBtnPausar().setText("Pausar");
 			JButton btnProceder = panelControl.getBtnProceder();
 			btnProceder.setEnabled(true);
 			/* Cambiamos el botón de "Siguiente" por "Empezar" y sustituimos su listener
@@ -316,7 +329,63 @@ public class Controlador {
 			}
 			
 		}
-		
+	}
+	
+	/**
+	 * Establece un nuevo valor para el parámetro de la población de entidades, a través 
+	 * del cambio detectado en el spinner. Realiza las restricciones necesarias antes
+	 * de modificar el parámetro deseado. Sirve para cualquiera de los spinners
+	 * @author Alberto
+	 */
+	public class SpParamListener implements ChangeListener {
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			JSpinner spinner = (JSpinner) e.getSource();
+			//Obtiene el nombre del parámetro a cambiar a partir del nombre del spinner
+			String param = spinner.getName(); 
+			int valor = (int) spinner.getValue(); //valor cambiado en el spinner
+			/* Si el spinner es el correspondiente al tiempo de vida, debe controlar que
+			 * su valor nunca sea menor o igual que el tiempo objetivo, así que en ese caso
+			 * altera el valor para que esté por encima
+			 */
+			if(param.equals("TiempoVida")) {
+				int valorSpObjetivo = (int)vista.getPanelControl().getSpTiempoObjetivo().getValue();
+				if(valor <= valorSpObjetivo) {
+					spinner.setValue(valorSpObjetivo + 10);
+					valor = (int)spinner.getValue();
+				}
+			}
+			/* Al principio del programa la población no está inicializada así que no debe actualizar
+			 * ningún parámetro en ese caso, ya se encarga el botón "Empezar" de capturar los valores
+			 */
+			if(modelo.getPoblacion() != null) {
+				//Si población ya está inicializada puede actualizarla sin problema
+				actualizarParam(param, valor);
+			}
+		}
+
+		/**
+		 * Según el nombre del parámetro actualiza el correspondiente de la población
+		 * con el valor nuevo
+		 * @param param 
+		 * @param valor
+		 */
+		private void actualizarParam(String param, int valor) {
+			switch(param) {
+				case "NumEntidades":
+					modelo.getPoblacion().setNumEntidades(valor);
+					break;
+				case "TasaMutacion":
+					modelo.getPoblacion().setTasaMutacion(valor);
+					break;
+				case "TiempoObjetivo":
+					modelo.getPoblacion().setTiempoObjetivo(valor);
+					break;
+				case "TiempoVida":
+					modelo.getPoblacion().setTiempoVida(valor);
+					break;
+			}
+		}
 	}
 	
 	public Vista getVista() {

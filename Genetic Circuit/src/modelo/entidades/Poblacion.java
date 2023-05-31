@@ -336,7 +336,6 @@ public class Poblacion {
 		 * genes aleatorios, ya que no quedan más cruces que hacer
 		 */
 		if(!parientesVivenIgualOMas) {
-			System.out.println("OJO");
 			rellenarGenesExtra(genesHijo, numCruces);
 		}
 		return new ADN(genesHijo);
@@ -386,6 +385,10 @@ public class Poblacion {
 	
 	public Entidad[] getEntidades() {
 		return entidades;
+	}
+
+	public void setNumEntidades(int numEntidades) {
+		this.numEntidades = numEntidades;
 	}
 
 	public void setTasaMutacion(double tasaMutacion) {
