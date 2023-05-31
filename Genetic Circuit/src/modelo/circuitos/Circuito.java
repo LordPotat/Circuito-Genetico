@@ -14,11 +14,6 @@ import java.util.ArrayList;
 public class Circuito {
 	
 	/**
-	 * Tiempo que tienen que alcanzar las entidades para terminar el proceso
-	 */
-	private int tiempoObjetivo = 140;
-	
-	/**
 	 * Establece el punto de spawn (punto inicial) en el que aparecen las entidades
 	 * @param ventana gráfica para determinar la posición relativa del spawn
 	 * @return el vector de posición del spawn
@@ -90,10 +85,6 @@ public class Circuito {
 		obsParams.get(8).put("Alto", 10f);
 		obsParams.get(8).put("Angulo", 0f);
 		return obsParams;
-	}
-
-	public int getTiempoObjetivo() {
-		return tiempoObjetivo;
 	}
 	
 }

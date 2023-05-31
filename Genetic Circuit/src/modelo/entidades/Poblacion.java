@@ -3,6 +3,8 @@ package modelo.entidades;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
+import controlador.Controlador;
 import modelo.Modelo;
 import processing.core.PVector;
 
@@ -24,7 +26,6 @@ public class Poblacion {
 	 * que tiene de reproducirse dependiendo de su aptitud
 	 */
 	private ArrayList<Entidad> poolGenetico;
-	
 	/** 
 	 * Probabilidad de que un gen mute tras el cruce de entidades en la reproducción
 	 */
@@ -37,11 +38,11 @@ public class Poblacion {
 	 * Contador de generaciones que se han reproducido 
 	 */
 	private int numGeneraciones;
-	/*
+	/**
 	 * Punto de "spawn" donde aparecen todas las entidades al inicio de cada generación
 	 */
 	private PVector posInicial;
-	/*
+	/**
 	 * Tiempo más cercano al objetivo obtenido por alguna entidad a lo largo de todas las generaciones
 	 */
 	private int mejorTiempo;
@@ -53,6 +54,22 @@ public class Poblacion {
 	 * La entidad que más cerca se ha quedado de cumplir o de haber cumplido el objetivo
 	 */
 	private Entidad mejorEntidad;
+	/**
+	 * Total de colisiones que han tenido las entidades con los obstáculos
+	 */
+	private int numColisiones;
+	/**
+	 * Total de veces que han llegado las entidades a la meta
+	 */
+	private int numLlegadas;
+	/**
+	 * Cantidad de entidades que tiene la poblacion
+	 */
+	private int numEntidades;
+	/**
+	 * Tiempo que tienen que alcanzar las entidades para terminar el proceso
+	 */
+	private int tiempoObjetivo = 140;
 	
 	private Random random = new Random();
 	
@@ -66,17 +83,19 @@ public class Poblacion {
 	public Poblacion(Modelo contexto, HashMap<String, Integer> poblacionParams, PVector posInicial) {
 		this.contexto = contexto;
 		//Crea un array con tantas entidades como se indique desde el controlador
-		entidades = new Entidad[poblacionParams.get("NumEntidades")];
+		numEntidades = poblacionParams.get("NumEntidades");
+		entidades = new Entidad[numEntidades];
 		//Inicia el pool genético vacío para rellenarlo cada vez que se seleccionen las entidades
 		poolGenetico = new ArrayList<Entidad>();
 		//La tasa de mutación viene como porcentaje así que se convierte a valor decimal
 		this.tasaMutacion = ((double) poblacionParams.get("TasaMutacion")) / 100;
-		numGeneraciones = 1; //Empieza como la primera generación
+		this.tiempoObjetivo = poblacionParams.get("TiempoObjetivo");
 		this.tiempoVida = poblacionParams.get("TiempoVida");
 		this.posInicial = posInicial;
 		//El "record" de tiempo irá bajando a partir del tiempo de vida, que es el peor resultado
 		mejorTiempo = tiempoVida; 
 		objetivoCumplido = false;
+		numGeneraciones = 1; //Empieza como la primera generación
 		generarPrimeraGen();
 	}
 	
@@ -100,12 +119,11 @@ public class Poblacion {
 		for(int i=0; i < entidades.length; i++) {
 			//La entidad se encontrará en otra posición y mirando a otra dirección tras actuar
 			entidades[i].actuar();
-			//Si la entidad choca, no debe mostrarla (mejora condiderablemente el rendimiento)
+			//Si la entidad choca, no debe mostrarla (mejora considerablemente el rendimiento)
 			if(!entidades[i].isHaChocado()) {
 				//Le comunica a la vista que muestre la entidad a través del controlador
 				contexto.getControlador().mostrarEntidad(entidades[i]);
-			}
-			
+			} 
 		}
 	}
 	
@@ -152,7 +170,7 @@ public class Poblacion {
 	 * @return si el mejor tiempo hasta el momento pasa el tiempo objetivo 
 	 */
 	private boolean comprobarObjetivo() {
-		return mejorTiempo <= contexto.getCircuito().getTiempoObjetivo();
+		return mejorTiempo <= tiempoObjetivo;
 	}
 
 	/** 
@@ -174,15 +192,23 @@ public class Poblacion {
 
 	/**
 	 * Compara si el tiempo obtenido por una entidad que ha obtenido la mejor aptitud
-	 * de la generación hasta el momento, ha superado el record de tiempo
-	 * actual y almacena el tiempo y la entidad que lo ha conseguido
+	 * de la generación hasta el momento, ha superado el record de tiempo actual y 
+	 * almacena el tiempo y la entidad que lo ha conseguido.
 	 * @param entidad cuyo tiempo debe ser comparado
 	 */
 	private void comprobarTiempoRecord(Entidad entidad) {
 		if(entidad.getTiempoObtenido() < mejorTiempo) {
 			mejorTiempo = entidad.getTiempoObtenido();
 			mejorEntidad = entidad;
-			System.out.println("Nuevo mejor tiempo: " + mejorTiempo);
+			/* Muestra en el panel de control el nuevo record de tiempo obtenido y
+			 * la aptitud de la mejorEntidad que lo ha conseguido
+			 */
+			Controlador controlador = contexto.getControlador();
+			controlador.actualizarPanel("TiempoRecord", mejorTiempo);
+			controlador.actualizarPanel("MejorAptitud", mejorEntidad.getAptitud());
+		} else if(mejorEntidad == null) {
+			mejorEntidad = entidad;
+			contexto.getControlador().actualizarPanel("MejorAptitud", mejorEntidad.getAptitud());
 		}
 	}
 
@@ -218,20 +244,20 @@ public class Poblacion {
 
 	/**
 	 * Realiza el proceso de reproducción de las entidades para producir la siguiente
-	 * generación a partir de la anterior. Deberán generarse el mismo número de
-	 * entidades hijas que en la actual, y se obtendrán a partir de escoger
+	 * generación a partir de la anterior. Deberán generarse el número de
+	 * entidades hijas que se indique para esa generación, y se obtendrán a partir de escoger
 	 * aleatoriamente dos parientes del pool genético seleccionado anteriormente.
 	 * Despúes se cruzará el ADN de los parientes con el algoritmo adecuado para 
 	 * crear la entidad nueva con ese ADN asignado, y se le aplicarán unas posibles
 	 * mutaciones aleatorias en su genotipo para aumentar la variabilidad de la población
 	 */
 	private void reproducir() {
-		//Se crea una colección nueva de entidades con el mismo tamaño a la actual
-		Entidad[] nuevaGeneracion = new Entidad[entidades.length];
+		//Se crea una colección nueva de entidades con el número de entidades actual
+		Entidad[] nuevaGeneracion = new Entidad[numEntidades];
 		/* Se añaden nuevas entidades hijas a la colección creadas tras "reproducirse"
 		 * dos parientes aleatorios del pool genético
 		 */
-		for(int i=0; i < entidades.length; i++) {
+		for(int i=0; i < nuevaGeneracion.length; i++) {
 			//El primer pariente se obtiene del primer indice aleatorio que escoge
 			int indPariente1 = random.nextInt(poolGenetico.size());
 			Entidad pariente1 = poolGenetico.get(indPariente1);
@@ -282,14 +308,23 @@ public class Poblacion {
 	 */
 	private ADN cruzarEntidades(Entidad pariente1, Entidad pariente2) {
 		//Inicia un array de vectores cuyo tamaño son los frames de vida de la entidad
-		PVector[] genesHijo = new PVector[getTiempoVida()];
+		PVector[] genesHijo = new PVector[tiempoVida];
 		//Obtiene los genes de ambos parientes
 		PVector[] genesPariente1 = pariente1.getAdn().getGenes();
 	    PVector[] genesPariente2 = pariente2.getAdn().getGenes();
+	    /* El número de cruces que se realizarán dependerá de si el tiempo de vida de los padres
+	     * es mayor o igual que el de la nueva generación o no. En el primer caso será simplemente
+	     * equivalente al tiempo de vida, pero en el caso de que sea menor, no habrá suficientes
+	     * cruces para rellenar sus genes, así que hará tantos cruces como la resta de la 
+	     * diferencia entre estos haya, para evitar errores de elementos vacíos.
+	     */
+	    int difTiempoVida = tiempoVida - genesPariente1.length;
+	    boolean parientesVivenIgualOMas = genesPariente1.length >= tiempoVida;
+	    int numCruces = parientesVivenIgualOMas ? tiempoVida : tiempoVida - difTiempoVida;
 	    /* Asigna a cada elemento del array el gen cuyo índice corresponde al de uno de los
 	     * dos parientes según el que toque aleatoriamente
 	     */
-		for(int i=0; i < genesHijo.length; i++) {
+		for(int i=0; i < numCruces; i++) {
 			//En cada gen tendrá un 50% de posibilidades de elegir el de un pariente u otro
 			if (random.nextBoolean()) {
 				genesHijo[i] = genesPariente1[i];
@@ -297,7 +332,28 @@ public class Poblacion {
 				genesHijo[i] = genesPariente2[i];
 			}
 		}
+		/* Si los parientes viven menos que los hijos, debe rellenar los genes que sobran con
+		 * genes aleatorios, ya que no quedan más cruces que hacer
+		 */
+		if(!parientesVivenIgualOMas) {
+			System.out.println("OJO");
+			rellenarGenesExtra(genesHijo, numCruces);
+		}
 		return new ADN(genesHijo);
+	}
+
+	/**
+	 * Rellena el resto de genes que faltan del genotipo de un hijo con genes aleatorios
+	 * @param genesHijo: la coleccion de genes que tiene elementos por rellenar
+	 * @param numCruces: los cruces que llegó a hacer hasta que no quedaban más genes
+	 */
+	private void rellenarGenesExtra(PVector[] genesHijo, int numCruces) {
+		//Genera un ADN temporal que sirve para obtener los genes aleatorios
+		ADN adnTemp = new ADN(tiempoVida);
+		//Comienza el bucle donde dejó el anterior para los genes que faltan
+		for(int i=numCruces; i < tiempoVida; i++) {
+			genesHijo[i] = adnTemp.getGenes()[i]; //Rellena con un gen aleatorio
+		}
 	}
 	
 	/**
@@ -312,6 +368,20 @@ public class Poblacion {
 				adnHijo.generarGenAleatorio(gen);
 			}
 		}
+	}
+	
+	/**
+	 * Incrementa el número de colisiones con obstáculos y lo muestra en el panel de control
+	 */
+	public void incrNumColisiones() {
+		contexto.getControlador().actualizarPanel("Colisiones", ++numColisiones);
+	}
+
+	/**
+	 * Incrementa el número de llegadas a la meta y lo muestra en el panel de control
+	 */
+	public void incrNumLlegadas() {
+		contexto.getControlador().actualizarPanel("Metas", ++numLlegadas);
 	}
 	
 	public Entidad[] getEntidades() {
@@ -352,6 +422,14 @@ public class Poblacion {
 
 	public Entidad getMejorEntidad() {
 		return mejorEntidad;
+	}
+
+	public int getTiempoObjetivo() {
+		return tiempoObjetivo;
+	}
+
+	public void setTiempoObjetivo(int tiempoObjetivo) {
+		this.tiempoObjetivo = tiempoObjetivo;
 	}
 	
 }

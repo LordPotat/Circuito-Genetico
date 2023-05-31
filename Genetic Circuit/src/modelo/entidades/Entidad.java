@@ -129,12 +129,16 @@ public class Entidad {
 	private void comprobarColisiones() {
 		//Si choca con la meta, actualiza la flag y no continúa comprobando más colisiones
 		if(colisionaConMeta()) {
+			//Incrementa el contador de llegadas a la meta de la población
+			poblacion.incrNumLlegadas();
 			haLlegado = true;
 			return;
 		}
 		//Si no ha chocado con la meta, pasa a comprobar si ha chocado con alguno de los obstáculos
 		for (Obstaculo obstaculo : poblacion.getContexto().getObstaculos()) {
 			if(obstaculo.chocaConEntidad(posicion)) {
+				//Incrementa el contador de colisiones de la población
+				poblacion.incrNumColisiones();
 				//Actualiza la flag y termina de comprobar cuando encuentra una colisión
 				haChocado = true; 
 				break;
@@ -173,8 +177,7 @@ public class Entidad {
 		 * obtenido del tiempo objetivo. El factor de la fórmula viene determinado por tanto
 		 * por el tiempo objetivo entre el tiempo obtenido, para calcular la proporción
 		 */
-		factorTiempo = (double)poblacion.getContexto().getCircuito().getTiempoObjetivo() 
-				/ (double)tiempoObtenido;
+		factorTiempo = (double)poblacion.getTiempoObjetivo() / (double)tiempoObtenido;
 		/* Para optimizar los resultados, se eleva el factor a una potencia de 1 partido por
 		 * un valor (como el factor es un decimal por debajo del 1, si queremos incrementar 
 		 * su valor el exponente también debe ser menor que 1). 
@@ -249,6 +252,10 @@ public class Entidad {
 
 	public boolean isHaChocado() {
 		return haChocado;
+	}
+
+	public boolean isHaLlegado() {
+		return haLlegado;
 	}
 	
 	

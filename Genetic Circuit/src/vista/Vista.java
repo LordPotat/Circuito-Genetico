@@ -19,16 +19,17 @@ public class Vista {
 	public Vista(Controlador controlador) {
 		initLookAndFeel();
 		
-		SwingUtilities.invokeLater(() -> {
-			panelControl = new PanelControl(controlador);
-	    });
-		
 		String[] processingArgs = {"Circuito Genético"};
 		ventana = Ventana.crearVentana(controlador);
 	    Thread hiloProcessing = new Thread(() -> {
 	    	Ventana.runSketch(processingArgs, ventana);
 	    });
 	    hiloProcessing.start();
+		
+		SwingUtilities.invokeLater(() -> {
+			panelControl = new PanelControl(controlador);
+	    });
+		
 	}
 
 	public Ventana getVentana() {

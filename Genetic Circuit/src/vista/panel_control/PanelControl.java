@@ -15,13 +15,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import controlador.Controlador;
 import java.awt.Toolkit;
+import java.util.HashMap;
 
 public class PanelControl extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	
-	private Controlador controlador;
-	private JPanel contentPane;
 	
 	private JPanel panel;
 	private JPanel seccion2;
@@ -29,14 +27,14 @@ public class PanelControl extends JFrame {
 	private JPanel seccion3;
 	private JLabel lblGeneracion;
 	private JCheckBox cbModoAutomatico;
-	private JButton btnEmpezar;
+	private JButton btnProceder;
 	private JButton btnReiniciar;
+	private JButton btnPausar;
 	private JSpinner spPoblacion;
 	private JSpinner spMutacion;
 	private JSpinner spTiempoObjetivo;
 	private JSpinner spTiempoVida;
 	private JLabel lblTiempoRecord;
-	private JLabel lblDistMin;
 	private JLabel lblMejorAptitud;
 	private JLabel lblMetas;
 	private JLabel lblColisiones;
@@ -48,6 +46,9 @@ public class PanelControl extends JFrame {
 	private JLabel lblDistMinEntidad;
 	private JLabel lblEstado;
 	private JLabel lblAptitudEntidad;
+	
+	private HashMap<String, JLabel> mapaLabels;
+	private JLabel lblTiempoEntidad;
 
 
 	public PanelControl(Controlador controlador) {
@@ -57,6 +58,7 @@ public class PanelControl extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(400, 720));
         frame.setResizable(false);
+        mapaLabels = new HashMap<String, JLabel>();
 
         // Crear JPanel principal
         panel = new JPanel();
@@ -70,17 +72,29 @@ public class PanelControl extends JFrame {
         panel.add(seccion1);
 
         lblGeneracion = new JLabel("Generación: 0");
+        lblGeneracion.setName("Generacion");
+        mapaLabels.put(lblGeneracion.getName(), lblGeneracion);
         seccion1.add(lblGeneracion);
 
-        cbModoAutomatico = new JCheckBox("Modo Automático");
-        seccion1.add(cbModoAutomatico);
+        btnProceder = new JButton("Empezar");
+        btnProceder.addActionListener(controlador.new BtnEmpezarListener());
+        seccion1.add(btnProceder);
 
-        btnEmpezar = new JButton("Comenzar");
-        seccion1.add(btnEmpezar);
-
+        btnPausar = new JButton("Pausar");
+        btnPausar.setEnabled(false);
+        btnPausar.addActionListener(controlador.new BtnPausarListener());
+        seccion1.add(btnPausar);
+        
         btnReiniciar = new JButton("Reiniciar");
+        btnReiniciar.setEnabled(false);
+        btnReiniciar.addActionListener(controlador.new BtnReiniciarListener());
         seccion1.add(btnReiniciar);
 
+        cbModoAutomatico = new JCheckBox("Modo Automático");
+        cbModoAutomatico.addActionListener(controlador.new CbModoAutoListener());
+        seccion1.add(cbModoAutomatico);
+        
+        
         // Segunda sección
         seccion2 = new JPanel();
         seccion2.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -88,19 +102,19 @@ public class PanelControl extends JFrame {
         panel.add(seccion2);
 
         seccion2.add(new JLabel("Población total"));
-        spPoblacion = new JSpinner(new SpinnerNumberModel(2, 2, 10000, 1));
+        spPoblacion = new JSpinner(new SpinnerNumberModel(1000, 2, 10000, 1));
         seccion2.add(spPoblacion);
 
         seccion2.add(new JLabel("Tasa de mutación (%)"));
-        spMutacion = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
+        spMutacion = new JSpinner(new SpinnerNumberModel(20, 0, 100, 1));
         seccion2.add(spMutacion);
 
         seccion2.add(new JLabel("Tiempo objetivo (frames)"));
-        spTiempoObjetivo = new JSpinner(new SpinnerNumberModel(0, 0, 10000, 1));
+        spTiempoObjetivo = new JSpinner(new SpinnerNumberModel(140, 0, 10000, 1));
         seccion2.add(spTiempoObjetivo);
 
         seccion2.add(new JLabel("Tiempo de vida (frames)"));
-        spTiempoVida = new JSpinner(new SpinnerNumberModel(1, 1, 10000, 1));
+        spTiempoVida = new JSpinner(new SpinnerNumberModel(400, 1, 10000, 1));
         seccion2.add(spTiempoVida);
 
         // Tercera sección
@@ -109,15 +123,21 @@ public class PanelControl extends JFrame {
         seccion3.setLayout(new BoxLayout(seccion3, BoxLayout.Y_AXIS));
         panel.add(seccion3);
 
-        lblTiempoRecord = new JLabel("Tiempo record (frames):");
+        lblTiempoRecord = new JLabel("Tiempo record (frames): 0");
+        lblTiempoRecord.setName("TiempoRecord");
+        mapaLabels.put(lblTiempoRecord.getName(), lblTiempoRecord);
         seccion3.add(lblTiempoRecord);
-        lblDistMin = new JLabel("Distancia mínima:");
-        seccion3.add(lblDistMin);
-        lblMejorAptitud = new JLabel("Mejor aptitud:");
+        lblMejorAptitud = new JLabel("Mejor aptitud: 0");
+        lblMejorAptitud.setName("MejorAptitud");
+        mapaLabels.put(lblMejorAptitud.getName(), lblMejorAptitud);
         seccion3.add(lblMejorAptitud);
-        lblMetas = new JLabel("Metas alcanzadas:");
+        lblMetas = new JLabel("Metas alcanzadas: 0");
+        lblMetas.setName("Metas");
+        mapaLabels.put(lblMetas.getName(), lblMetas);
         seccion3.add(lblMetas);
-        lblColisiones = new JLabel("Colisiones:");
+        lblColisiones = new JLabel("Colisiones: 0");
+        lblColisiones.setName("Colisiones");
+        mapaLabels.put(lblColisiones.getName(), lblColisiones);
         seccion3.add(lblColisiones);
 
         JPanel panelEntidad = new JPanel();
@@ -127,169 +147,107 @@ public class PanelControl extends JFrame {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         seccion3.add(scrollPane);
 
-        lblEntidad = new JLabel("Entidad", SwingConstants.CENTER);
+        lblEntidad = new JLabel("Entidad 0", SwingConstants.CENTER);
+        lblEntidad.setName("Entidad");
+        mapaLabels.put(lblEntidad.getName(), lblEntidad);
         panelEntidad.add(lblEntidad);
         lblPosicion = new JLabel("Posicion (px): (0,0)");
+        lblPosicion.setName("Posicion");
+        mapaLabels.put(lblPosicion.getName(), lblPosicion);
         panelEntidad.add(lblPosicion);
         lblVelocidad = new JLabel("Velocidad (px/frame): 0");
+        lblVelocidad.setName("Velocidad");
+        mapaLabels.put(lblVelocidad.getName(), lblVelocidad);
         panelEntidad.add(lblVelocidad);
         lblAceleracion = new JLabel("Aceleración (px/frame): 0");
+        lblAceleracion.setName("Aceleracion");
+        mapaLabels.put(lblAceleracion.getName(), lblAceleracion);
         panelEntidad.add(lblAceleracion);
-        lblDistancia = new JLabel("Distancia:");
+        lblDistancia = new JLabel("Distancia: 0");
+        lblDistancia.setName("DistanciaEntidad");
+        mapaLabels.put(lblDistancia.getName(), lblDistancia);
         panelEntidad.add(lblDistancia);
-        lblDistMinEntidad = new JLabel("Distancia mínima:");
+        lblDistMinEntidad = new JLabel("Distancia mínima: 0");
+        lblDistMinEntidad.setName("DistanciaMinEntidad");
+        mapaLabels.put(lblDistMinEntidad.getName(), lblDistMinEntidad);
         panelEntidad.add(lblDistMinEntidad);
-        lblEstado = new JLabel("Estado:");
+        lblEstado = new JLabel("Estado: 0");
+        lblEstado.setName("EstadoEntidad");
+        mapaLabels.put(lblEstado.getName(), lblEstado);
         panelEntidad.add(lblEstado);
-        JLabel lblTiempoEntidad = new JLabel("Tiempo obtenido:");
+        lblTiempoEntidad = new JLabel("Tiempo obtenido: 0");
+        lblTiempoEntidad.setName("TiempoEntidad");
+        mapaLabels.put(lblTiempoEntidad.getName(), lblTiempoEntidad);
         panelEntidad.add(lblTiempoEntidad);
-        lblAptitudEntidad = new JLabel("Aptitud:");
+        lblAptitudEntidad = new JLabel("Aptitud: 0");
+        lblAptitudEntidad.setName("AptitudEntidad");
+        mapaLabels.put(lblAptitudEntidad.getName(), lblAptitudEntidad);
         panelEntidad.add(lblAptitudEntidad);
 
         // Mostrar la ventana
         frame.pack();
         frame.setVisible(true);
 	}
-
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	
+	/**
+	 * Actualiza el label que busca por el nombre pasado por parámetro con el valor indicado
+	 * @param <T> tipo (generalmente numérico) de valor
+	 * @param label: el nombre del label que debe actualizar
+	 * @param valor: el valor que se le añadirá al label
+	 */
+	public <T> void setValor(String label, T valor) {
+		JLabel lbl = obtenerLabelPorNombre(label); //Obtiene el JLabel por su nombre 
+		//Si no lo encuentra no hace nada
+		if(lbl == null) {
+			return;
+		}
+		//Edita el texto del label con el nuevo valor parseado
+		String txt = lbl.getText();
+		lbl.setText(txt.split(":\\s*")[0] + ": " + String.valueOf(valor));
+	}
+	
+	/**
+	 * Devuelve un JLabel realizando una búsqueda por su nombre en el mapa correspondiente.
+	 * @param nombre del label
+	 * @return el JLabel que corresponde al nombre
+	 */
+	public JLabel obtenerLabelPorNombre(String nombre) {
+        if (mapaLabels.containsKey(nombre)) {
+                return (JLabel) mapaLabels.get(nombre);
+        }
+        else return null;
+	}
+	
+	public int getTotalPoblacion() {
+		return (int)spPoblacion.getValue();
 	}
 
-
-	public Controlador getControlador() {
-		return controlador;
+	public int getTasaMutacion() {
+		return (int)spMutacion.getValue();
 	}
 
-
-	public JPanel getContentPane() {
-		return contentPane;
+	public int getTiempoObjetivo() {
+		return (int)spTiempoObjetivo.getValue();
 	}
 
-
-	public JPanel getPanel() {
-		return panel;
+	public int getTiempoVida() {
+		return (int)spTiempoVida.getValue();
 	}
-
-
-	public JPanel getSeccion2() {
-		return seccion2;
-	}
-
-
-	public JPanel getSeccion1() {
-		return seccion1;
-	}
-
-
-	public JPanel getSeccion3() {
-		return seccion3;
-	}
-
-
-	public JLabel getLblGeneracion() {
-		return lblGeneracion;
-	}
-
 
 	public JCheckBox getCbModoAutomatico() {
 		return cbModoAutomatico;
 	}
 
-
-	public JButton getBtnEmpezar() {
-		return btnEmpezar;
+	public JButton getBtnProceder() {
+		return btnProceder;
 	}
-
 
 	public JButton getBtnReiniciar() {
 		return btnReiniciar;
 	}
 
-
-	public JSpinner getSpPoblacion() {
-		return spPoblacion;
+	public JButton getBtnPausar() {
+		return btnPausar;
 	}
-
-
-	public JSpinner getSpMutacion() {
-		return spMutacion;
-	}
-
-
-	public JSpinner getSpTiempoObjetivo() {
-		return spTiempoObjetivo;
-	}
-
-
-	public JSpinner getSpTiempoVida() {
-		return spTiempoVida;
-	}
-
-
-	public JLabel getLblTiempoRecord() {
-		return lblTiempoRecord;
-	}
-
-
-	public JLabel getLblDistMin() {
-		return lblDistMin;
-	}
-
-
-	public JLabel getLblMejorAptitud() {
-		return lblMejorAptitud;
-	}
-
-
-	public JLabel getLblMetas() {
-		return lblMetas;
-	}
-
-
-	public JLabel getLblColisiones() {
-		return lblColisiones;
-	}
-
-
-	public JLabel getLblEntidad() {
-		return lblEntidad;
-	}
-
-
-	public JLabel getLblPosicion() {
-		return lblPosicion;
-	}
-
-
-	public JLabel getLblVelocidad() {
-		return lblVelocidad;
-	}
-
-
-	public JLabel getLblAceleracion() {
-		return lblAceleracion;
-	}
-
-
-	public JLabel getLblDistancia() {
-		return lblDistancia;
-	}
-
-
-	public JLabel getLblDistMinEntidad() {
-		return lblDistMinEntidad;
-	}
-
-
-	public JLabel getLblEstado() {
-		return lblEstado;
-	}
-
-
-	public JLabel getLblAptitudEntidad() {
-		return lblAptitudEntidad;
-	}
-
 	
 }

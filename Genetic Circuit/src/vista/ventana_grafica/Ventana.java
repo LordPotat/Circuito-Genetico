@@ -37,8 +37,6 @@ public class Ventana extends PApplet {
 	
 	public void setup() {
 		windowTitle("Circuito Genético");
-//		GraphicsDevice pantalla = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
-//		int tasaRefresco = pantalla.getDisplayMode().getRefreshRate();
 		frameRate(60);
 		stroke(0);
 		background(255);
@@ -52,8 +50,9 @@ public class Ventana extends PApplet {
 		stroke(0);
 		drawFramerate();
 		drawCircuito();
-		int numGeneraciones = controlador.manipularPoblacion();
-		drawGeneraciones(numGeneraciones);
+		if(!controlador.isParado()) {
+			controlador.manipularPoblacion();
+		}
 	}
 
 	private void drawCircuito() {
