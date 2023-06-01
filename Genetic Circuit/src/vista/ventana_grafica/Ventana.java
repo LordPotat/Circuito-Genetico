@@ -89,10 +89,12 @@ public class Ventana extends PApplet {
         popMatrix();
 	}
 	
-	public void drawEntidad(PVector posicion, PVector velocidad) {
+	public void drawEntidad(PVector posicion, PVector velocidad, boolean monitorizada) {
 		pushMatrix();
 		translate(posicion.x, posicion.y);
 		rotate(atan2(velocidad.y, velocidad.x));
+		int colorStroke = monitorizada ? color(204, 0, 255) : color(0, 0, 0);
+		humanoide.setStroke(colorStroke);
 		shape(humanoide);
 		if(modoDebug == true) {
 			drawFlechaDireccion(velocidad);
@@ -191,13 +193,8 @@ public class Ventana extends PApplet {
 		text("Framerate: " + round(frameRate), 10, 15);
 	}
 	
-	public void drawGeneraciones(int numGeneraciones) {
-		pushMatrix();
-		fill(125);
-		textSize(16);
-		textAlign(LEFT, CENTER);
-		text("Generaciones: " + numGeneraciones, 10, 31);
-		popMatrix();
+	public void mousePressed() {
+		controlador.seleccionarEntidad(new PVector(mouseX, mouseY));
 	}
 
 	public void keyPressed() {

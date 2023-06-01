@@ -155,19 +155,19 @@ public class PanelControl extends JFrame {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         seccion3.add(scrollPane);
 
-        lblEntidad = new JLabel("Entidad 0", SwingConstants.CENTER);
+        lblEntidad = new JLabel("Entidad: -", SwingConstants.CENTER);
         lblEntidad.setName("Entidad");
         mapaLabels.put(lblEntidad.getName(), lblEntidad);
         panelEntidad.add(lblEntidad);
-        lblPosicion = new JLabel("Posicion (px): (0,0)");
+        lblPosicion = new JLabel("Posicion (px): [0,0,0]");
         lblPosicion.setName("Posicion");
         mapaLabels.put(lblPosicion.getName(), lblPosicion);
         panelEntidad.add(lblPosicion);
-        lblVelocidad = new JLabel("Velocidad (px/frame): 0");
+        lblVelocidad = new JLabel("Velocidad (px): [0,0,0]");
         lblVelocidad.setName("Velocidad");
         mapaLabels.put(lblVelocidad.getName(), lblVelocidad);
         panelEntidad.add(lblVelocidad);
-        lblAceleracion = new JLabel("Aceleración (px/frame): 0");
+        lblAceleracion = new JLabel("Aceleración (px): [0,0,0]");
         lblAceleracion.setName("Aceleracion");
         mapaLabels.put(lblAceleracion.getName(), lblAceleracion);
         panelEntidad.add(lblAceleracion);
@@ -179,7 +179,7 @@ public class PanelControl extends JFrame {
         lblDistMinEntidad.setName("DistanciaMinEntidad");
         mapaLabels.put(lblDistMinEntidad.getName(), lblDistMinEntidad);
         panelEntidad.add(lblDistMinEntidad);
-        lblEstado = new JLabel("Estado: 0");
+        lblEstado = new JLabel("Estado: -");
         lblEstado.setName("EstadoEntidad");
         mapaLabels.put(lblEstado.getName(), lblEstado);
         panelEntidad.add(lblEstado);

@@ -70,8 +70,18 @@ public class Poblacion {
 	 * Tiempo que tienen que alcanzar las entidades para terminar el proceso
 	 */
 	private int tiempoObjetivo = 140;
+	/**
+	 * Entidad que actualmente está siendo monitorizada en el panel de control
+	 */
+	private Entidad entidadMonitorizada;
+	/**
+	 * Mejor aptitud obtenida hasta ahora entre todas las generaciones
+	 */
+	private double mejorAptitud;
 	
 	private Random random = new Random();
+
+	
 	
 	/**
 	 * Constructor que inicializa la población a través de una serie de parámetros iniciales
@@ -107,7 +117,7 @@ public class Poblacion {
 			/* Como la primera generación no es producto de un cruce, se le pasa null
 			 * para que se inicialice un ADN nuevo con genes aleatorios
 			 */
-			entidades[i] = new Entidad(this, null);
+			entidades[i] = new Entidad(this, null, i);
 		}
 	}
 
@@ -184,8 +194,14 @@ public class Poblacion {
 			//Si la aptitud obtenida es mejor que alguna anterior, la sustituye
 			if (entidad.evaluarAptitud() > mejorAptitud) {
 				mejorAptitud = entidad.getAptitud();
+				//Comprueba si ha superado algún record
 				comprobarTiempoRecord(entidad);
+				comprobarMejorAptitud(mejorAptitud);
 			}
+		}
+		//Si hay una entidad siendo monitorizada, muestra la aptitud evaluada para ésta en el panel
+		if(entidadMonitorizada != null) {	
+			contexto.getControlador().actualizarPanel("AptitudEntidad", entidadMonitorizada.getAptitud());
 		}
 		return mejorAptitud;
 	}
@@ -193,25 +209,32 @@ public class Poblacion {
 	/**
 	 * Compara si el tiempo obtenido por una entidad que ha obtenido la mejor aptitud
 	 * de la generación hasta el momento, ha superado el record de tiempo actual y 
-	 * almacena el tiempo y la entidad que lo ha conseguido.
+	 * almacena el tiempo que ha conseguido.
 	 * @param entidad cuyo tiempo debe ser comparado
 	 */
 	private void comprobarTiempoRecord(Entidad entidad) {
 		if(entidad.getTiempoObtenido() < mejorTiempo) {
 			mejorTiempo = entidad.getTiempoObtenido();
 			mejorEntidad = entidad;
-			/* Muestra en el panel de control el nuevo record de tiempo obtenido y
-			 * la aptitud de la mejorEntidad que lo ha conseguido
-			 */
+			// Muestra en el panel de control el nuevo record de tiempo obtenido 
 			Controlador controlador = contexto.getControlador();
 			controlador.actualizarPanel("TiempoRecord", mejorTiempo);
-			controlador.actualizarPanel("MejorAptitud", mejorEntidad.getAptitud());
-		} else if(mejorEntidad == null) {
-			mejorEntidad = entidad;
-			contexto.getControlador().actualizarPanel("MejorAptitud", mejorEntidad.getAptitud());
-		}
+		} 
 	}
 
+	/**
+	 * Compara si la aptitud obtenida por una entidad que ha obtenido la mejor aptitud
+	 * de la generación hasta el momento, ha superado a la mejor aptitud de todas las
+	 * generaciones, y lo almacena de ser así
+	 * @param entidad cuya aptitud debe ser comparada
+	 */
+	private void comprobarMejorAptitud(double aptitud) {
+		if(aptitud > mejorAptitud) {
+			mejorAptitud = aptitud;
+			contexto.getControlador().actualizarPanel("MejorAptitud", mejorAptitud);
+		}
+	}
+	
 	/**
 	 * Determina la probabilidad que tiene cada entidad de reproducirse con otra según
 	 * la proporción entre su aptitud y la mejor aptitud
@@ -270,7 +293,7 @@ public class Poblacion {
 			 * le pasamos el ADN como argumento a su constructor, y ya no generará
 			 * genes aleatoriamente (excluyendo aquellos que han mutado)
 			 */
-			nuevaGeneracion[i] = new Entidad(this, adnHijo);
+			nuevaGeneracion[i] = new Entidad(this, adnHijo, i);
 		}
 		entidades = nuevaGeneracion; //Se sustituyen las entidades actuales por las nuevas
 		numGeneraciones++; //Se incrementa el contador de generaciones
@@ -433,6 +456,21 @@ public class Poblacion {
 
 	public void setTiempoObjetivo(int tiempoObjetivo) {
 		this.tiempoObjetivo = tiempoObjetivo;
+	}
+
+	public Entidad getEntidadMonitorizada() {
+		return entidadMonitorizada;
+	}
+	
+	/**
+	 * Reemplaza la entidad que estaba siendo monitorizada por otra (si es que había una)
+	 * @param entidadMonitorizada
+	 */
+	public void setEntidadMonitorizada(Entidad entidadMonitorizada) {
+		if(this.entidadMonitorizada != null) { 
+			this.entidadMonitorizada.setMonitorizada(false);
+		}
+		this.entidadMonitorizada = entidadMonitorizada;
 	}
 	
 }

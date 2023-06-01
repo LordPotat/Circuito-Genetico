@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -16,6 +18,7 @@ import modelo.Modelo;
 import modelo.circuitos.Circuito;
 import modelo.entidades.Entidad;
 import modelo.entidades.Poblacion;
+import processing.core.PVector;
 import vista.Vista;
 import vista.panel_control.PanelControl;
 import vista.ventana_grafica.Ventana;
@@ -42,6 +45,8 @@ public class Controlador {
 	 * Almacena temporalmente el tiempo de vida actualizado
 	 */
 	private int tiempoVidaCache;
+	
+	private ExecutorService monitorizador;
 	
 	/** 
 	 * Inicia la vista con la propia instancia para que las interfaces accedan al controlador
@@ -94,6 +99,9 @@ public class Controlador {
 		//Si todavía le queda tiempo de vida a la población, realiza un ciclo de ejecución
 		if(numFramesGen < tiempoVidaCache) {
 			entidades.realizarCiclo();
+			if(entidades.getEntidadMonitorizada() != null) {
+				monitorizarEntidad(entidades.getEntidadMonitorizada());
+			}
 			ventana.setNumFramesGen(++numFramesGen);
 		} 
 		//De lo contrario, la población debe evolucionar y reiniciar su ciclo de vida
@@ -121,6 +129,8 @@ public class Controlador {
 						vista.getPanelControl().getBtnProceder().setEnabled(true);
 					}
 				}, 5);
+			} else {
+				limpiarEntidadMonitorizada();
 			}
 			
 		}
@@ -135,7 +145,7 @@ public class Controlador {
 	 */
 	public void mostrarRutaOptima(Entidad mejorEntidad) {
 		vista.getVentana().drawRutaOptima(mejorEntidad.getAdn().getGenes(), mejorEntidad.getTiempoObtenido());
-		vista.getVentana().drawEntidad(mejorEntidad.getPosicion(), mejorEntidad.getVelocidad());
+		vista.getVentana().drawEntidad(mejorEntidad.getPosicion(), mejorEntidad.getVelocidad(), mejorEntidad.isMonitorizada());
 	}
 	
 	/**
@@ -143,11 +153,55 @@ public class Controlador {
 	 * @param entidad que se debe mostrar
 	 */
 	public void mostrarEntidad(Entidad entidad) {
-		vista.getVentana().drawEntidad(entidad.getPosicion(), entidad.getVelocidad());
+		vista.getVentana().drawEntidad(entidad.getPosicion(), entidad.getVelocidad(), entidad.isMonitorizada());
 	}
 	
 	public <T> void actualizarPanel(String label, T valor) {
 		vista.getPanelControl().setValor(label, valor);
+	}
+	
+	public void monitorizarEntidad(Entidad entidad) {
+		actualizarPanel("Entidad", entidad.getIndice());
+		actualizarPanel("Posicion", entidad.getPosicion());
+		actualizarPanel("Velocidad", entidad.getVelocidad());
+		actualizarPanel("Aceleracion", entidad.getAceleracion());
+		actualizarPanel("DistanciaEntidad", entidad.getDistancia());
+		actualizarPanel("DistanciaMinEntidad", entidad.getDistanciaMinima());
+		actualizarPanel("TiempoEntidad", entidad.getTiempoObtenido()); 
+		actualizarPanel("AptitudEntidad", entidad.getAptitud());
+		String estado = entidad.isHaChocado() ? "Chocado" : entidad.isHaLlegado() ? "Llegado" : "Activa";
+		actualizarPanel("EstadoEntidad", estado);
+	}
+	
+	public void seleccionarEntidad(PVector posRaton) {
+		Poblacion poblacion = modelo.getPoblacion();
+		if(poblacion == null) {
+			return;
+		}
+		Entidad[] entidades = poblacion.getEntidades();
+		for(int i = entidades.length - 1; i >= 0; i--) {
+			if (entidades[i].contieneRaton(posRaton)) {
+				entidades[i].setMonitorizada(true);
+				poblacion.setEntidadMonitorizada(entidades[i]);
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * Vacía la entidad monitorizada y sus datos del panel de control cuando su generación ya no exista
+	 */
+	private void limpiarEntidadMonitorizada() {
+		modelo.getPoblacion().setEntidadMonitorizada(null); 
+		actualizarPanel("Entidad", "-");
+		actualizarPanel("Posicion", "[0, 0, 0]");
+		actualizarPanel("Velocidad", "[0, 0, 0]");
+		actualizarPanel("Aceleracion", "[0, 0, 0]");
+		actualizarPanel("DistanciaEntidad", 0);
+		actualizarPanel("DistanciaMinEntidad", 0);
+		actualizarPanel("TiempoEntidad", 0); 
+		actualizarPanel("AptitudEntidad", 0);
+		actualizarPanel("EstadoEntidad", "-");
 	}
 	
 	/**
@@ -211,6 +265,7 @@ public class Controlador {
 			vista.getPanelControl().getBtnPausar().setEnabled(true);
 			//Desactiva el propio botón hasta que se pueda pasar a la siguiente generación
 			vista.getPanelControl().getBtnProceder().setEnabled(false);
+			limpiarEntidadMonitorizada();
 		}
 	}
 	
@@ -288,6 +343,7 @@ public class Controlador {
 			panelControl.setValor("Metas", 0);
 			panelControl.setValor("Colisiones", 0);
 			panelControl.setValor("Generacion", 0);
+			limpiarEntidadMonitorizada();
 		}
 	}
 	

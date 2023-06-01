@@ -2,6 +2,7 @@ package modelo.entidades;
 
 import modelo.componentes.Meta;
 import modelo.componentes.Obstaculo;
+import processing.core.PMatrix2D;
 import processing.core.PVector;
 
 /**
@@ -45,6 +46,19 @@ public class Entidad {
 	 * El tiempo que ha tardado en llegar a la meta, si es que ha llegado
 	 */
 	private int tiempoObtenido;
+	/**
+	 * Flag que indica si la entidad está siendo monitorizada en el panel de control
+	 */
+	private boolean monitorizada = false;
+	/**
+	 * Indice que ocupa en la población. Actua como si fuera un z_index al indicar
+	 * cómo de superpuesta está respecto al resto de entidades 
+	 */
+	private int indice;
+	/**
+	 * Distancia a la que se encuentra de la meta en en frame actual
+	 */
+	private float distancia;
 	
 	/**
 	 * Constructor que a partir de la población, establece los parámetros iniciales de la
@@ -53,14 +67,16 @@ public class Entidad {
 	 * @param poblacion a la que pertenece
 	 * @param adn: genotipo
 	 */
-	public Entidad(Poblacion poblacion, ADN adn) {
+	public Entidad(Poblacion poblacion, ADN adn, int indice) {
 		this.poblacion = poblacion;
+		this.indice = indice;
 		//Se copia el vector de posición inicial que comparten todas las entidades de la población
 		posicion = poblacion.getPosInicial().copy();
 		//Velocidad y aceleración comienzan vacías ya que se modificarán según se apliquen fuerzas
 		velocidad = new PVector(0,0);
 		aceleracion = new PVector(0,0);
 		aptitud = genActual = 0;
+		tiempoObtenido = 0;
 		haChocado = haLlegado = false;
 		//La primera distancia "record" es la distancia entre la meta y el punto inicial
 		distanciaMinima = PVector.dist(posicion, poblacion.getContexto().getMeta().getPosicion());
@@ -99,6 +115,13 @@ public class Entidad {
 	 * @param fuerza que altera su aceleración
 	 */
 	private void desplazar(PVector fuerza) {
+		/* Resetea la magnitud de su aceleración a 0 para que no incremente cada frame.
+		 * De no hacerlo, la velocidad se dispará a valores exageradamente grandes ya que
+		 * cada vez se moverá más rápido, y queremos que se desplace poco a poco en cada frame.
+		 * Esto se debe a que si seguimos sumando fuerzas a la aceleración, se acumulan y por tanto
+		 * la variación de la velocidad crece cada vez al incrementar la aceleración constantemente
+		 */
+		aceleracion.mult(0);
 		/* Según la segunda ley de Newton, asumiendo que no hay masa a tener en cuenta,
 		 * la aceleración será igual a la fuerza aplicada en ese instante (frame),
 		 * así que le sumamos ese vector
@@ -114,13 +137,6 @@ public class Entidad {
 		 * qúe punto, de la dirección.
 		 */
 		posicion.add(velocidad);
-		/* Resetea la magnitud de su aceleración a 0 para que no incremente cada frame.
-		 * De no hacerlo, la velocidad se dispará a valores exageradamente grandes ya que
-		 * cada vez se moverá más rápido, y queremos que se desplace poco a poco en cada frame.
-		 * Esto se debe a que si seguimos sumando fuerzas a la aceleración, se acumulan y por tanto
-		 * la variación de la velocidad crece cada vez al incrementar la aceleración constantemente
-		 */
-		aceleracion.mult(0);
 	}
 	
 	/**
@@ -156,7 +172,7 @@ public class Entidad {
 	private boolean colisionaConMeta() {
 		Meta meta = poblacion.getContexto().getMeta();
 		//Obtiene la distancia de la posición de la meta a la de la entidad
-		double distancia = PVector.dist(posicion, meta.getPosicion());
+		distancia = PVector.dist(posicion, meta.getPosicion());
 		//Si la destancia es menor a la del "record", actualiza su valor
 		if(distancia < distanciaMinima) {
 			distanciaMinima = distancia;
@@ -218,6 +234,42 @@ public class Entidad {
 		}
 	}
 	
+	/**
+	 * Comprueba si la posicion del raton está dentro de la hitbox de la entidad.
+	 * El algoritmo de colisión es muy parecido al de los obstáculos.
+	 * @param posRaton
+	 * @return si la hitbox contiene donde se encuentra el ratón
+	 */
+	public boolean contieneRaton(PVector posRaton) {
+		
+		//Distancia relativa del ratón a la entidad
+		PVector posRelativa = PVector.sub(posRaton, posicion);
+		
+		//Obtener matrix rotacion entidad
+	    PMatrix2D matrizRotacion = new PMatrix2D(); 
+	    float angulo = (float) Math.atan2(velocidad.x, velocidad.y); 
+	    matrizRotacion.rotate(-angulo);
+	    
+	    //Punto relativo con la rotación revetida
+	    PVector posRotada = new PVector();
+	    posRotada.x = posRelativa.x * matrizRotacion.m00 + posRelativa.y * matrizRotacion.m01;
+	    posRotada.y = posRelativa.x * matrizRotacion.m10 + posRelativa.y * matrizRotacion.m11;
+	    
+	    /* Puntos para comprobar si se encuentra en la "hitbox". Los valores escogidos
+	     * se basan en la representación gráfica de la entidad más un margen para que
+	     * la hitbox no sea muy pequeña y que no sea tan complicado acertar
+	     */
+	    float verticeX0 = -50;
+	    float verticeX1 = 25;
+	    float verticeY0 = -25;
+	    float verticeY1 = 25;
+	    
+	    //Comprueba si se encuentra en la hitbox en ambos ejes
+	    boolean colisionaX = posRotada.x >= verticeX0 && posRotada.x <= verticeX1; 
+	    boolean colisionaY = posRotada.y >= verticeY0 && posRotada.y <= verticeY1;
+	    return colisionaX && colisionaY;
+	}
+	
 	public ADN getAdn() {
 		return adn;
 	}
@@ -257,6 +309,21 @@ public class Entidad {
 	public boolean isHaLlegado() {
 		return haLlegado;
 	}
-	
-	
+
+	public boolean isMonitorizada() {
+		return monitorizada;
+	}
+
+	public void setMonitorizada(boolean monitorizado) {
+		this.monitorizada = monitorizado;
+	}
+
+	public int getIndice() {
+		return indice;
+	}
+
+	public float getDistancia() {
+		return distancia;
+	}
+
 }
