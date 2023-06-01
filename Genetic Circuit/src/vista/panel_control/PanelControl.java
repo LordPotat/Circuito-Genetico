@@ -46,10 +46,15 @@ public class PanelControl extends JFrame {
 	private JLabel lblDistMinEntidad;
 	private JLabel lblEstado;
 	private JLabel lblAptitudEntidad;
+	private JLabel lblTiempoEntidad;
+	private JLabel lblTiempoRecordActual;
+	private JLabel lblMejorAptitudActual;
+	private JLabel lblMetasActual;
+	private JLabel lblColisionesActual;
+	private JLabel lblDatosTotal;
+	private JLabel lblDatosActual;
 	
 	private HashMap<String, JLabel> mapaLabels;
-	private JLabel lblTiempoEntidad;
-
 
 	public PanelControl(Controlador controlador) {
 		// Crear JFrame principal
@@ -130,7 +135,10 @@ public class PanelControl extends JFrame {
         seccion3.setAlignmentX(Component.CENTER_ALIGNMENT);
         seccion3.setLayout(new BoxLayout(seccion3, BoxLayout.Y_AXIS));
         panel.add(seccion3);
-
+        
+        lblDatosTotal = new JLabel("Datos Totales");
+        seccion3.add(lblDatosTotal);
+   
         lblTiempoRecord = new JLabel("Tiempo record (frames): 0");
         lblTiempoRecord.setName("TiempoRecord");
         mapaLabels.put(lblTiempoRecord.getName(), lblTiempoRecord);
@@ -148,6 +156,26 @@ public class PanelControl extends JFrame {
         mapaLabels.put(lblColisiones.getName(), lblColisiones);
         seccion3.add(lblColisiones);
 
+        lblDatosActual = new JLabel("Datos Última Generación");
+        seccion3.add(lblDatosActual);
+        
+        lblTiempoRecordActual = new JLabel("Tiempo record (frames): 0");
+        lblTiempoRecordActual.setName("TiempoRecordActual");
+        mapaLabels.put(lblTiempoRecordActual.getName(), lblTiempoRecordActual);
+        seccion3.add(lblTiempoRecordActual);
+        lblMejorAptitudActual = new JLabel("Mejor aptitud: 0");
+        lblMejorAptitudActual.setName("MejorAptitudActual");
+        mapaLabels.put(lblMejorAptitudActual.getName(), lblMejorAptitudActual);
+        seccion3.add(lblMejorAptitudActual);
+        lblMetasActual = new JLabel("Metas alcanzadas: 0");
+        lblMetasActual.setName("MetasActual");
+        mapaLabels.put(lblMetasActual.getName(), lblMetasActual);
+        seccion3.add(lblMetasActual);
+        lblColisionesActual = new JLabel("Colisiones: 0");
+        lblColisionesActual.setName("ColisionesActual");
+        mapaLabels.put(lblColisionesActual.getName(), lblColisionesActual);
+        seccion3.add(lblColisionesActual);
+        
         JPanel panelEntidad = new JPanel();
         panelEntidad.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelEntidad.setLayout(new BoxLayout(panelEntidad, BoxLayout.Y_AXIS));

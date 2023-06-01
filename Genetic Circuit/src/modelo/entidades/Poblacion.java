@@ -63,6 +63,14 @@ public class Poblacion {
 	 */
 	private int numLlegadas;
 	/**
+	 * Total de colisiones que han tenido las entidades con los obstáculos 
+	 */
+	private int numColisionesActual;
+	/**
+	 * Total de veces que han llegado las entidades a la meta en esta generacion
+	 */
+	private int numLlegadasActual;
+	/**
 	 * Cantidad de entidades que tiene la poblacion
 	 */
 	private int numEntidades;
@@ -81,7 +89,6 @@ public class Poblacion {
 	
 	private Random random = new Random();
 
-	
 	
 	/**
 	 * Constructor que inicializa la población a través de una serie de parámetros iniciales
@@ -143,6 +150,8 @@ public class Poblacion {
 	 */
 	public void evolucionar() {
 		seleccionar();
+		numLlegadasActual = 0;
+		numColisionesActual = 0;
 		if(!objetivoCumplido) {
 			/* Si no ha cumplido aún el objetivo, pasa a reproducir a las entidades para
 			 * producir una nueva generación a partir de la anterior
@@ -213,11 +222,13 @@ public class Poblacion {
 	 * @param entidad cuyo tiempo debe ser comparado
 	 */
 	private void comprobarTiempoRecord(Entidad entidad) {
+		Controlador controlador = contexto.getControlador();
+		int tiempoObtenido = entidad.getTiempoObtenido();
+		controlador.actualizarPanel("TiempoRecordActual", tiempoObtenido);
 		if(entidad.getTiempoObtenido() < mejorTiempo) {
-			mejorTiempo = entidad.getTiempoObtenido();
+			mejorTiempo = tiempoObtenido;
 			mejorEntidad = entidad;
 			// Muestra en el panel de control el nuevo record de tiempo obtenido 
-			Controlador controlador = contexto.getControlador();
 			controlador.actualizarPanel("TiempoRecord", mejorTiempo);
 		} 
 	}
@@ -229,6 +240,7 @@ public class Poblacion {
 	 * @param entidad cuya aptitud debe ser comparada
 	 */
 	private void comprobarMejorAptitud(double aptitud) {
+		contexto.getControlador().actualizarPanel("MejorAptitudActual", aptitud);
 		if(aptitud > mejorAptitud) {
 			mejorAptitud = aptitud;
 			contexto.getControlador().actualizarPanel("MejorAptitud", mejorAptitud);
@@ -393,6 +405,17 @@ public class Poblacion {
 	}
 	
 	/**
+	 * Reemplaza la entidad que estaba siendo monitorizada por otra (si es que había una)
+	 * @param entidadMonitorizada
+	 */
+	public void setEntidadMonitorizada(Entidad entidadMonitorizada) {
+		if(this.entidadMonitorizada != null) { 
+			this.entidadMonitorizada.setMonitorizada(false);
+		}
+		this.entidadMonitorizada = entidadMonitorizada;
+	}
+	
+	/**
 	 * Incrementa el número de colisiones con obstáculos y lo muestra en el panel de control
 	 */
 	public void incrNumColisiones() {
@@ -404,6 +427,20 @@ public class Poblacion {
 	 */
 	public void incrNumLlegadas() {
 		contexto.getControlador().actualizarPanel("Metas", ++numLlegadas);
+	}
+	
+	/**
+	 * Incrementa el número de colisiones con obstáculos  de esta generacion y lo muestra en el panel de control
+	 */
+	public void incrNumColisionesActual() {
+		contexto.getControlador().actualizarPanel("ColisionesActual", ++numColisionesActual);
+	}
+
+	/**
+	 * Incrementa el número de llegadas a la meta de esta generacion y lo muestra en el panel de control
+	 */
+	public void incrNumLlegadasActual() {
+		contexto.getControlador().actualizarPanel("MetasActual", ++numLlegadasActual);
 	}
 	
 	public Entidad[] getEntidades() {
@@ -460,17 +497,6 @@ public class Poblacion {
 
 	public Entidad getEntidadMonitorizada() {
 		return entidadMonitorizada;
-	}
-	
-	/**
-	 * Reemplaza la entidad que estaba siendo monitorizada por otra (si es que había una)
-	 * @param entidadMonitorizada
-	 */
-	public void setEntidadMonitorizada(Entidad entidadMonitorizada) {
-		if(this.entidadMonitorizada != null) { 
-			this.entidadMonitorizada.setMonitorizada(false);
-		}
-		this.entidadMonitorizada = entidadMonitorizada;
 	}
 	
 }

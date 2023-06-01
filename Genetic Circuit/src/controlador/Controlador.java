@@ -46,8 +46,6 @@ public class Controlador {
 	 */
 	private int tiempoVidaCache;
 	
-	private ExecutorService monitorizador;
-	
 	/** 
 	 * Inicia la vista con la propia instancia para que las interfaces accedan al controlador
 	 * @throws InterruptedException 
@@ -99,6 +97,7 @@ public class Controlador {
 		//Si todavía le queda tiempo de vida a la población, realiza un ciclo de ejecución
 		if(numFramesGen < tiempoVidaCache) {
 			entidades.realizarCiclo();
+			//En cada ciclo debe monitorizar los datos de la entidad monitorizada, si es que hay
 			if(entidades.getEntidadMonitorizada() != null) {
 				monitorizarEntidad(entidades.getEntidadMonitorizada());
 			}
@@ -130,7 +129,9 @@ public class Controlador {
 					}
 				}, 5);
 			} else {
+				//Si el modo automático está activado debe dejar de monitorizar sólo
 				limpiarEntidadMonitorizada();
+				limpiarUltimaGeneracion();
 			}
 			
 		}
@@ -156,28 +157,43 @@ public class Controlador {
 		vista.getVentana().drawEntidad(entidad.getPosicion(), entidad.getVelocidad(), entidad.isMonitorizada());
 	}
 	
+	/**
+	 * Actualiza un campo (label) del panel de control con un nuevo valor
+	 * @param <T> Tipo de valor
+	 * @param label: nombre del campo que debe actualizar
+	 * @param valor
+	 */
 	public <T> void actualizarPanel(String label, T valor) {
 		vista.getPanelControl().setValor(label, valor);
 	}
 	
-	public void monitorizarEntidad(Entidad entidad) {
-		actualizarPanel("Entidad", entidad.getIndice());
-		actualizarPanel("Posicion", entidad.getPosicion());
-		actualizarPanel("Velocidad", entidad.getVelocidad());
-		actualizarPanel("Aceleracion", entidad.getAceleracion());
-		actualizarPanel("DistanciaEntidad", entidad.getDistancia());
-		actualizarPanel("DistanciaMinEntidad", entidad.getDistanciaMinima());
-		actualizarPanel("TiempoEntidad", entidad.getTiempoObtenido()); 
-		actualizarPanel("AptitudEntidad", entidad.getAptitud());
-		String estado = entidad.isHaChocado() ? "Chocado" : entidad.isHaLlegado() ? "Llegado" : "Activa";
-		actualizarPanel("EstadoEntidad", estado);
+	/**
+	 * Vacía los datos del panel de control correspondientes a la última generación
+	 */
+	private void limpiarUltimaGeneracion() {
+		modelo.getPoblacion().setEntidadMonitorizada(null); 
+		actualizarPanel("TiempoRecordActual", 0);
+		actualizarPanel("MejorAptitudActual", 0);
+		actualizarPanel("MetasActual", 0);
+		actualizarPanel("ColisionesActual", 0);
 	}
 	
+	/**
+	 * Determina si la posicion del ratón en el momento de haber activado un evento de
+	 * 'click' se encuentra en la 'hitbox' de alguna entidad y de ser así comienza a 
+	 * monitorizar esa entidad
+	 * @param posRaton: punto en el que se ha hecho click con el ratón
+	 */
 	public void seleccionarEntidad(PVector posRaton) {
 		Poblacion poblacion = modelo.getPoblacion();
+		//Si aún no se ha generado la población, no hace nad
 		if(poblacion == null) {
 			return;
 		}
+		/* Recorre todas las entidades desde la última posición (la más superpuesta al haber
+		 * sido la última en dibujarse en pantalla). Si alguna contiene en su hitbox la
+		 * posición del ratón, sustituye la entidad monitorizada por ella y termina de buscar
+		 */
 		Entidad[] entidades = poblacion.getEntidades();
 		for(int i = entidades.length - 1; i >= 0; i--) {
 			if (entidades[i].contieneRaton(posRaton)) {
@@ -186,6 +202,23 @@ public class Controlador {
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Actualizae en el panel de control todos los datos sobre una entidad
+	 * que está siendo monitorizada actualmente
+	 * @param entidad 
+	 */
+	public void monitorizarEntidad(Entidad entidad) {
+		actualizarPanel("Entidad", entidad.getIndice());
+		actualizarPanel("Posicion", entidad.getPosicion());
+		actualizarPanel("Velocidad", entidad.getVelocidad());
+		actualizarPanel("DistanciaEntidad", entidad.getDistancia());
+		actualizarPanel("DistanciaMinEntidad", entidad.getDistanciaMinima());
+		actualizarPanel("TiempoEntidad", entidad.getTiempoObtenido()); 
+		actualizarPanel("AptitudEntidad", entidad.getAptitud());
+		String estado = entidad.isHaChocado() ? "Chocado" : entidad.isHaLlegado() ? "Llegado" : "Activa";
+		actualizarPanel("EstadoEntidad", estado);
 	}
 	
 	/**
@@ -266,6 +299,7 @@ public class Controlador {
 			//Desactiva el propio botón hasta que se pueda pasar a la siguiente generación
 			vista.getPanelControl().getBtnProceder().setEnabled(false);
 			limpiarEntidadMonitorizada();
+			limpiarUltimaGeneracion();
 		}
 	}
 	
@@ -315,6 +349,11 @@ public class Controlador {
 			Ventana ventana = vista.getVentana();
 			if(!ventana.isLooping()) {
 				ventana.loop();
+				/* Hay que reiniciar el número de frames porque si no se produce un bug
+				 * en el que tras empezar de nuevo, empieza a contar desde el frame en el
+				 * que estaba al pausar el proceso antes de reiniciar, rompiendo el programa
+				 */
+				ventana.setNumFramesGen(0); 
 			}
 			//Dejamos activado sólo el botón de empezar
 			PanelControl panelControl = vista.getPanelControl();
@@ -344,6 +383,7 @@ public class Controlador {
 			panelControl.setValor("Colisiones", 0);
 			panelControl.setValor("Generacion", 0);
 			limpiarEntidadMonitorizada();
+			limpiarUltimaGeneracion();
 		}
 	}
 	
@@ -366,7 +406,7 @@ public class Controlador {
 			
 			JButton btnProceder = vista.getPanelControl().getBtnProceder();
 			/* Comprueba si el botón proceder es ahora mismo "Siguiente" ya que no debe
-			 * modificarlo si está en modo "Empezar, ya que solo debe comenzar una población
+			 * modificarlo si está en modo "Empezar", ya que solo debe comenzar una población
 			 * de esa manera.
 			 */
 			if(btnProceder.getText().equals("Siguiente")) {

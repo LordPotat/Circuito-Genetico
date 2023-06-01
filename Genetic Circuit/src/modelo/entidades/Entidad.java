@@ -147,6 +147,7 @@ public class Entidad {
 		if(colisionaConMeta()) {
 			//Incrementa el contador de llegadas a la meta de la población
 			poblacion.incrNumLlegadas();
+			poblacion.incrNumLlegadasActual();
 			haLlegado = true;
 			return;
 		}
@@ -155,6 +156,7 @@ public class Entidad {
 			if(obstaculo.chocaConEntidad(posicion)) {
 				//Incrementa el contador de colisiones de la población
 				poblacion.incrNumColisiones();
+				poblacion.incrNumColisionesActual();
 				//Actualiza la flag y termina de comprobar cuando encuentra una colisión
 				haChocado = true; 
 				break;
