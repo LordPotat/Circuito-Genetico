@@ -475,6 +475,18 @@ public class Controlador {
 	}
 	
 	/**
+	 * Cierra el programa sin importar el estado en el que se encuentre
+	 * @author Alberto
+	 */
+	public class BtnSalirListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			vista.getVentana().exit();
+			System.exit(0);
+		}
+	}
+	
+	/**
 	 * Activa o desactiva según se marque la checkbox el modo automático. Si se activa
 	 * las generaciones se sucederán sólas sin necesidad del input del usuario para
 	 * continuar su ciclo de vida. Si se desactiva el usuario deberá pulsar el botón

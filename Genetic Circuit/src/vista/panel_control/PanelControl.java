@@ -13,6 +13,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
+import javax.swing.DefaultComboBoxModel;
 import controlador.Controlador;
 import java.awt.Toolkit;
 import java.util.HashMap;
@@ -58,6 +59,7 @@ public class PanelControl extends JFrame {
 	
 	private HashMap<String, JLabel> mapaLabels;
 	private JComboBox<String> cBoxCircuito;
+	private JButton btnSalir;
 
 	public PanelControl(Controlador controlador) {
 		// Crear JFrame principal
@@ -97,7 +99,11 @@ public class PanelControl extends JFrame {
         btnReiniciar.setEnabled(false);
         btnReiniciar.addActionListener(controlador.new BtnReiniciarListener());
         seccion1.add(btnReiniciar);
-
+        
+        btnSalir = new JButton("Salir");
+        btnSalir.addActionListener(controlador.new BtnSalirListener());
+        seccion1.add(btnSalir);
+        
         cbModoAutomatico = new JCheckBox("Modo Automático");
         cbModoAutomatico.addActionListener(controlador.new CbModoAutoListener());
         seccion1.add(cbModoAutomatico);
@@ -278,7 +284,8 @@ public class PanelControl extends JFrame {
 		for(int i= 0; i < circuitos.length; i++) {
 			circuitos[i] = circuitos[i].substring(0, circuitos[i].lastIndexOf("."));
 		}
-		return new JComboBox<String>(circuitos);
+		//Si no se pasan los items en forma de ComboBoxModel el WindowBuilder no lo reconoce
+		return new JComboBox<String>(new DefaultComboBoxModel<String>(circuitos));
 	}
 	
 	public int getTotalPoblacion() {
