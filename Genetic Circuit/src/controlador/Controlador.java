@@ -27,9 +27,12 @@ import vista.ventana_grafica.Ventana;
  */
 public class Controlador {
 	
+<<<<<<< HEAD
 	/**
 	 * Circuito que debe cargarse al inicio del programa
 	 */
+=======
+>>>>>>> branch 'main' of https://github.com/LordPotat/Circuito-Genetico.git
 	private static final String CIRCUITO_INICIAL = "circuito1";
 	
 	private Vista vista;
