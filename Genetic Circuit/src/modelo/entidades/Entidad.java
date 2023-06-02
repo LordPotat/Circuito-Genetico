@@ -40,7 +40,7 @@ public class Entidad {
 	/**
 	 * Distancia "record" mínima a la que se ha quedado de la meta hasta el momento
 	 */
-	private double distanciaMinima;
+	private float distanciaMinima;
 	
 	/**
 	 * El tiempo que ha tardado en llegar a la meta, si es que ha llegado
@@ -292,7 +292,7 @@ public class Entidad {
 		return aceleracion;
 	}
 
-	public double getDistanciaMinima() {
+	public float getDistanciaMinima() {
 		return distanciaMinima;
 	}
 

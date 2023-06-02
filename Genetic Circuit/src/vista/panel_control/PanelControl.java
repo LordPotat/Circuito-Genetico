@@ -187,15 +187,15 @@ public class PanelControl extends JFrame {
         lblEntidad.setName("Entidad");
         mapaLabels.put(lblEntidad.getName(), lblEntidad);
         panelEntidad.add(lblEntidad);
-        lblPosicion = new JLabel("Posicion (px): [0,0,0]");
+        lblPosicion = new JLabel("Posicion (px): (0,0)");
         lblPosicion.setName("Posicion");
         mapaLabels.put(lblPosicion.getName(), lblPosicion);
         panelEntidad.add(lblPosicion);
-        lblVelocidad = new JLabel("Velocidad (px): [0,0,0]");
+        lblVelocidad = new JLabel("Velocidad (px): (0,0)");
         lblVelocidad.setName("Velocidad");
         mapaLabels.put(lblVelocidad.getName(), lblVelocidad);
         panelEntidad.add(lblVelocidad);
-        lblAceleracion = new JLabel("Aceleración (px): [0,0,0]");
+        lblAceleracion = new JLabel("Aceleración (px): (0,0)");
         lblAceleracion.setName("Aceleracion");
         mapaLabels.put(lblAceleracion.getName(), lblAceleracion);
         panelEntidad.add(lblAceleracion);
