@@ -27,6 +27,9 @@ import vista.ventana_grafica.Ventana;
  */
 public class Controlador {
 	
+	/**
+	 * Circuito que debe cargarse al inicio del programa
+	 */
 	private static final String CIRCUITO_INICIAL = "circuito1";
 	
 	private Vista vista;

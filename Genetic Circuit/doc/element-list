@@ -1,1 +1,9 @@
+controlador
+main
+modelo
+modelo.circuitos
+modelo.componentes
+modelo.entidades
+vista
+vista.panel_control
 vista.ventana_grafica
