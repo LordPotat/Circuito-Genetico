@@ -1,7 +1,7 @@
 package modelo.entidades;
 
-import modelo.componentes.Meta;
-import modelo.componentes.Obstaculo;
+import modelo.circuito.Meta;
+import modelo.circuito.Obstaculo;
 import processing.core.PMatrix2D;
 import processing.core.PVector;
 

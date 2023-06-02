@@ -12,7 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import modelo.Modelo;
-import modelo.circuitos.Circuito;
+import modelo.circuito.Circuito;
 import modelo.entidades.Entidad;
 import modelo.entidades.Poblacion;
 import processing.core.PVector;

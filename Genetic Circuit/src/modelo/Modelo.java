@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import controlador.Controlador;
-import modelo.circuitos.Circuito;
-import modelo.componentes.Meta;
-import modelo.componentes.Obstaculo;
+import modelo.circuito.Circuito;
+import modelo.circuito.Meta;
+import modelo.circuito.Obstaculo;
 import modelo.entidades.Poblacion;
 import processing.core.PVector;
 

@@ -1,7 +1,5 @@
-package main;
+package controlador;
 import java.awt.EventQueue;
-
-import controlador.Controlador;
 
 /**
  * Clase principal que inicia el programa

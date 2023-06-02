@@ -1,4 +1,4 @@
-package modelo.componentes;
+package modelo.circuito;
 
 import processing.core.PVector;
 

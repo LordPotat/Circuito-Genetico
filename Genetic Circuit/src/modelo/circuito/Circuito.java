@@ -1,5 +1,5 @@
 
-package modelo.circuitos;
+package modelo.circuito;
 
 import java.util.HashMap;
 

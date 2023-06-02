@@ -2,8 +2,8 @@ package vista.ventana_grafica;
 
 import controlador.Controlador;
 import modelo.Modelo;
-import modelo.componentes.Meta;
-import modelo.componentes.Obstaculo;
+import modelo.circuito.Meta;
+import modelo.circuito.Obstaculo;
 import processing.core.PApplet;
 import processing.core.PShape;
 import processing.core.PVector;
