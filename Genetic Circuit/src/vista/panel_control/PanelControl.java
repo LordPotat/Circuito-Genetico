@@ -16,6 +16,8 @@ import javax.swing.JScrollPane;
 import controlador.Controlador;
 import java.awt.Toolkit;
 import java.util.HashMap;
+import javax.swing.JComboBox;
+import java.io.File;
 
 public class PanelControl extends JFrame {
 
@@ -55,6 +57,7 @@ public class PanelControl extends JFrame {
 	private JLabel lblDatosActual;
 	
 	private HashMap<String, JLabel> mapaLabels;
+	private JComboBox<String> cBoxCircuito;
 
 	public PanelControl(Controlador controlador) {
 		// Crear JFrame principal
@@ -105,6 +108,13 @@ public class PanelControl extends JFrame {
         seccion2.setAlignmentX(Component.CENTER_ALIGNMENT);
         seccion2.setLayout(new BoxLayout(seccion2, BoxLayout.Y_AXIS));
         panel.add(seccion2);
+        
+        cBoxCircuito = rellenarCboxCircuito();
+        cBoxCircuito.setSelectedIndex(0);
+        cBoxCircuito.setMaximumRowCount(10);
+        cBoxCircuito.setEditable(true);
+        cBoxCircuito.addItemListener(controlador.new CboxCircuitoListener());
+        seccion2.add(cBoxCircuito);
 
         seccion2.add(new JLabel("Población total"));
         spPoblacion = new JSpinner(new SpinnerNumberModel(1000, 4, 15000, 50));
@@ -254,6 +264,23 @@ public class PanelControl extends JFrame {
         else return null;
 	}
 	
+	/**
+	 * Añade al combo box de circuitos todos los nombres de los ficheros de la carpeta
+	 * del proyecto en el que se encuentran almacenados, para que se puedan seleccionar
+	 * @return el combo box con la lista de circuitos seleccionables
+	 */
+	private JComboBox<String> rellenarCboxCircuito() {
+		//'res/circuits' es la ruta del proyecto donde se encuentran
+		File carpetaCircuitos = new File("res/circuits"); 
+		//Obtiene los nombres de los ficheros de cada circuito de la carpeta
+		String[] circuitos = carpetaCircuitos.list(); 
+		//Elimina la extensión del nombre ya que es implícita al cargarlos
+		for(int i= 0; i < circuitos.length; i++) {
+			circuitos[i] = circuitos[i].substring(0, circuitos[i].lastIndexOf("."));
+		}
+		return new JComboBox<String>(circuitos);
+	}
+	
 	public int getTotalPoblacion() {
 		return (int)spPoblacion.getValue();
 	}
@@ -288,6 +315,10 @@ public class PanelControl extends JFrame {
 
 	public JSpinner getSpTiempoObjetivo() {
 		return spTiempoObjetivo;
+	}
+
+	public JComboBox<String> getcBoxCircuito() {
+		return cBoxCircuito;
 	}
 	
 	 

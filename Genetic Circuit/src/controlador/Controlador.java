@@ -2,14 +2,17 @@ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
+import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.JComboBox;
 
 import modelo.Modelo;
 import modelo.circuito.Circuito;
@@ -27,10 +30,23 @@ import vista.ventana_grafica.Ventana;
  */
 public class Controlador {
 	
-
+	/**
+	 * Circuito que se debe cargar al inicio del programa automáticamente
+	 */
 	private static final String CIRCUITO_INICIAL = "circuito1";
 	
+	/**
+	 * Indica si el programa debe ejecutarse con normalidad o limitarse a guardar un circuito nuevo
+	 */
+	private String modoEjecucion;
+	
+	/**
+	 * Componente del programa que contiene la interfaz de el usuario
+	 */
 	private Vista vista;
+	/**
+	 * Componente del programa que contiene los datos almacenados necesarios
+	 */
 	private Modelo modelo;
 	
 	/**
@@ -46,30 +62,72 @@ public class Controlador {
 	 */
 	private int tiempoVidaCache;
 	
+	/**
+	 * Constructor que inicializa el controlador en el modo especificado. Si se le pasa "NORMAL",
+	 * se ejecuta el programa con normalidad, pero si se le pasa "EDITOR", su funcionalidad es guardar
+	 * en un archivo un nuevo circuito que se haya diseñado y programado para siguientes ejecuciones
+	 * @param modoEjecuion
+	 */
+	public Controlador(String modoEjecuion) {
+		this.modoEjecucion = modoEjecuion;
+	}
+	
 	/** 
-	 * Inicia la vista con la propia instancia para que las interfaces accedan al controlador
+	 * Inicia la vista y el modelo con la propia instancia para que puedan acceder al mismo controlador
+	 * y comunicarse entre sí. Después determina su flujo de ejecución según el modo obtenido en el
+	 * constructor
 	 * @throws InterruptedException 
 	 */
-	public void iniciarVista() throws InterruptedException  {
+	public void iniciarControlador() throws InterruptedException  {
+		//Genera las dos ventanas que formarán la interfaz gráfica del usuario
 		vista = new Vista(this);
-		//Espera a que de tiempo a que se cargue la ventana
+		//Espera a que de tiempo a que se cargue la ventana de Processing
 		Thread.sleep(300);
 		//Cuando la ventana esté correctamente iniciada se pueden iniciar los datos
-		iniciarCircuito();
+		modelo = new Modelo(this);
+		/* Según el modo de ejecución, guarda un circuito en el proyecto y no continúa haciendo nada
+		 * o procede con la ejecución normal iniciando el circuito por defecto
+		 */
+		Ventana ventana = vista.getVentana();
+		ejecutarModoEditorCircuitos(ventana);
+		//Se carga el circuito por defecto al inicio del programa establecido en una constante
+		iniciarCircuito(CIRCUITO_INICIAL ,vista.getVentana());
 	}
 
 	/** 
-	 * Inicia los objetos del modelo de datos presentes en el circuito: la meta, obstaculos 
-	 * Obtiene los datos almacenados en el circuito escogido para configurar sus parámetros
+	 * Inicia los objetos del modelo de datos presentes en el circuito: la meta y obstaculos .
+	 * Obtiene los datos almacenados en el fichero correspondiente al circuito pasado como
+	 * argumento para poder asignar los parámetros necesarios para su inicialización
+	 * @param nombreCircuito: el circuito que debe cargarse 
+	 * @param ventana gráfica necesaria para poder dar contexto a los elementos
 	 */
-	public void iniciarCircuito() {
-		modelo = new Modelo(this);
-		Ventana ventana = vista.getVentana();
-		Circuito.guardarCircuito("circuito1", ventana);
-		modelo.setCircuito(Circuito.cargarCircuito(CIRCUITO_INICIAL));
-		Circuito circuitoInicial = modelo.getCircuito();
-		modelo.setMeta(circuitoInicial.setupMeta(ventana));
-		modelo.setObstaculos(circuitoInicial.setupObstaculos(ventana));
+	public void iniciarCircuito(String nombreCircuito, Ventana ventana) {
+		//Obtiene el circuito desde su fichero de la carpeta del proyecto
+		modelo.setCircuito(Circuito.cargarCircuito(nombreCircuito));
+		//Inicia la meta y obstáculos a partir de los parámetros del circuito cargado
+		Circuito circuito = modelo.getCircuito();
+		modelo.setMeta(circuito.setupMeta(ventana));
+		modelo.setObstaculos(circuito.setupObstaculos(ventana));
+	}
+
+	/** 
+	 * Si se indica el modo de ejecución "EDITOR", al inicio del programa
+	 * guardará como fichero en el proyecto el último circuito que hayamos diseñado
+	 * para que se pueda seleccionar y cargar la siguiente vez que ejecute el programa.
+	 * El programa no continúa haciendo nada y termina salvo que cambiemos el valor de 
+	 * esa flag, pensada solo para el desarrollador y no el usuario
+	 * @param ventana gráfica necesaria para poder crear el circuito
+	 */
+	private void ejecutarModoEditorCircuitos(Ventana ventana) {
+		if(modoEjecucion.equals("EDITOR")) {
+			/* Se le tiene que pasa el nombre del circuito con el que se nombrará el fichero y
+			 * la ventana para poder colocar elementos relativos a ésta
+			 */
+			Circuito.guardarCircuito("circuito3", ventana);
+			//Cierra de manera segura la ventana gráfica y termina la ejecución del programa
+			vista.getVentana().exit();
+			System.exit(0);
+		}
 	}
 
 	/**
@@ -285,9 +343,14 @@ public class Controlador {
 			btnProceder.removeActionListener(this); //eliminamos el actual
 			//Deshabilitamos el botón hasta que se pueda avanzar de generación
 			btnProceder.setEnabled(false); 
+			/* Deshabilita el selector de circuitos hasta que se reinicie al estado inicial
+			 * ya que cambiar el circuito en mitad del proceso es contraproducente
+			 */
+			panelControl.getcBoxCircuito().setEnabled(false);
 			//Habilita también los demás botones que ahora tendrán sentido utilizar
 			panelControl.getBtnReiniciar().setEnabled(true);
 			panelControl.getBtnPausar().setEnabled(true);
+			
 		}
 		
 		/**
@@ -369,14 +432,18 @@ public class Controlador {
 			Ventana ventana = vista.getVentana();
 			if(!ventana.isLooping()) {
 				ventana.loop();
-				/* Hay que reiniciar el número de frames porque si no se produce un bug
-				 * en el que tras empezar de nuevo, empieza a contar desde el frame en el
-				 * que estaba al pausar el proceso antes de reiniciar, rompiendo el programa
-				 */
-				ventana.setNumFramesGen(0); 
 			}
-			//Dejamos activado sólo el botón de empezar
+			/* Hay que reiniciar el número de frames porque si no se produce un bug
+			 * en el que tras empezar de nuevo, empieza a contar desde el frame en el
+			 * que estaba al pausar el proceso antes de reiniciar, rompiendo el programa
+			 */
+			ventana.setNumFramesGen(0); 
+			/* Dejamos activado sólo el botón de empezar y el selector de circuitos, que
+			 * ahora no tendría problema para poder cargar otro distinto al haber empezado
+			 * otro proceso
+			 */
 			PanelControl panelControl = vista.getPanelControl();
+			panelControl.getcBoxCircuito().setEnabled(true);
 			panelControl.getBtnReiniciar().setEnabled(false);
 			panelControl.getBtnPausar().setEnabled(false);
 			panelControl.getBtnPausar().setText("Pausar");
@@ -419,7 +486,7 @@ public class Controlador {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//Obtenemos si el checkbox que lanza el evento está o no activado
-			JCheckBox cbModoAuto = (JCheckBox) e.getSource();
+			JToggleButton cbModoAuto = (JToggleButton) e.getSource();
 			boolean activado = cbModoAuto.isSelected();
 			//Activa o desactiva el modo automático según esté seleccionado
 			modoAutomatico = activado;
@@ -502,6 +569,33 @@ public class Controlador {
 					break;
 			}
 		}
+	}
+	
+	/**
+	 * Cambia el circuito cargando el fichero correspondiente a la opción que se ha 
+	 * seleccionado en el combo box y reestableciendo los parámetros necesarios en los
+	 * elementos del proceso como la meta, obstáculos y la población a partir del circuito.
+	 * En el siguiente frame se actualizara el circuito mostrado en la ventana gráfica.
+	 * @author Alberto
+	 */
+	public class CboxCircuitoListener implements ItemListener {
+		
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			//Solo se activa si se selecciona una opción distinta a la actual
+			if(e.getStateChange() == ItemEvent.SELECTED) {
+				@SuppressWarnings("unchecked")
+				JComboBox<String> cBoxCircuito = (JComboBox<String>) e.getSource();
+				//Obtiene el nombre del circuito a partir del item seleccionado
+				String circuitoSeleccionado = (String) cBoxCircuito.getSelectedItem();
+				/* Inicia los elementos (meta y obstáculos) del circuito tras cargar el ficheros
+				 * con el nombre del circuito seleccionado
+				 */
+				iniciarCircuito(circuitoSeleccionado, vista.getVentana());
+			}
+			
+		}
+		
 	}
 	
 	public Vista getVista() {
