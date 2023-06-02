@@ -452,7 +452,7 @@ public class Poblacion {
 	}
 
 	public void setTasaMutacion(double tasaMutacion) {
-		this.tasaMutacion = tasaMutacion;
+		this.tasaMutacion = tasaMutacion / 100;
 	}
 
 	public int getNumGeneraciones() {

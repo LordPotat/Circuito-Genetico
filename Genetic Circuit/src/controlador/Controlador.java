@@ -5,9 +5,6 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
@@ -29,6 +26,8 @@ import vista.ventana_grafica.Ventana;
  * @author Alberto Pérez
  */
 public class Controlador {
+	
+	private static final String CIRCUITO_INICIAL = "circuito1";
 	
 	private Vista vista;
 	private Modelo modelo;
@@ -65,9 +64,11 @@ public class Controlador {
 	public void iniciarCircuito() {
 		modelo = new Modelo(this);
 		Ventana ventana = vista.getVentana();
-		Circuito circuito = modelo.getCircuito();
-		modelo.setMeta(circuito.setupMeta(ventana));
-		modelo.setObstaculos(circuito.setupObstaculos(ventana));
+		Circuito.guardarCircuito("circuito1", ventana);
+		modelo.setCircuito(Circuito.cargarCircuito(CIRCUITO_INICIAL));
+		Circuito circuitoInicial = modelo.getCircuito();
+		modelo.setMeta(circuitoInicial.setupMeta(ventana));
+		modelo.setObstaculos(circuitoInicial.setupObstaculos(ventana));
 	}
 
 	/**
@@ -77,7 +78,6 @@ public class Controlador {
 	 * En ese momento llamara a la función con los pasos del algoritmo genético necesarios
 	 * @return el numero de generaciones actual de la población
 	 */
-	
 	public void manipularPoblacion() {
 		Poblacion entidades = modelo.getPoblacion();
 		Ventana ventana = vista.getVentana();
@@ -211,14 +211,33 @@ public class Controlador {
 	 */
 	public void monitorizarEntidad(Entidad entidad) {
 		actualizarPanel("Entidad", entidad.getIndice());
-		actualizarPanel("Posicion", entidad.getPosicion());
-		actualizarPanel("Velocidad", entidad.getVelocidad());
-		actualizarPanel("DistanciaEntidad", entidad.getDistancia());
-		actualizarPanel("DistanciaMinEntidad", entidad.getDistanciaMinima());
+		//Redondeamos el valor de la distancia a dos decimales para no mostrar demasiados números
+		actualizarPanel("DistanciaEntidad", redondearValor(entidad.getDistancia(), 2));
+		actualizarPanel("DistanciaMinEntidad", redondearValor(entidad.getDistanciaMinima(), 2));
+		//Para los vectores redondeamos hasta 4 decimales ya que debe mostrar más precisión
+		actualizarPanel("Posicion", "("+ redondearValor(entidad.getPosicion().x, 4) +
+				", " + redondearValor(entidad.getPosicion().y, 4) + ")");
+		actualizarPanel("Velocidad", "("+ redondearValor(entidad.getVelocidad().x, 4) + 
+				", " + redondearValor(entidad.getVelocidad().y, 4) + ")");
+		actualizarPanel("Aceleracion", "("+ redondearValor(entidad.getAceleracion().x, 4) +
+				", " + redondearValor(entidad.getAceleracion().y, 4) + ")");
 		actualizarPanel("TiempoEntidad", entidad.getTiempoObtenido()); 
+		//La aptitud no la redondeamos porque siempre son números muy pequeños
 		actualizarPanel("AptitudEntidad", entidad.getAptitud());
+		//Según la entidad tenga determinadas flags o no, mostrará en el estado en el que está
 		String estado = entidad.isHaChocado() ? "Chocado" : entidad.isHaLlegado() ? "Llegado" : "Activa";
 		actualizarPanel("EstadoEntidad", estado);
+	}
+	
+	/**
+	 * Redondea un valor decimal hasta el número de decimales indicado
+	 * @param valor
+	 * @param numDecimales 
+	 * @return el valor redondeado
+	 */
+	private double redondearValor(float valor, int numDecimales) {
+		double factor = Math.pow(10, numDecimales);
+		return Math.round(valor * factor) / factor;
 	}
 	
 	/**
@@ -227,9 +246,9 @@ public class Controlador {
 	private void limpiarEntidadMonitorizada() {
 		modelo.getPoblacion().setEntidadMonitorizada(null); 
 		actualizarPanel("Entidad", "-");
-		actualizarPanel("Posicion", "[0, 0, 0]");
-		actualizarPanel("Velocidad", "[0, 0, 0]");
-		actualizarPanel("Aceleracion", "[0, 0, 0]");
+		actualizarPanel("Posicion", "(0, 0)");
+		actualizarPanel("Velocidad", "(0, 0)");
+		actualizarPanel("Aceleracion", "(0, 0)");
 		actualizarPanel("DistanciaEntidad", 0);
 		actualizarPanel("DistanciaMinEntidad", 0);
 		actualizarPanel("TiempoEntidad", 0); 
@@ -248,7 +267,7 @@ public class Controlador {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//Iniciamos la población con los parámetros iniciales, incluido el punto de spawn del circuito
-			modelo.setPoblacionEntidades(setupPoblacion(), modelo.getCircuito().setSpawn(vista.getVentana()));
+			modelo.setPoblacionEntidades(setupPoblacion(), modelo.getCircuito().setSpawn());
 			/* Actualizamos la flag de parado para que la ventana pueda empezar a llamar a la función de
 			 * manipularProceso() cada frame
 			 */
