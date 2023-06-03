@@ -203,7 +203,7 @@ public class Ventana extends PApplet {
 		fill(80); 
 		text("Estado: ", 9, 45);
 		int[] colorEstado = estado.getColor();
-		fill(color(colorEstado[0], colorEstado[1], colorEstado[2])); 
+		fill(colorEstado[0], colorEstado[1], colorEstado[2]); 
 		text(estado.getTexto(), 9 + textWidth("Estado: "), 45);
 	}
 
@@ -212,8 +212,18 @@ public class Ventana extends PApplet {
 	}
 
 	public void keyPressed() {
+		if(key == ' ') {
+			return;
+		}
+		if(key == 'a' || key == 'A') {
+			return;
+		}
+		if(key == 'r' || key == 'R') {
+			return;
+		}
 		if(key == 'd' || key == 'D') {
 			modoDebug = !modoDebug;
+			return;
 		}
 	}
 	

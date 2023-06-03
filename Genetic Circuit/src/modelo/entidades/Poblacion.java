@@ -15,6 +15,10 @@ import processing.core.PVector;
  */
 public class Poblacion {
 	
+	/**
+	 * Modelo de datos que contiene el resto de elementos con los que debe interaccionar
+	 * la población, así como el controlador para comunicarse con la interfaz
+	 */
 	private Modelo contexto;
 	
 	/**
@@ -149,20 +153,28 @@ public class Poblacion {
 	 * hasta que tras evaluarlas se compruebe que se ha completado el objetivo
 	 */
 	public void evolucionar() {
+		//Selecciona las entidades para determinar el proceso de reproducción
 		seleccionar();
+		//Reinicia los contadores de llegadas y colisiones para la generación actual
 		numLlegadasActual = 0;
 		numColisionesActual = 0;
-		if(!objetivoCumplido) {
-			/* Si no ha cumplido aún el objetivo, pasa a reproducir a las entidades para
-			 * producir una nueva generación a partir de la anterior
-			 */
+		/* Si no ha cumplido aún el objetivo, pasa a reproducir a las entidades para
+		 * producir una nueva generación a partir de la anterior
+		 */
+		if(!objetivoCumplido) {	
 			reproducir();	
-		} else {
-			/* Tras cumplir el objetivo da la orden a la vista de que muestre la ruta
-			 * tomada por la mejor entidad, pasándole ésta para que la mantenga en pantalla
-			 */
-			contexto.getControlador().mostrarRutaOptima(mejorEntidad);
+		} 
+	}
+	
+	/**
+	 * Reemplaza la entidad que estaba siendo monitorizada por otra (si es que había una)
+	 * @param entidadMonitorizada
+	 */
+	public void setEntidadMonitorizada(Entidad entidadMonitorizada) {
+		if(this.entidadMonitorizada != null) { 
+			this.entidadMonitorizada.setMonitorizada(false);
 		}
+		this.entidadMonitorizada = entidadMonitorizada;
 	}
 	
 	/**
@@ -180,16 +192,8 @@ public class Poblacion {
 			objetivoCumplido = true;
 			return;
 		}
+		//Determina según sus aptitudes y la mejor conseguida esta generación como se reproducirán
 		calcProbabilidadReproduccion(mejorAptitud);
-	}
-
-	/**
-	 * Comprueba si se ha cumplido el objetivo de las entidades de llegar al meta
-	 * del circuito en el tiempo establecido.
-	 * @return si el mejor tiempo hasta el momento pasa el tiempo objetivo 
-	 */
-	private boolean comprobarObjetivo() {
-		return mejorTiempo <= tiempoObjetivo;
 	}
 
 	/** 
@@ -200,17 +204,30 @@ public class Poblacion {
 	private double evaluarEntidades() {
 		double mejorAptitud = 0.0;
 		for(Entidad entidad : entidades) {
-			//Si la aptitud obtenida es mejor que alguna anterior, la sustituye
-			if (entidad.evaluarAptitud() > mejorAptitud) {
-				mejorAptitud = entidad.getAptitud();
-				//Comprueba si ha superado algún record
-				comprobarTiempoRecord(entidad);
-				comprobarMejorAptitud(mejorAptitud);
-			}
+			mejorAptitud = evaluarEntidad(mejorAptitud, entidad);
 		}
-		//Si hay una entidad siendo monitorizada, muestra la aptitud evaluada para ésta en el panel
+		//Si hay una entidad siendo monitorizada, muestra la aptitud evaluada para se vea en el panel
 		if(entidadMonitorizada != null) {	
 			contexto.getControlador().actualizarPanel("AptitudEntidad", entidadMonitorizada.getAptitud());
+		}
+		return mejorAptitud;
+	}
+	
+	/**
+	 * Califica una entidad a través de su función de aptitud y determina si ha
+	 * superado a la mejor de esta generación. También comprueba si ha superado
+	 * algún record entre todas las generaciones
+	 * @param mejorAptitud conseguida hasta el momento
+	 * @param entidad que debe evaluar
+	 * @return la mejor aptitud la haya superado o no
+	 */
+	private double evaluarEntidad(double mejorAptitud, Entidad entidad) {
+		//Si la aptitud obtenida es mejor que alguna anterior, la sustituye
+		if (entidad.evaluarAptitud() > mejorAptitud) {
+			mejorAptitud = entidad.getAptitud();
+			//Comprueba si ha superado algún record
+			comprobarTiempoRecord(entidad);
+			comprobarMejorAptitud(mejorAptitud);
 		}
 		return mejorAptitud;
 	}
@@ -245,6 +262,15 @@ public class Poblacion {
 			mejorAptitud = aptitud;
 			contexto.getControlador().actualizarPanel("MejorAptitud", mejorAptitud);
 		}
+	}
+	
+	/**
+	 * Comprueba si se ha cumplido el objetivo de las entidades de llegar al meta
+	 * del circuito en el tiempo establecido.
+	 * @return si el mejor tiempo hasta el momento pasa el tiempo objetivo 
+	 */
+	private boolean comprobarObjetivo() {
+		return mejorTiempo <= tiempoObjetivo;
 	}
 	
 	/**
@@ -293,22 +319,32 @@ public class Poblacion {
 		 * dos parientes aleatorios del pool genético
 		 */
 		for(int i=0; i < nuevaGeneracion.length; i++) {
-			//El primer pariente se obtiene del primer indice aleatorio que escoge
-			int indPariente1 = random.nextInt(poolGenetico.size());
-			Entidad pariente1 = poolGenetico.get(indPariente1);
-			//El segundo pariente deberá ser uno con una aptitud distinta al primero
-			Entidad pariente2 = encontrarParienteDistinto(pariente1);
-			//Se obtiene el ADN que tendrá el hijo tras cruzar el de ambos parientes
-			ADN adnHijo = cruzarEntidades(pariente1, pariente2);
-			mutar(adnHijo); //Se le aplican las mutaciones que surjan aleatoriametne
-			/* Como creamos una nueva entidad a partir de un genotipo ya construido,
-			 * le pasamos el ADN como argumento a su constructor, y ya no generará
-			 * genes aleatoriamente (excluyendo aquellos que han mutado)
-			 */
-			nuevaGeneracion[i] = new Entidad(this, adnHijo, i);
+			crearEntidadHija(nuevaGeneracion, i);
 		}
 		entidades = nuevaGeneracion; //Se sustituyen las entidades actuales por las nuevas
 		numGeneraciones++; //Se incrementa el contador de generaciones
+	}
+
+	/**
+	 * Genera un nuevo objeto Entidad apartir del cruce de los genes de dos parientes
+	 * aleatorios del pool genético y tras realizar una posible mutación
+	 * @param nuevaGeneracion la colección de entidades que sustituirá a la anterior
+	 * @param i el índice de la entidad que se va a crear
+	 */
+	private void crearEntidadHija(Entidad[] nuevaGeneracion, int i) {
+		//El primer pariente se obtiene del primer indice aleatorio que escoge
+		int indPariente1 = random.nextInt(poolGenetico.size());
+		Entidad pariente1 = poolGenetico.get(indPariente1);
+		//El segundo pariente deberá ser uno con una aptitud distinta al primero
+		Entidad pariente2 = encontrarParienteDistinto(pariente1);
+		//Se obtiene el ADN que tendrá el hijo tras cruzar el de ambos parientes
+		ADN adnHijo = cruzarEntidades(pariente1, pariente2);
+		mutar(adnHijo); //Se le aplican las mutaciones que surjan aleatoriamente
+		/* Como creamos una nueva entidad a partir de un genotipo ya construido,
+		 * le pasamos el ADN como argumento a su constructor, y ya no generará
+		 * genes aleatoriamente (excluyendo aquellos que han mutado)
+		 */
+		nuevaGeneracion[i] = new Entidad(this, adnHijo, i);
 	}
 	
 	/**
@@ -356,16 +392,11 @@ public class Poblacion {
 	    int difTiempoVida = tiempoVida - genesPariente1.length;
 	    boolean parientesVivenIgualOMas = genesPariente1.length >= tiempoVida;
 	    int numCruces = parientesVivenIgualOMas ? tiempoVida : tiempoVida - difTiempoVida;
-	    /* Asigna a cada elemento del array el gen cuyo índice corresponde al de uno de los
-	     * dos parientes según el que toque aleatoriamente
+	    /* Le asigna un gen a cada uno de los genes que puede obtener a partir de los cruces entre
+	     * los parientes 
 	     */
 		for(int i=0; i < numCruces; i++) {
-			//En cada gen tendrá un 50% de posibilidades de elegir el de un pariente u otro
-			if (random.nextBoolean()) {
-				genesHijo[i] = genesPariente1[i];
-			} else {
-				genesHijo[i] = genesPariente2[i];
-			}
+			genesHijo[i] = elegirGenes(genesPariente1[i], genesPariente2[i]);
 		}
 		/* Si los parientes viven menos que los hijos, debe rellenar los genes que sobran con
 		 * genes aleatorios, ya que no quedan más cruces que hacer
@@ -374,6 +405,23 @@ public class Poblacion {
 			rellenarGenesExtra(genesHijo, numCruces);
 		}
 		return new ADN(genesHijo);
+	}
+
+	/**
+	 * Asigna a un gen del hijo que se está creando el gen correspondiente al de alguno de
+	 * los dos parientes según el que toque aleatoriamente
+	 * @param genPariente1 gen del primer pariente
+	 * @param genPariente2 gen del segundo pariente
+	 */
+	private PVector elegirGenes(PVector genPariente1, PVector genPariente2) {
+		/* En cada gen tendrá un 50% de posibilidades de elegir el de un pariente u otro.
+		 * Funciona como si se tirara una moneda al aire para cada uno
+		 */
+		if (random.nextBoolean()) {
+	        return genPariente1;
+	    } else {
+	        return genPariente2;
+	    }
 	}
 
 	/**
@@ -402,17 +450,6 @@ public class Poblacion {
 				adnHijo.generarGenAleatorio(gen);
 			}
 		}
-	}
-	
-	/**
-	 * Reemplaza la entidad que estaba siendo monitorizada por otra (si es que había una)
-	 * @param entidadMonitorizada
-	 */
-	public void setEntidadMonitorizada(Entidad entidadMonitorizada) {
-		if(this.entidadMonitorizada != null) { 
-			this.entidadMonitorizada.setMonitorizada(false);
-		}
-		this.entidadMonitorizada = entidadMonitorizada;
 	}
 	
 	/**

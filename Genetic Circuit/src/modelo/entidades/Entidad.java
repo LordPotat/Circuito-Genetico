@@ -111,6 +111,57 @@ public class Entidad {
 	}
 
 	/**
+	 * Califica a la entidad actualizando su valor de aptitud dependiendo de lo cerca que
+	 * se ha quedado de cumplir el objetivo de llegar a la meta en el tiempo indicado
+	 * @return la aptitud calculada a partir de las fórmulas
+	 */
+	public double evaluarAptitud() {
+		normalizarDistanciaMinima();
+		double factorTiempo = 1.0;
+		/* La aptitud debe ser directamente proporcional a lo cerca que está que está el tiempo
+		 * obtenido del tiempo objetivo. El factor de la fórmula viene determinado por tanto
+		 * por el tiempo objetivo entre el tiempo obtenido, para calcular la proporción
+		 */
+		factorTiempo = (double)poblacion.getTiempoObjetivo() / (double)tiempoObtenido;
+		/* Para optimizar los resultados, se eleva el factor a una potencia de 1 partido por
+		 * un valor (como el factor es un decimal por debajo del 1, si queremos incrementar 
+		 * su valor el exponente también debe ser menor que 1). 
+		 * Tras numerosas pruebas el exponente que rinde mejor para recompensar el obtener un 
+		 * tiempo más cercano al objetivo, sin que ello provoque una situación de estancamiento 
+		 * por premiarlo demasiado y no promover variedad, es el de 1/4, que es el punto de equilibrio
+		 */
+		factorTiempo = Math.pow(factorTiempo,1/4);
+		/* La aptitud debe ser inversamente proporcional a la distancia minima a la meta
+		 * que alcanza, y al tiempo obtenido. La fórmula resultante será el factor de tiempo
+		 * dividido entre tiempo obtenido por distancia mínima. */
+		aptitud = factorTiempo / (tiempoObtenido * distanciaMinima);
+		//Si ha llegado a la meta, debe verse recompensado y por tanto mutiplica su aptitud
+		if (haLlegado) {
+			aptitud *= 4; //Tras realizar pruebas, 4 es el múltiplo que obtiene mejores resultados
+		}
+		/* Puede ser razonable pensar que haría falta penalizar a los que se chocan, sin embargo,
+		 * eso solo provocaría menos variedad de entidades y terminaría estancando la evolución
+		 * al ser muchísimo más probable que solo se reproduzcan los que llegan a la meta. Eso
+		 * favorece el elitismo y es algo que queremos evitar para conseguir mejores tiempos
+		 */
+		return aptitud;
+	}
+	
+	/**
+	 * Comprueba si la posicion del raton está dentro de la hitbox de la entidad.
+	 * El algoritmo de colisión es muy parecido al de los obstáculos.
+	 * @param posRaton
+	 * @return si la hitbox contiene donde se encuentra el ratón
+	 */
+	public boolean contieneRaton(PVector posRaton) {
+		//Distancia relativa del ratón a la entidad
+		PVector posRelativa = PVector.sub(posRaton, posicion);
+		//Posición relativa rotada en el angulo inverso al de la entidad
+		PVector posRotada = rotarPosicionRelativa(posRelativa);
+	    return posCoincideConHitbox(posRotada);
+	}
+	
+	/**
 	 * Mueve a la entidad de una posición a otra.
 	 * @param fuerza que altera su aceleración
 	 */
@@ -148,24 +199,15 @@ public class Entidad {
 			//Incrementa el contador de llegadas a la meta de la población
 			poblacion.incrNumLlegadas();
 			poblacion.incrNumLlegadasActual();
-			haLlegado = true;
+			haLlegado = true; 
 			return;
 		}
 		//Si no ha chocado con la meta, pasa a comprobar si ha chocado con alguno de los obstáculos
-		for (Obstaculo obstaculo : poblacion.getContexto().getObstaculos()) {
-			if(obstaculo.chocaConEntidad(posicion)) {
-				//Incrementa el contador de colisiones de la población
-				poblacion.incrNumColisiones();
-				poblacion.incrNumColisionesActual();
-				//Actualiza la flag y termina de comprobar cuando encuentra una colisión
-				haChocado = true; 
-				break;
-			}
-		}
+		comprobarColisionesObstaculos();
 		//Incrementa el tiempo obtenido para este frame antes de que la flag tenga efecto
 		tiempoObtenido++;
 	}
-	
+
 	/**
 	 * Comprueba si ha chocado con la meta del circuito y actualiza la distancia mínima a ésta
 	 * si es que se ha superado el "record"
@@ -184,40 +226,20 @@ public class Entidad {
 	}
 	
 	/**
-	 * Califica a la entidad actualizando su valor de aptitud dependiendo de lo cerca que
-	 * se ha quedado de cumplir el objetivo de llegar a la meta en el tiempo indicado
-	 * @return la aptitud calculada a partir de las fórmulas
+	 * Recorre todos los obstáculos para ver si alguno colisiona con la entidad. De ser así,
+	 * para de comprobar más y modifica la flag y los contadores correspondientes
 	 */
-	public double evaluarAptitud() {
-		normalizarDistanciaMinima();
-		double factorTiempo = 1.0;
-		/* La aptitud debe ser directamente proporcional a lo cerca que está que está el tiempo
-		 * obtenido del tiempo objetivo. El factor de la fórmula viene determinado por tanto
-		 * por el tiempo objetivo entre el tiempo obtenido, para calcular la proporción
-		 */
-		factorTiempo = (double)poblacion.getTiempoObjetivo() / (double)tiempoObtenido;
-		/* Para optimizar los resultados, se eleva el factor a una potencia de 1 partido por
-		 * un valor (como el factor es un decimal por debajo del 1, si queremos incrementar 
-		 * su valor el exponente también debe ser menor que 1). 
-		 * Tras numerosas pruebas el exponente que rinde mejor para recompensar el obtener un 
-		 * tiempo más cercano al objetivo, sin que ello provoque una situación de estancamiento 
-		 * por premiarlo demasiado y no promover variedad, es el de 1/4, que es el punto de equilibrio
-		 */
-		factorTiempo = Math.pow(factorTiempo,1/4);
-		/* La aptitud debe ser inversamente proporcional a la distancia minima a la meta
-		 * que alcanza, y al tiempo obtenido. La fórmula resultante será el factor de tiempo
-		 * dividido entre tiempo obtenido por distancia mínima. */
-		aptitud = factorTiempo / (tiempoObtenido * distanciaMinima);
-		//Si ha llegado a la meta, debe verse recompensado y por tanto mutiplica su aptitud
-		if (haLlegado) {
-			aptitud *= 4; //Tras realizar pruebas, 4 es el múltiplo que obtiene mejores resultados
+	private void comprobarColisionesObstaculos() {
+		for (Obstaculo obstaculo : poblacion.getContexto().getObstaculos()) {
+			if(obstaculo.chocaConEntidad(posicion)) {
+				//Incrementa el contador de colisiones de la población
+				poblacion.incrNumColisiones();
+				poblacion.incrNumColisionesActual();
+				//Actualiza la flag y termina de comprobar cuando encuentra una colisión
+				haChocado = true; 
+				break;
+			}
 		}
-		/* Puede ser razonable pensar que haría falta penalizar a los que se chocan, sin embargo,
-		 * eso solo provocaría menos variedad de entidades y terminaría estancando la evolución
-		 * al ser muchísimo más probable que solo se reproduzcan los que llegan a la meta. Eso
-		 * favorece el elitismo y es algo que queremos evitar para conseguir mejores tiempos
-		 */
-		return aptitud;
 	}
 
 	/**
@@ -237,27 +259,14 @@ public class Entidad {
 	}
 	
 	/**
-	 * Comprueba si la posicion del raton está dentro de la hitbox de la entidad.
-	 * El algoritmo de colisión es muy parecido al de los obstáculos.
-	 * @param posRaton
-	 * @return si la hitbox contiene donde se encuentra el ratón
+	 * Comprueba si la posición con el ángulo de rotación revertido se encontraría
+	 * dentro de los límites de los vértices y ejes de la hitbox de la entidad en
+	 * el origen de las coordenadas
+	 * @param posRotada 
+	 * @return si la posición rotada se encuentra en los límites de los vértices
 	 */
-	public boolean contieneRaton(PVector posRaton) {
-		
-		//Distancia relativa del ratón a la entidad
-		PVector posRelativa = PVector.sub(posRaton, posicion);
-		
-		//Obtener matrix rotacion entidad
-	    PMatrix2D matrizRotacion = new PMatrix2D(); 
-	    float angulo = (float) Math.atan2(velocidad.x, velocidad.y); 
-	    matrizRotacion.rotate(-angulo);
-	    
-	    //Punto relativo con la rotación revetida
-	    PVector posRotada = new PVector();
-	    posRotada.x = posRelativa.x * matrizRotacion.m00 + posRelativa.y * matrizRotacion.m01;
-	    posRotada.y = posRelativa.x * matrizRotacion.m10 + posRelativa.y * matrizRotacion.m11;
-	    
-	    /* Puntos para comprobar si se encuentra en la "hitbox". Los valores escogidos
+	private boolean posCoincideConHitbox(PVector posRotada) {
+		/* Puntos para comprobar si se encuentra en la "hitbox". Los valores escogidos
 	     * se basan en la representación gráfica de la entidad más un margen para que
 	     * la hitbox no sea muy pequeña y que no sea tan complicado acertar
 	     */
@@ -265,11 +274,30 @@ public class Entidad {
 	    float verticeX1 = 25;
 	    float verticeY0 = -25;
 	    float verticeY1 = 25;
-	    
 	    //Comprueba si se encuentra en la hitbox en ambos ejes
 	    boolean colisionaX = posRotada.x >= verticeX0 && posRotada.x <= verticeX1; 
 	    boolean colisionaY = posRotada.y >= verticeY0 && posRotada.y <= verticeY1;
-	    return colisionaX && colisionaY;
+	    boolean colisiona = colisionaX && colisionaY;
+		return colisiona;
+	}
+
+	/**
+	 * Rota el punto relativo entre la posición del ratón y la entidad en un ángulo
+	 * inverso al de la rotación de la entidad para poder comprobar la colisión
+	 * como no estuviera rotada en primer lugar
+	 * @param posRelativa del punto a lap posición de la entidad
+	 * @return la posición relativa rotada en el ángulo inverso al de la entidad
+	 */
+	private PVector rotarPosicionRelativa(PVector posRelativa) {
+		//Obtiene la matriz de rotacion de la entidad
+	    PMatrix2D matrizRotacion = new PMatrix2D(); 
+	    float angulo = (float) Math.atan2(velocidad.x, velocidad.y); 
+	    matrizRotacion.rotate(-angulo);
+	    //Punto relativo con la rotación revertida
+	    PVector posRotada = new PVector();
+	    posRotada.x = posRelativa.x * matrizRotacion.m00 + posRelativa.y * matrizRotacion.m01;
+	    posRotada.y = posRelativa.x * matrizRotacion.m10 + posRelativa.y * matrizRotacion.m11;
+		return posRotada;
 	}
 	
 	public ADN getAdn() {

@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
-import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JComboBox;
@@ -511,7 +511,7 @@ public class Controlador {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//Obtenemos si el checkbox que lanza el evento está o no activado
-			JToggleButton cbModoAuto = (JToggleButton) e.getSource();
+			JCheckBox cbModoAuto = (JCheckBox) e.getSource();
 			boolean activado = cbModoAuto.isSelected();
 			//Activa o desactiva el modo automático según esté seleccionado
 			modoAutomatico = activado;
