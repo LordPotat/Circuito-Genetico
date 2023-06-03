@@ -38,6 +38,29 @@ public class ControladorEventos {
 		this.vista = vista;
 	}
 	
+	/** 
+	 * Determina qué evento debería desencadenarse cuando se pulse la tecla "espacio"
+	 * según las circunstancias actuales del programa
+	 */
+	public void realizarEventoEspacio() {
+		/* Si el botón de proceder corresponde a "Empezar", indica que está en el estado
+		 * inicial y ejecuta empezar(). */
+		if(vista.getPanelControl().getBtnProceder().getText().equals("Empezar")) {
+			empezar();
+		} 
+		/* De lo contrario, implica que el proceso ya ha comenzado. Si en ese momento no está
+		 * en el estado "EN_ESPERA" quiere decir que la generacion todavía no ha acabado
+		 * su ciclo de vida y por tanto ejecuta pausar()
+		 */
+		else if(controlador.getEstado() != Estado.EN_ESPERA){
+			pausar();
+		} 
+		//Para el resto de casos restantes, debe ejecutar continuar()
+		else {
+			continuar();
+		}
+	}
+	
 	/**
 	 * Iniciará la población de entidades a partir de los parámetros introducidos en el 
 	 * panel de control para que de comienzo al proceso evolutivo. Una vez iniciado 
@@ -174,6 +197,13 @@ public class ControladorEventos {
 				panelControl.getBtnPausar().setEnabled(true);
 			} 
 		}
+	}
+	
+	/**
+	 * Simula un click en el check box del modo automático para activar o desactivarlo
+	 */
+	public void cambiarModo() {
+		vista.getPanelControl().getCbModoAutomatico().doClick();
 	}
 	
 	/**

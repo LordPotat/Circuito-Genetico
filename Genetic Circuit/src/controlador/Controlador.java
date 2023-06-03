@@ -428,5 +428,9 @@ public class Controlador {
 		return controladorEventos;
 	}
 
+	public boolean isModoAutomatico() {
+		return modoAutomatico;
+	}
+
 }
 

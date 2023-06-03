@@ -213,12 +213,15 @@ public class Ventana extends PApplet {
 
 	public void keyPressed() {
 		if(key == ' ') {
+			controlador.getControladorEventos().realizarEventoEspacio();
 			return;
 		}
 		if(key == 'a' || key == 'A') {
+			controlador.getControladorEventos().cambiarModo();
 			return;
 		}
 		if(key == 'r' || key == 'R') {
+			controlador.getControladorEventos().reiniciar();
 			return;
 		}
 		if(key == 'd' || key == 'D') {
