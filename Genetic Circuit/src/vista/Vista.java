@@ -3,7 +3,6 @@ package vista;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -26,10 +25,7 @@ public class Vista {
 	    });
 	    hiloProcessing.start();
 		
-		SwingUtilities.invokeLater(() -> {
-			panelControl = new PanelControl(controlador);
-	    });
-		
+		panelControl = new PanelControl(controlador); 	
 	}
 
 	public Ventana getVentana() {
