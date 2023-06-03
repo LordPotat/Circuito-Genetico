@@ -11,6 +11,9 @@ import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 
 import modelo.Modelo;
+import modelo.entidades.Entidad;
+import modelo.entidades.Poblacion;
+import processing.core.PVector;
 import vista.Vista;
 import vista.panel_control.PanelControl;
 import vista.ventana_grafica.Ventana;
@@ -122,8 +125,8 @@ public class ControladorEventos {
 		vista.getPanelControl().getBtnPausar().setEnabled(true);
 		//Desactiva el propio botón hasta que se pueda pasar a la siguiente generación
 		vista.getPanelControl().getBtnProceder().setEnabled(false);
-		controlador.limpiarEntidadMonitorizada();
-		controlador.limpiarUltimaGeneracion();
+		controlador.getVisualizador().limpiarEntidadMonitorizada();
+		controlador.getVisualizador().limpiarUltimaGeneracion();
 	}
 	
 	/**
@@ -260,6 +263,32 @@ public class ControladorEventos {
 	}
 	
 	/**
+	 * Determina si la posicion del ratón en el momento de haber activado un evento de
+	 * 'click' se encuentra en la 'hitbox' de alguna entidad y de ser así comienza a 
+	 * monitorizar esa entidad
+	 * @param posRaton: punto en el que se ha hecho click con el ratón
+	 */
+	public void seleccionarEntidad(PVector posRaton) {
+		Poblacion poblacion = modelo.getPoblacion();
+		//Si aún no se ha generado la población, no hace nad
+		if(poblacion == null) {
+			return;
+		}
+		/* Recorre todas las entidades desde la última posición (la más superpuesta al haber
+		 * sido la última en dibujarse en pantalla). Si alguna contiene en su hitbox la
+		 * posición del ratón, sustituye la entidad monitorizada por ella y termina de buscar
+		 */
+		Entidad[] entidades = poblacion.getEntidades();
+		for(int i = entidades.length - 1; i >= 0; i--) {
+			if (entidades[i].contieneRaton(posRaton)) {
+				entidades[i].setMonitorizada(true);
+				poblacion.setEntidadMonitorizada(entidades[i]);
+				break;
+			}
+		}
+	}
+	
+	/**
 	 * Cierra el programa sin importar el estado en el que se encuentre
 	 */
 	public void salir() {
@@ -292,8 +321,8 @@ public class ControladorEventos {
 		panelControl.setValor("Metas", 0);
 		panelControl.setValor("Colisiones", 0);
 		panelControl.setValor("Generacion", 0);
-		controlador.limpiarEntidadMonitorizada();
-		controlador.limpiarUltimaGeneracion();
+		controlador.getVisualizador().limpiarEntidadMonitorizada();
+		controlador.getVisualizador().limpiarUltimaGeneracion();
 	}
 	
 	/**

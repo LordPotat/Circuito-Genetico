@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import controlador.Controlador;
+import controlador.Visualizador;
 import modelo.Modelo;
 import processing.core.PVector;
 
@@ -143,7 +144,7 @@ public class Poblacion {
 			//Si la entidad choca, no debe mostrarla (mejora considerablemente el rendimiento)
 			if(!entidades[i].isHaChocado()) {
 				//Le comunica a la vista que muestre la entidad a través del controlador
-				contexto.getControlador().mostrarEntidad(entidades[i]);
+				contexto.getControlador().getVisualizador().mostrarEntidad(entidades[i]);
 			} 
 		}
 	}
@@ -208,7 +209,7 @@ public class Poblacion {
 		}
 		//Si hay una entidad siendo monitorizada, muestra la aptitud evaluada para se vea en el panel
 		if(entidadMonitorizada != null) {	
-			contexto.getControlador().actualizarPanel("AptitudEntidad", entidadMonitorizada.getAptitud());
+			contexto.getControlador().getVisualizador().actualizarPanel("AptitudEntidad", entidadMonitorizada.getAptitud());
 		}
 		return mejorAptitud;
 	}
@@ -241,12 +242,13 @@ public class Poblacion {
 	private void comprobarTiempoRecord(Entidad entidad) {
 		Controlador controlador = contexto.getControlador();
 		int tiempoObtenido = entidad.getTiempoObtenido();
-		controlador.actualizarPanel("TiempoRecordActual", tiempoObtenido);
+		Visualizador visualizador = controlador.getVisualizador();
+		visualizador.actualizarPanel("TiempoRecordActual", tiempoObtenido);
 		if(entidad.getTiempoObtenido() < mejorTiempo) {
 			mejorTiempo = tiempoObtenido;
 			mejorEntidad = entidad;
 			// Muestra en el panel de control el nuevo record de tiempo obtenido 
-			controlador.actualizarPanel("TiempoRecord", mejorTiempo);
+			visualizador.actualizarPanel("TiempoRecord", mejorTiempo);
 		} 
 	}
 
@@ -257,10 +259,11 @@ public class Poblacion {
 	 * @param entidad cuya aptitud debe ser comparada
 	 */
 	private void comprobarMejorAptitud(double aptitud) {
-		contexto.getControlador().actualizarPanel("MejorAptitudActual", aptitud);
+		Visualizador visualizador = contexto.getControlador().getVisualizador();
+		visualizador.actualizarPanel("MejorAptitudActual", aptitud);
 		if(aptitud > mejorAptitud) {
 			mejorAptitud = aptitud;
-			contexto.getControlador().actualizarPanel("MejorAptitud", mejorAptitud);
+			visualizador.actualizarPanel("MejorAptitud", mejorAptitud);
 		}
 	}
 	
@@ -456,28 +459,28 @@ public class Poblacion {
 	 * Incrementa el número de colisiones con obstáculos y lo muestra en el panel de control
 	 */
 	public void incrNumColisiones() {
-		contexto.getControlador().actualizarPanel("Colisiones", ++numColisiones);
+		contexto.getControlador().getVisualizador().actualizarPanel("Colisiones", ++numColisiones);
 	}
 
 	/**
 	 * Incrementa el número de llegadas a la meta y lo muestra en el panel de control
 	 */
 	public void incrNumLlegadas() {
-		contexto.getControlador().actualizarPanel("Metas", ++numLlegadas);
+		contexto.getControlador().getVisualizador().actualizarPanel("Metas", ++numLlegadas);
 	}
 	
 	/**
 	 * Incrementa el número de colisiones con obstáculos  de esta generacion y lo muestra en el panel de control
 	 */
 	public void incrNumColisionesActual() {
-		contexto.getControlador().actualizarPanel("ColisionesActual", ++numColisionesActual);
+		contexto.getControlador().getVisualizador().actualizarPanel("ColisionesActual", ++numColisionesActual);
 	}
 
 	/**
 	 * Incrementa el número de llegadas a la meta de esta generacion y lo muestra en el panel de control
 	 */
 	public void incrNumLlegadasActual() {
-		contexto.getControlador().actualizarPanel("MetasActual", ++numLlegadasActual);
+		contexto.getControlador().getVisualizador().actualizarPanel("MetasActual", ++numLlegadasActual);
 	}
 	
 	public Entidad[] getEntidades() {

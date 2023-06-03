@@ -4,16 +4,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 import modelo.Modelo;
 import modelo.circuito.Circuito;
-import modelo.entidades.Entidad;
 import modelo.entidades.Poblacion;
-import processing.core.PVector;
 import vista.Vista;
 import vista.panel_control.PanelControl;
 import vista.ventana_grafica.Ventana;
 
 /** 
  * Se encarga de iniciar y manipular el flujo del programa. Contiene la vista y el modelo de datos.
- * 
+ * Todo el proceso evolutivo que lleva a cabo el programa y la manipulación de las entidades se realiza
+ * en este controlador, así como la obtención de los circuitos con los que interactúan
  * @author Alberto Pérez
  */
 public class Controlador {
@@ -54,8 +53,14 @@ public class Controlador {
 	 * Almacena temporalmente el tiempo de vida actualizado
 	 */
 	private int tiempoVidaCache;
-	
+	/**
+	 * Subcontrolador que se encarga de gestionar todos los eventos desencadenados en la vista
+	 */
 	private ControladorEventos controladorEventos;
+	/**
+	 * Subcontrolador que se encarga de gestionar la visualizacion de los datos en la vista
+	 */
+	private Visualizador visualizador;
 	
 	/**
 	 * Constructor que inicializa el controlador en el modo especificado. Si se le pasa "NORMAL",
@@ -108,8 +113,11 @@ public class Controlador {
 	 * comportamiento del programa
 	 */
 	private void iniciarSubcontroladores() {
+		//Inicia el controlador encargado de los eventos de la interfaz
 		controladorEventos = new ControladorEventos(this, modelo, vista);
+		//Le asigna los eventos a los listeners de los componentes del panel de control
 		vista.getPanelControl().asignarEventos();
+		visualizador = new Visualizador(vista, modelo);
 	}
 	
 	/** 
@@ -135,7 +143,7 @@ public class Controlador {
 	 * @param nombreCircuito: el circuito que debe cargarse 
 	 * @param ventana gráfica necesaria para poder dar contexto a los elementos
 	 */
-	public void iniciarCircuito(String nombreCircuito, Ventana ventana) {
+	void iniciarCircuito(String nombreCircuito, Ventana ventana) {
 		//Obtiene el circuito desde su fichero de la carpeta del proyecto
 		modelo.setCircuito(Circuito.cargarCircuito(nombreCircuito));
 		//Inicia la meta y obstáculos a partir de los parámetros del circuito cargado
@@ -188,7 +196,7 @@ public class Controlador {
 		entidades.realizarCiclo();
 		//En cada ciclo debe monitorizar los datos de la entidad monitorizada, si es que hay
 		if(entidades.getEntidadMonitorizada() != null) {
-			monitorizarEntidad(entidades.getEntidadMonitorizada());
+			visualizador.monitorizarEntidad(entidades.getEntidadMonitorizada());
 		}
 		//Incrementa el contador de frames para que las entidades actuén según les toca
 		ventana.setNumFramesGen(++numFramesGen);
@@ -217,8 +225,8 @@ public class Controlador {
 			detenerProceso(); 
 		} else {
 			//Si el modo automático está activado debe dejar de monitorizar sólo
-			limpiarEntidadMonitorizada();
-			limpiarUltimaGeneracion();
+			visualizador.limpiarEntidadMonitorizada();
+			visualizador.limpiarUltimaGeneracion();
 		}
 	}
 	
@@ -255,137 +263,7 @@ public class Controlador {
 		//Deshabilita el botón de pausa ya que no está en el proceso ya
 		panelControl.getBtnPausar().setEnabled(false);
 		panelControl.setValor("Generacion", entidades.getNumGeneraciones());
-		mostrarRutaOptima(entidades.getMejorEntidad());
-	}
-	
-	/**
-	 * Muestra en la ventana gráfica la ruta óptima (en el tiempo establecido) 
-	 * desde el punto inicial de la población hasta la meta
-	 * @param mejorEntidad: la entidad que ha logrado el objetivo establecido 
-	 */
-	public void mostrarRutaOptima(Entidad mejorEntidad) {
-		vista.getVentana().drawRutaOptima(mejorEntidad.getAdn().getGenes(), mejorEntidad.getTiempoObtenido());
-		vista.getVentana().drawEntidad(mejorEntidad.getPosicion(), mejorEntidad.getVelocidad(), mejorEntidad.isMonitorizada());
-	}
-	
-	/**
-	 * Muestra una entidad en la ventana gráfica en la posición y dirección actual
-	 * @param entidad que se debe mostrar
-	 */
-	public void mostrarEntidad(Entidad entidad) {
-		vista.getVentana().drawEntidad(entidad.getPosicion(), entidad.getVelocidad(), entidad.isMonitorizada());
-	}
-	
-	/**
-	 * Muestra en pantalla sólo aquellas entidades que no hayan chocado. Se llama cuando
-	 * se pausa la ejecución para que las entidades permanezcan dibujadas y no desaparezcan
-	 * hasta reanudar.
-	 */
-	public void mostrarEntidadesActivas() {
-		for(Entidad entidad : modelo.getPoblacion().getEntidades()) {
-			if(!entidad.isHaChocado()) {
-				mostrarEntidad(entidad);
-			}
-		}
-	}
-	
-	/**
-	 * Actualiza un campo (label) del panel de control con un nuevo valor
-	 * @param <T> Tipo de valor
-	 * @param label: nombre del campo que debe actualizar
-	 * @param valor
-	 */
-	public <T> void actualizarPanel(String label, T valor) {
-		vista.getPanelControl().setValor(label, valor);
-	}
-	
-	/**
-	 * Vacía los datos del panel de control correspondientes a la última generación
-	 */
-	void limpiarUltimaGeneracion() {
-		modelo.getPoblacion().setEntidadMonitorizada(null); 
-		actualizarPanel("TiempoRecordActual", 0);
-		actualizarPanel("MejorAptitudActual", 0);
-		actualizarPanel("MetasActual", 0);
-		actualizarPanel("ColisionesActual", 0);
-	}
-	
-	/**
-	 * Determina si la posicion del ratón en el momento de haber activado un evento de
-	 * 'click' se encuentra en la 'hitbox' de alguna entidad y de ser así comienza a 
-	 * monitorizar esa entidad
-	 * @param posRaton: punto en el que se ha hecho click con el ratón
-	 */
-	public void seleccionarEntidad(PVector posRaton) {
-		Poblacion poblacion = modelo.getPoblacion();
-		//Si aún no se ha generado la población, no hace nad
-		if(poblacion == null) {
-			return;
-		}
-		/* Recorre todas las entidades desde la última posición (la más superpuesta al haber
-		 * sido la última en dibujarse en pantalla). Si alguna contiene en su hitbox la
-		 * posición del ratón, sustituye la entidad monitorizada por ella y termina de buscar
-		 */
-		Entidad[] entidades = poblacion.getEntidades();
-		for(int i = entidades.length - 1; i >= 0; i--) {
-			if (entidades[i].contieneRaton(posRaton)) {
-				entidades[i].setMonitorizada(true);
-				poblacion.setEntidadMonitorizada(entidades[i]);
-				break;
-			}
-		}
-	}
-
-	/**
-	 * Actualiza en el panel de control todos los datos sobre una entidad
-	 * que está siendo monitorizada actualmente
-	 * @param entidad 
-	 */
-	public void monitorizarEntidad(Entidad entidad) {
-		actualizarPanel("Entidad", entidad.getIndice());
-		//Redondeamos el valor de la distancia a dos decimales para no mostrar demasiados números
-		actualizarPanel("DistanciaEntidad", redondearValor(entidad.getDistancia(), 2));
-		actualizarPanel("DistanciaMinEntidad", redondearValor(entidad.getDistanciaMinima(), 2));
-		//Para los vectores redondeamos hasta 4 decimales ya que debe mostrar más precisión
-		actualizarPanel("Posicion", "("+ redondearValor(entidad.getPosicion().x, 4) +
-				", " + redondearValor(entidad.getPosicion().y, 4) + ")");
-		actualizarPanel("Velocidad", "("+ redondearValor(entidad.getVelocidad().x, 4) + 
-				", " + redondearValor(entidad.getVelocidad().y, 4) + ")");
-		actualizarPanel("Aceleracion", "("+ redondearValor(entidad.getAceleracion().x, 4) +
-				", " + redondearValor(entidad.getAceleracion().y, 4) + ")");
-		actualizarPanel("TiempoEntidad", entidad.getTiempoObtenido()); 
-		//La aptitud no la redondeamos porque siempre son números muy pequeños
-		actualizarPanel("AptitudEntidad", entidad.getAptitud());
-		//Según la entidad tenga determinadas flags o no, mostrará en el estado en el que está
-		String estado = entidad.isHaChocado() ? "Chocado" : entidad.isHaLlegado() ? "Llegado" : "Activa";
-		actualizarPanel("EstadoEntidad", estado);
-	}
-	
-	/**
-	 * Redondea un valor decimal hasta el número de decimales indicado
-	 * @param valor
-	 * @param numDecimales 
-	 * @return el valor redondeado
-	 */
-	private double redondearValor(float valor, int numDecimales) {
-		double factor = Math.pow(10, numDecimales);
-		return Math.round(valor * factor) / factor;
-	}
-	
-	/**
-	 * Vacía la entidad monitorizada y sus datos del panel de control cuando su generación ya no exista
-	 */
-	void limpiarEntidadMonitorizada() {
-		modelo.getPoblacion().setEntidadMonitorizada(null); 
-		actualizarPanel("Entidad", "-");
-		actualizarPanel("Posicion", "(0, 0)");
-		actualizarPanel("Velocidad", "(0, 0)");
-		actualizarPanel("Aceleracion", "(0, 0)");
-		actualizarPanel("DistanciaEntidad", 0);
-		actualizarPanel("DistanciaMinEntidad", 0);
-		actualizarPanel("TiempoEntidad", 0); 
-		actualizarPanel("AptitudEntidad", 0);
-		actualizarPanel("EstadoEntidad", "-");
+		visualizador.mostrarRutaOptima(entidades.getMejorEntidad());
 	}
 	
 	public Vista getVista() {
@@ -430,6 +308,10 @@ public class Controlador {
 
 	public boolean isModoAutomatico() {
 		return modoAutomatico;
+	}
+
+	public Visualizador getVisualizador() {
+		return visualizador;
 	}
 
 }

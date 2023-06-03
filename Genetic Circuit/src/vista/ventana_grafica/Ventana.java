@@ -55,7 +55,7 @@ public class Ventana extends PApplet {
 		if(!controlador.isParado()) {
 			controlador.manipularPoblacion();
 		} else if (controlador.getEstado() == Estado.PAUSADO) {
-			controlador.mostrarEntidadesActivas();
+			controlador.getVisualizador().mostrarEntidadesActivas();
 		}
 	}
 
@@ -208,7 +208,7 @@ public class Ventana extends PApplet {
 	}
 
 	public void mousePressed() {
-		controlador.seleccionarEntidad(new PVector(mouseX, mouseY));
+		controlador.getControladorEventos().seleccionarEntidad(new PVector(mouseX, mouseY));
 	}
 
 	public void keyPressed() {
