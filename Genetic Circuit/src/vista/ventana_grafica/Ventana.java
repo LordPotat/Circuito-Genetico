@@ -1,6 +1,7 @@
 package vista.ventana_grafica;
 
 import controlador.Controlador;
+import controlador.Estado;
 import modelo.Modelo;
 import modelo.circuito.Meta;
 import modelo.circuito.Obstaculo;
@@ -49,9 +50,12 @@ public class Ventana extends PApplet {
 		background(255);
 		stroke(0);
 		drawFramerate();
+		drawEstado(controlador.getEstado());
 		drawCircuito();
 		if(!controlador.isParado()) {
 			controlador.manipularPoblacion();
+		} else if (controlador.getEstado() == Estado.PAUSADO) {
+			controlador.mostrarEntidadesActivas();
 		}
 	}
 
@@ -187,12 +191,22 @@ public class Ventana extends PApplet {
 	}
 	
 	private void drawFramerate() {
-		fill(125);
+		fill(80);
 		textSize(16);
 		textAlign(LEFT, CENTER);
 		text("Framerate: " + round(frameRate), 10, 15);
 	}
 	
+	public void drawEstado(Estado estado) {
+		textSize(18);
+		textAlign(LEFT, CENTER);
+		fill(80); 
+		text("Estado: ", 9, 45);
+		int[] colorEstado = estado.getColor();
+		fill(color(colorEstado[0], colorEstado[1], colorEstado[2])); 
+		text(estado.getTexto(), 9 + textWidth("Estado: "), 45);
+	}
+
 	public void mousePressed() {
 		controlador.seleccionarEntidad(new PVector(mouseX, mouseY));
 	}

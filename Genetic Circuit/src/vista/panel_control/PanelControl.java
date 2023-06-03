@@ -63,17 +63,18 @@ public class PanelControl extends JFrame {
 
 	public PanelControl(Controlador controlador) {
 		// Crear JFrame principal
-        JFrame frame = new JFrame("Interfaz de Java Swing");
-        frame.setIconImage(Toolkit.getDefaultToolkit().getImage(PanelControl.class.getResource("/img/gene_icon.png")));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(400, 720));
-        frame.setResizable(false);
+        JFrame frmCircuitoGentico = new JFrame("Interfaz de Java Swing");
+        frmCircuitoGentico.setTitle("Circuito Gen\u00E9tico - Panel de Control");
+        frmCircuitoGentico.setIconImage(Toolkit.getDefaultToolkit().getImage(PanelControl.class.getResource("/img/gene_icon.png")));
+        frmCircuitoGentico.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frmCircuitoGentico.setPreferredSize(new Dimension(400, 720));
+        frmCircuitoGentico.setResizable(false);
         mapaLabels = new HashMap<String, JLabel>();
 
         // Crear JPanel principal
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        frame.getContentPane().add(panel);
+        frmCircuitoGentico.getContentPane().add(panel);
 
         // Primera sección
         seccion1 = new JPanel();
@@ -237,8 +238,8 @@ public class PanelControl extends JFrame {
         panelEntidad.add(lblAptitudEntidad);
 
         // Mostrar la ventana
-        frame.pack();
-        frame.setVisible(true);
+        frmCircuitoGentico.pack();
+        frmCircuitoGentico.setVisible(true);
 	}
 	
 	/**

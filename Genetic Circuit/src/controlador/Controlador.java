@@ -36,6 +36,11 @@ public class Controlador {
 	private static final String CIRCUITO_INICIAL = "circuito1";
 	
 	/**
+	 * Estado que tiene actualmente el programa
+	 */
+	private Estado estado;
+	
+	/**
 	 * Indica si el programa debe ejecutarse con normalidad o limitarse a guardar un circuito nuevo
 	 */
 	private String modoEjecucion;
@@ -79,6 +84,7 @@ public class Controlador {
 	 * @throws InterruptedException 
 	 */
 	public void iniciarControlador() throws InterruptedException  {
+		estado = Estado.EN_ESPERA;
 		//Genera las dos ventanas que formarán la interfaz gráfica del usuario
 		vista = new Vista(this);
 		//Espera a que de tiempo a que se cargue la ventana de Processing
@@ -145,6 +151,8 @@ public class Controlador {
 		 * si es el caso después de mostrar la ruta óptima, para no continuar el proceso
 		 */
 		if(entidades.isObjetivoCumplido()) {
+			//Actualiza el estado a "finalizado" ya que el proceso evolutivo ha terminado
+			estado = Estado.FINALIZADO;
 			//Deshabilita el botón de pausa ya que no está en el proceso ya
 			panelControl.getBtnPausar().setEnabled(false);
 			panelControl.setValor("Generacion", entidades.getNumGeneraciones());
@@ -171,22 +179,25 @@ public class Controlador {
 			 * reproduzcan para aplicarle el cambio
 			 */
 			tiempoVidaCache = entidades.getTiempoVida();
-			/* Si el modo automático no está activado, para el proceso hasta que se pulse
-			 * el botón de "siguiente". Si está activado, deja que continúe por su cuenta.
+			/* Si el modo automático no está activado y todavía no se ha cumplido el objetivo, 
+			 * para el proceso hasta que se pulse el botón de "siguiente". Si está activado,
+			 * deja que continúe por su cuenta.
 			 */
-			if(!modoAutomatico) {
+			if(!modoAutomatico && !entidades.isObjetivoCumplido()) {
+				/* Actualiza el estado a "en espera" ya que se ha parado el proceso evolutivo 
+				 * hasta que pulsemos el botón de "siguiente" */
+				estado = Estado.EN_ESPERA;
 				parado = true; 
 				//Desabilita el botón de pausa para que no pueda iniciar otra generación por error
 				vista.getPanelControl().getBtnPausar().setEnabled(false);
 				/* Habilita el botón de "siguiente" para que pueda pasar a la siguiente generación
-				 * Lo hace con un delay para que se actualice correctamente el contador de generaciones
-				 */
+				 * Lo hace con un delay para que se actualice correctamente el contador de generaciones */
 				new Timer().schedule(new TimerTask() {
 					@Override
 					public void run() {
 						vista.getPanelControl().getBtnProceder().setEnabled(true);
 					}
-				}, 5);
+				}, 5); 
 			} else {
 				//Si el modo automático está activado debe dejar de monitorizar sólo
 				limpiarEntidadMonitorizada();
@@ -215,6 +226,20 @@ public class Controlador {
 	public void mostrarEntidad(Entidad entidad) {
 		vista.getVentana().drawEntidad(entidad.getPosicion(), entidad.getVelocidad(), entidad.isMonitorizada());
 	}
+	
+	/**
+	 * Muestra en pantalla sólo aquellas entidades que no hayan chocado. Se llama cuando
+	 * se pausa la ejecución para que las entidades permanezcan dibujadas y no desaparezcan
+	 * hasta reanudar.
+	 */
+	public void mostrarEntidadesActivas() {
+		for(Entidad entidad : modelo.getPoblacion().getEntidades()) {
+			if(!entidad.isHaChocado()) {
+				mostrarEntidad(entidad);
+			}
+		}
+	}
+	
 	
 	/**
 	 * Actualiza un campo (label) del panel de control con un nuevo valor
@@ -322,9 +347,10 @@ public class Controlador {
 	 * @author Alberto
 	 */
 	public class BtnEmpezarListener implements ActionListener {
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//Actualiza el estado a "realizando ciclo" ya que se empieza a ejecutar el proceso evolutivo
+			estado = Estado.REALIZANDO_CICLO;
 			//Iniciamos la población con los parámetros iniciales, incluido el punto de spawn del circuito
 			modelo.setPoblacionEntidades(setupPoblacion(), modelo.getCircuito().setSpawn());
 			/* Actualizamos la flag de parado para que la ventana pueda empezar a llamar a la función de
@@ -376,6 +402,8 @@ public class Controlador {
 	public class BtnSiguienteListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//Actualiza el estado a "realizando ciclo" ya que se reanuda el proceso evolutivo
+			estado = Estado.REALIZANDO_CICLO;
 			parado = false;
 			//Habilita el botón de pausa ya que ya no provocaría que iniciase otro ciclo
 			vista.getPanelControl().getBtnPausar().setEnabled(true);
@@ -399,17 +427,9 @@ public class Controlador {
 			//Actualiza el texto a "Reanudar" o "pausar" según está parado o no
 			String textoBtn = (parado) ? "Reanudar" : "Pausar";
 			panelControl.getBtnPausar().setText(textoBtn);
-			/* Si está parado, debe impedir que la ventana se actualice cada frame, ya
-			 * que si no sobreescribirá lo que hay en pantalla y no dará la sensación
-			 * de "pausa" real. Cuando no esté ya parado, permite otra vez el bucle
-			 */
-			Ventana ventana = vista.getVentana();
-			if(parado) {
-				ventana.noLoop();
-			} else {
-				ventana.loop();
-			}
-			
+			/* Si se ha pausado la ejecución, actualiza el estado a "pausado", y si se ha
+			 * reanudado, se actualiza a "realizando ciclo */
+			estado = (parado) ? Estado.PAUSADO : Estado.REALIZANDO_CICLO;
 		}
 	}
 	
@@ -419,20 +439,13 @@ public class Controlador {
 	 * @author Alberto
 	 */
 	public class BtnReiniciarListener implements ActionListener {
-		
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//Actualiza el estado a "en espera" ya que se ha dejado de ejecutar el proceso evolutivo
+			estado = Estado.EN_ESPERA;
 			//Impide que la ventana siga actualizando hasta que volvamos a empezar
 			parado = true; 
-			/* Si se ha pausado antes el proceso, la ventana deja de actualizarse, por
-			 * tanto, al reiniciar debe comprobar si lo está haciendo y de lo contrario
-			 * activar el bucle de refrescar la ventana
-			 */
 			Ventana ventana = vista.getVentana();
-			if(!ventana.isLooping()) {
-				ventana.loop();
-			}
 			/* Hay que reiniciar el número de frames porque si no se produce un bug
 			 * en el que tras empezar de nuevo, empieza a contar desde el frame en el
 			 * que estaba al pausar el proceso antes de reiniciar, rompiendo el programa
@@ -624,6 +637,10 @@ public class Controlador {
 
 	public boolean isParado() {
 		return parado;
+	}
+
+	public Estado getEstado() {
+		return estado;
 	}
 
 }
