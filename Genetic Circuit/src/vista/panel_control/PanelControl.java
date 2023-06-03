@@ -15,6 +15,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.DefaultComboBoxModel;
 import controlador.Controlador;
+import controlador.ControladorEventos;
+
 import java.awt.Toolkit;
 import java.util.HashMap;
 import javax.swing.JComboBox;
@@ -61,7 +63,12 @@ public class PanelControl extends JFrame {
 	private JComboBox<String> cBoxCircuito;
 	private JButton btnSalir;
 
+	private Controlador controlador;
+
 	public PanelControl(Controlador controlador) {
+		
+		this.controlador = controlador;
+		
 		// Crear JFrame principal
         JFrame frmCircuitoGentico = new JFrame("Interfaz de Java Swing");
         frmCircuitoGentico.setTitle("Circuito Gen\u00E9tico - Panel de Control");
@@ -88,25 +95,20 @@ public class PanelControl extends JFrame {
         seccion1.add(lblGeneracion);
 
         btnProceder = new JButton("Empezar");
-        btnProceder.addActionListener(controlador.new BtnEmpezarListener());
         seccion1.add(btnProceder);
 
         btnPausar = new JButton("Pausar");
         btnPausar.setEnabled(false);
-        btnPausar.addActionListener(controlador.new BtnPausarListener());
         seccion1.add(btnPausar);
         
         btnReiniciar = new JButton("Reiniciar");
         btnReiniciar.setEnabled(false);
-        btnReiniciar.addActionListener(controlador.new BtnReiniciarListener());
         seccion1.add(btnReiniciar);
         
         btnSalir = new JButton("Salir");
-        btnSalir.addActionListener(controlador.new BtnSalirListener());
         seccion1.add(btnSalir);
         
         cbModoAutomatico = new JCheckBox("Modo Automático");
-        cbModoAutomatico.addActionListener(controlador.new CbModoAutoListener());
         seccion1.add(cbModoAutomatico);
         
         
@@ -120,31 +122,26 @@ public class PanelControl extends JFrame {
         cBoxCircuito.setSelectedIndex(0);
         cBoxCircuito.setMaximumRowCount(10);
         cBoxCircuito.setEditable(true);
-        cBoxCircuito.addItemListener(controlador.new CboxCircuitoListener());
         seccion2.add(cBoxCircuito);
 
         seccion2.add(new JLabel("Población total"));
         spPoblacion = new JSpinner(new SpinnerNumberModel(1000, 4, 15000, 50));
         spPoblacion.setName("NumEntidades");
-        spPoblacion.addChangeListener(controlador.new SpParamListener());
         seccion2.add(spPoblacion);
 
         seccion2.add(new JLabel("Tasa de mutación (%)"));
         spMutacion = new JSpinner(new SpinnerNumberModel(20, 0, 100, 1));
         spMutacion.setName("TasaMutacion");
-        spMutacion.addChangeListener(controlador.new SpParamListener());
         seccion2.add(spMutacion);
 
         seccion2.add(new JLabel("Tiempo objetivo (frames)"));
         spTiempoObjetivo = new JSpinner(new SpinnerNumberModel(140, 2, 2000, 1));
         spTiempoObjetivo.setName("TiempoObjetivo");
-        spTiempoObjetivo.addChangeListener(controlador.new SpParamListener());
         seccion2.add(spTiempoObjetivo);
 
         seccion2.add(new JLabel("Tiempo de vida (frames)"));
         spTiempoVida = new JSpinner(new SpinnerNumberModel(400, 10, 2001, 5));
         spTiempoVida.setName("TiempoVida");
-        spTiempoVida.addChangeListener(controlador.new SpParamListener());
         seccion2.add(spTiempoVida);
 
         // Tercera sección
@@ -240,6 +237,26 @@ public class PanelControl extends JFrame {
         // Mostrar la ventana
         frmCircuitoGentico.pack();
         frmCircuitoGentico.setVisible(true);
+	}
+	
+	/**
+	 * Añade listeners a cada uno de los controles que lo necesita para que ejecuten
+	 * los eventos del controlador que le corresponden a cada uno
+	 */
+	public void asignarEventos() {
+		//Obtiene el controlador que gestiona los eventos de la interfaz
+		ControladorEventos controladorEventos = controlador.getControladorEventos();
+		//Asigna los eventos a los listeners de cada evento
+		btnProceder.addActionListener((e) -> controladorEventos.empezar());
+        btnPausar.addActionListener((e) -> controladorEventos.pausar());
+        btnReiniciar.addActionListener((e) -> controladorEventos.reiniciar());
+        btnSalir.addActionListener((e) -> controladorEventos.salir());
+        cbModoAutomatico.addActionListener((e) -> controladorEventos.cambiarModo(e));
+        cBoxCircuito.addItemListener((e) -> controladorEventos.elegirCircuito(e));
+        spPoblacion.addChangeListener((e) -> controladorEventos.modificarParametro(e));
+        spMutacion.addChangeListener((e) -> controladorEventos.modificarParametro(e));
+        spTiempoObjetivo.addChangeListener((e) -> controladorEventos.modificarParametro(e));
+        spTiempoVida.addChangeListener((e) -> controladorEventos.modificarParametro(e));
 	}
 	
 	/**

@@ -26,10 +26,7 @@ public class Vista {
 	    });
 	    hiloProcessing.start();
 		
-		SwingUtilities.invokeLater(() -> {
-			panelControl = new PanelControl(controlador);
-	    });
-		
+		panelControl = new PanelControl(controlador); 	
 	}
 
 	public Ventana getVentana() {
