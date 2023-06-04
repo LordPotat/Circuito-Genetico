@@ -1,6 +1,7 @@
 package vista;
 
 import controlador.Controlador;
+
 import controlador.Estado;
 import modelo.Modelo;
 import modelo.circuito.Meta;
@@ -12,12 +13,18 @@ import processing.opengl.PJOGL;
 
 public class Ventana extends PApplet {
 
+	private static final int ANCHO_VENTANA = 1280;
+	private static final int ALTO_VENTANA = 720;
+	
 	private static Ventana instancia = null;
 	
 	private Controlador controlador;
 	private int numFramesGen;
 	private PShape humanoide;
+	
 	private boolean modoDebug;
+	
+	
 	
 	private Ventana(Controlador controlador) {
 		this.controlador = controlador;
@@ -31,12 +38,14 @@ public class Ventana extends PApplet {
 	}
 	
 	public void settings() {
-		size(1280, 720, P2D);
+		size(ANCHO_VENTANA, ALTO_VENTANA, P2D);
 		PJOGL.setIcon("gene_icon.png");
 		smooth(16);
 	}
 	
 	public void setup() {
+		centrarVentana();
+        windowResizable(false);
 		windowTitle("Circuito Genético");
 		frameRate(60);
 		stroke(0);
@@ -228,6 +237,17 @@ public class Ventana extends PApplet {
 			modoDebug = !modoDebug;
 			return;
 		}
+	}
+	
+	public void windowResized() {
+        windowResize(ANCHO_VENTANA, ALTO_VENTANA);
+        centrarVentana();
+    }
+	
+	private void centrarVentana() {
+		int posicionVentanaX = (displayWidth - width) / 2 + 25; 
+        int posicionVentanaY = (displayHeight - height) / 2;
+        surface.setLocation(posicionVentanaX, posicionVentanaY);
 	}
 	
 	public int getNumFramesGen() {
