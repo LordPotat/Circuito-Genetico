@@ -94,7 +94,6 @@ public class Visualizador {
 		actualizarPanel("Aceleracion", "("+ redondearValor(entidad.getAceleracion().x, 4) +
 				", " + redondearValor(entidad.getAceleracion().y, 4) + ")");
 		actualizarPanel("TiempoEntidad", entidad.getTiempoObtenido()); 
-		//La aptitud no la redondeamos porque siempre son números muy pequeños
 		actualizarPanel("AptitudEntidad", entidad.getAptitud());
 		//Según la entidad tenga determinadas flags o no, mostrará en el estado en el que está
 		String estado = entidad.isHaChocado() ? "Chocado" : entidad.isHaLlegado() ? "Llegado" : "Activa";
@@ -111,6 +110,7 @@ public class Visualizador {
 		double factor = Math.pow(10, numDecimales);
 		return Math.round(valor * factor) / factor;
 	}
+	
 	
 	/**
 	 * Vacía la entidad monitorizada y sus datos del panel de control cuando su generación ya no exista

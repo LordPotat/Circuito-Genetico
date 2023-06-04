@@ -1,5 +1,6 @@
 package modelo.entidades;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -209,7 +210,8 @@ public class Poblacion {
 		}
 		//Si hay una entidad siendo monitorizada, muestra la aptitud evaluada para se vea en el panel
 		if(entidadMonitorizada != null) {	
-			contexto.getControlador().getVisualizador().actualizarPanel("AptitudEntidad", entidadMonitorizada.getAptitud());
+			contexto.getControlador().getVisualizador().actualizarPanel("AptitudEntidad", 
+					redondearAptitud(entidadMonitorizada.getAptitud()));
 		}
 		return mejorAptitud;
 	}
@@ -244,7 +246,7 @@ public class Poblacion {
 		int tiempoObtenido = entidad.getTiempoObtenido();
 		Visualizador visualizador = controlador.getVisualizador();
 		visualizador.actualizarPanel("TiempoRecordActual", tiempoObtenido);
-		if(entidad.getTiempoObtenido() < mejorTiempo) {
+		if(entidad.getTiempoObtenido() <= mejorTiempo) {
 			mejorTiempo = tiempoObtenido;
 			mejorEntidad = entidad;
 			// Muestra en el panel de control el nuevo record de tiempo obtenido 
@@ -260,10 +262,10 @@ public class Poblacion {
 	 */
 	private void comprobarMejorAptitud(double aptitud) {
 		Visualizador visualizador = contexto.getControlador().getVisualizador();
-		visualizador.actualizarPanel("MejorAptitudActual", aptitud);
+		visualizador.actualizarPanel("MejorAptitudActual", redondearAptitud(aptitud));
 		if(aptitud > mejorAptitud) {
 			mejorAptitud = aptitud;
-			visualizador.actualizarPanel("MejorAptitud", mejorAptitud);
+			visualizador.actualizarPanel("MejorAptitud", redondearAptitud(mejorAptitud));
 		}
 	}
 	
@@ -453,6 +455,17 @@ public class Poblacion {
 				adnHijo.generarGenAleatorio(gen);
 			}
 		}
+	}
+	
+	/**
+	 * Reduce el número de decimales en notación científica que muestra la aptitud
+	 * para hacerlo más legible en la interfaz
+	 * @param aptitud
+	 * @return la aptitud redondeada mostrando solo 4 decimales extra
+	 */
+	private String redondearAptitud(double aptitud) {
+		DecimalFormat df = new DecimalFormat("0.0####E0");
+		return df.format(aptitud);
 	}
 	
 	/**

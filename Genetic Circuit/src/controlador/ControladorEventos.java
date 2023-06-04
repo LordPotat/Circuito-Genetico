@@ -86,10 +86,9 @@ public class ControladorEventos {
 		PanelControl panelControl = vista.getPanelControl();
 		JButton btnProceder = panelControl.getBtnProceder();
 		btnProceder.setText("Siguiente");
-		btnProceder.addActionListener((e) -> continuar()); //añadimos el otro listener
 		btnProceder.removeActionListener(btnProceder.getActionListeners()[0]); //eliminamos el actual
+		btnProceder.addActionListener((e) -> continuar()); //añadimos el otro listener
 		//Deshabilitamos el botón hasta que se pueda avanzar de generación
-		btnProceder.setEnabled(false); 
 		/* Deshabilita el selector de circuitos hasta que se reinicie al estado inicial
 		 * ya que cambiar el circuito en mitad del proceso es contraproducente
 		 */
@@ -97,6 +96,7 @@ public class ControladorEventos {
 		//Habilita también los demás botones que ahora tendrán sentido utilizar
 		panelControl.getBtnReiniciar().setEnabled(true);
 		panelControl.getBtnPausar().setEnabled(true);
+		btnProceder.setEnabled(false); 
 	}
 	
 	/**
@@ -123,10 +123,10 @@ public class ControladorEventos {
 		controlador.setParado(false);
 		//Habilita el botón de pausa ya que ya no provocaría que iniciase otro ciclo
 		vista.getPanelControl().getBtnPausar().setEnabled(true);
-		//Desactiva el propio botón hasta que se pueda pasar a la siguiente generación
-		vista.getPanelControl().getBtnProceder().setEnabled(false);
 		controlador.getVisualizador().limpiarEntidadMonitorizada();
 		controlador.getVisualizador().limpiarUltimaGeneracion();
+		//Desactiva el propio botón hasta que se pueda pasar a la siguiente generación
+		vista.getPanelControl().getBtnProceder().setEnabled(false);
 	}
 	
 	/**
@@ -150,7 +150,6 @@ public class ControladorEventos {
 		 */
 		PanelControl panelControl = vista.getPanelControl();
 		panelControl.getcBoxCircuito().setEnabled(true);
-		panelControl.getBtnReiniciar().setEnabled(false);
 		panelControl.getBtnPausar().setEnabled(false);
 		panelControl.getBtnPausar().setText("Pausar");
 		JButton btnProceder = panelControl.getBtnProceder();
@@ -163,6 +162,7 @@ public class ControladorEventos {
 		btnProceder.addActionListener((e) -> empezar());
 		//Reseteamos la información mostrada en el panel de control
 		reiniciarInfoPanel(panelControl);
+		panelControl.getBtnReiniciar().setEnabled(false);
 	}
 	
 	/**

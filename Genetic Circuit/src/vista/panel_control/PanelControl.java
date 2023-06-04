@@ -29,6 +29,9 @@ import java.awt.Point;
 import java.awt.BorderLayout;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.BevelBorder;
+import javax.swing.JSeparator;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 
 public class PanelControl {
 	
@@ -74,7 +77,7 @@ public class PanelControl {
         JFrame frmCircuitoGenetico = new JFrame("Circuito Gen\u00E9tico - Panel de Control\r\n");
         frmCircuitoGenetico.setLocation(new Point(0, 0));
         frmCircuitoGenetico.setName("frameCircuitoGenetico");
-        frmCircuitoGenetico.setTitle("Panel de Control");
+        frmCircuitoGenetico.setTitle("Circuito Gen\u00E9tico");
         frmCircuitoGenetico.setIconImage(Toolkit.getDefaultToolkit().getImage(PanelControl.class.getResource("/img/gene_icon.png")));
         frmCircuitoGenetico.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frmCircuitoGenetico.setResizable(false);
@@ -90,7 +93,7 @@ public class PanelControl {
         panelTop.setOpaque(false);
         panelPrincipal.add(panelTop, BorderLayout.NORTH);
         
-        JLabel lblTitulo = new JLabel("Circuito Gen\u00E9tico");
+        JLabel lblTitulo = new JLabel("Panel de Control");
         lblTitulo.setVerticalTextPosition(SwingConstants.TOP);
         lblTitulo.setVerticalAlignment(SwingConstants.TOP);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -412,7 +415,7 @@ public class PanelControl {
         panelTotalGeneracionesContenido.setLayout(new BoxLayout(panelTotalGeneracionesContenido,BoxLayout.Y_AXIS));
         panelTotalGeneraciones.add(panelTotalGeneracionesContenido, BorderLayout.CENTER);
         
-        lblTiempoRecord = new JLabel("Tiempo record (frames): 0");
+        lblTiempoRecord = new JLabel("Tiempo record: 0");
         lblTiempoRecord.setForeground(new Color(255, 255, 255));
         lblTiempoRecord.setFont(new Font("Lato", Font.BOLD, 12));
         lblTiempoRecord.setName("TiempoRecord");
@@ -451,7 +454,7 @@ public class PanelControl {
         panelGeneracionActualTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelGeneracionActual.add(panelGeneracionActualTitulo, BorderLayout.NORTH);
         
-        JLabel lblDatosGeneracionActual = new JLabel("Datos Última Generación");
+        JLabel lblDatosGeneracionActual = new JLabel("Datos Generación");
         lblDatosGeneracionActual.setForeground(new Color(255, 255, 255));
         lblDatosGeneracionActual.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblDatosGeneracionActual.setFont(new Font("Lato", Font.BOLD, 14));
@@ -463,7 +466,7 @@ public class PanelControl {
         panelGeneracionActualContenido.setLayout(new BoxLayout(panelGeneracionActualContenido,BoxLayout.Y_AXIS));
         panelGeneracionActual.add(panelGeneracionActualContenido, BorderLayout.CENTER);
         
-        lblTiempoRecordActual = new JLabel("Tiempo record (frames): 0");
+        lblTiempoRecordActual = new JLabel("Tiempo record: 0");
         lblTiempoRecordActual.setForeground(new Color(255, 255, 255));
         lblTiempoRecordActual.setFont(new Font("Lato", Font.BOLD, 12));
         lblTiempoRecordActual.setName("TiempoRecordActual");
@@ -500,11 +503,18 @@ public class PanelControl {
         panelDatos.add(panelDatosEntidad);
         
         JPanel panelDatosEntidadTitulo = new JPanel();
+        panelDatosEntidadTitulo.setBorder(new LineBorder(new Color(169, 58, 222)));
         panelDatosEntidadTitulo.setOpaque(false);
-        panelDatosEntidad.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelDatosEntidadTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelDatosEntidadTitulo.setLayout(new BoxLayout(panelDatosEntidadTitulo, BoxLayout.Y_AXIS));
         panelDatosEntidad.add(panelDatosEntidadTitulo, BorderLayout.NORTH);
         
         lblEntidad = new JLabel("Entidad: -", SwingConstants.CENTER);
+        lblEntidad.setMinimumSize(new Dimension(52, 20));
+        lblEntidad.setMaximumSize(new Dimension(100, 20));
+        lblEntidad.setPreferredSize(new Dimension(52, 20));
+        lblEntidad.setVerticalTextPosition(SwingConstants.BOTTOM);
+        lblEntidad.setVerticalAlignment(SwingConstants.BOTTOM);
         lblEntidad.setForeground(new Color(255, 255, 255));
         lblEntidad.setFont(new Font("Lato", Font.BOLD, 14));
         lblEntidad.setName("Entidad");
@@ -513,66 +523,97 @@ public class PanelControl {
         panelDatosEntidadTitulo.add(lblEntidad);
         
         JPanel panelDatosEntidadContenido = new JPanel();
+        panelDatosEntidadContenido.setBorder(new LineBorder(new Color(169, 58, 222)));
         panelDatosEntidadContenido.setOpaque(false);
         panelDatosEntidadContenido.setAlignmentY(Component.CENTER_ALIGNMENT);
         panelDatosEntidadContenido.setLayout(new BoxLayout(panelDatosEntidadContenido, BoxLayout.Y_AXIS));
         panelDatosEntidad.add(panelDatosEntidadContenido, BorderLayout.CENTER);
-            
-        lblPosicion = new JLabel("Posicion (px): (0,0)");
+        
+        JPanel panelParamsEntidad = new JPanel();
+        panelParamsEntidad.setOpaque(false);
+        panelParamsEntidad.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelParamsEntidad.setLayout(new BoxLayout(panelParamsEntidad, BoxLayout.Y_AXIS));
+        panelDatosEntidadContenido.add(panelParamsEntidad);
+        
+        lblPosicion = new JLabel("Posicion: (0,0)");
+        lblPosicion.setPreferredSize(new Dimension(102, 20));
+        lblPosicion.setMinimumSize(new Dimension(102, 20));
+        lblPosicion.setMaximumSize(new Dimension(180, 20));
         lblPosicion.setForeground(new Color(255, 255, 255));
         lblPosicion.setFont(new Font("Lato", Font.BOLD, 12));
         lblPosicion.setName("Posicion");
         mapaLabels.put(lblPosicion.getName(), lblPosicion);
-        panelDatosEntidadContenido.add(lblPosicion);
+        panelParamsEntidad.add(lblPosicion);
         
-        lblVelocidad = new JLabel("Velocidad (px): (0,0)");
+        lblVelocidad = new JLabel("Velocidad: (0,0)");
+        lblVelocidad.setMaximumSize(new Dimension(180, 20));
+        lblVelocidad.setMinimumSize(new Dimension(108, 20));
+        lblVelocidad.setPreferredSize(new Dimension(108, 20));
         lblVelocidad.setForeground(new Color(255, 255, 255));
         lblVelocidad.setFont(new Font("Lato", Font.BOLD, 12));
         lblVelocidad.setName("Velocidad");
         mapaLabels.put(lblVelocidad.getName(), lblVelocidad);
-        panelDatosEntidadContenido.add(lblVelocidad);
+        panelParamsEntidad.add(lblVelocidad);
         
-        lblAceleracion = new JLabel("Aceleración (px): (0,0)");
+        lblAceleracion = new JLabel("Aceleración: (0,0)");
+        lblAceleracion.setMinimumSize(new Dimension(118, 20));
+        lblAceleracion.setMaximumSize(new Dimension(180, 20));
+        lblAceleracion.setPreferredSize(new Dimension(118, 20));
         lblAceleracion.setForeground(new Color(255, 255, 255));
         lblAceleracion.setFont(new Font("Lato", Font.BOLD, 12));
         lblAceleracion.setName("Aceleracion");
         mapaLabels.put(lblAceleracion.getName(), lblAceleracion);
-        panelDatosEntidadContenido.add(lblAceleracion);
+        panelParamsEntidad.add(lblAceleracion);
         
         lblDistancia = new JLabel("Distancia: 0");
+        lblDistancia.setMaximumSize(new Dimension(120, 20));
+        lblDistancia.setMinimumSize(new Dimension(65, 20));
+        lblDistancia.setPreferredSize(new Dimension(65, 20));
         lblDistancia.setForeground(new Color(255, 255, 255));
         lblDistancia.setFont(new Font("Lato", Font.BOLD, 12));
         lblDistancia.setName("DistanciaEntidad");
         mapaLabels.put(lblDistancia.getName(), lblDistancia);
-        panelDatosEntidadContenido.add(lblDistancia);
+        panelParamsEntidad.add(lblDistancia);
         
         lblDistMinEntidad = new JLabel("Distancia mínima: 0");
+        lblDistMinEntidad.setMaximumSize(new Dimension(180, 20));
+        lblDistMinEntidad.setMinimumSize(new Dimension(110, 20));
+        lblDistMinEntidad.setPreferredSize(new Dimension(110, 20));
         lblDistMinEntidad.setForeground(new Color(255, 255, 255));
         lblDistMinEntidad.setFont(new Font("Lato", Font.BOLD, 12));
         lblDistMinEntidad.setName("DistanciaMinEntidad");
         mapaLabels.put(lblDistMinEntidad.getName(), lblDistMinEntidad);
-        panelDatosEntidadContenido.add(lblDistMinEntidad);
+        panelParamsEntidad.add(lblDistMinEntidad);
         
         lblEstado = new JLabel("Estado: -");
+        lblEstado.setMaximumSize(new Dimension(100, 20));
+        lblEstado.setMinimumSize(new Dimension(49, 20));
+        lblEstado.setPreferredSize(new Dimension(49, 20));
         lblEstado.setForeground(new Color(255, 255, 255));
         lblEstado.setFont(new Font("Lato", Font.BOLD, 12));
         lblEstado.setName("EstadoEntidad");
         mapaLabels.put(lblEstado.getName(), lblEstado);
-        panelDatosEntidadContenido.add(lblEstado);
+        panelParamsEntidad.add(lblEstado);
         
         lblTiempoEntidad = new JLabel("Tiempo obtenido: 0");
+        lblTiempoEntidad.setMinimumSize(new Dimension(106, 20));
+        lblTiempoEntidad.setMaximumSize(new Dimension(130, 20));
+        lblTiempoEntidad.setPreferredSize(new Dimension(106, 20));
         lblTiempoEntidad.setForeground(new Color(255, 255, 255));
         lblTiempoEntidad.setFont(new Font("Lato", Font.BOLD, 12));
         lblTiempoEntidad.setName("TiempoEntidad");
         mapaLabels.put(lblTiempoEntidad.getName(), lblTiempoEntidad);
-        panelDatosEntidadContenido.add(lblTiempoEntidad);
+        panelParamsEntidad.add(lblTiempoEntidad);
         
         lblAptitudEntidad = new JLabel("Aptitud: 0");
+        lblAptitudEntidad.setMinimumSize(new Dimension(50, 20));
+        lblAptitudEntidad.setMaximumSize(new Dimension(110, 20));
+        lblAptitudEntidad.setPreferredSize(new Dimension(50, 20));
         lblAptitudEntidad.setForeground(new Color(255, 255, 255));
         lblAptitudEntidad.setFont(new Font("Lato", Font.BOLD, 12));
         lblAptitudEntidad.setName("AptitudEntidad");
         mapaLabels.put(lblAptitudEntidad.getName(), lblAptitudEntidad);
-        panelDatosEntidadContenido.add(lblAptitudEntidad);
+        panelParamsEntidad.add(lblAptitudEntidad);
 
         // Mostrar la ventana
         frmCircuitoGenetico.pack();

@@ -223,8 +223,9 @@ public class Controlador {
 		 */
 		if(!modoAutomatico && !entidades.isObjetivoCumplido()) {
 			detenerProceso(); 
-		} else {
-			//Si el modo automático está activado debe dejar de monitorizar sólo
+		} else if (modoAutomatico && !entidades.isObjetivoCumplido()) {
+			/* Si el modo automático está activado debe dejar de monitorizar sólo en caso
+			 * de que no se haya cumplido el objetivo, si se ha cumplido mantiene la info*/
 			visualizador.limpiarEntidadMonitorizada();
 			visualizador.limpiarUltimaGeneracion();
 		}
