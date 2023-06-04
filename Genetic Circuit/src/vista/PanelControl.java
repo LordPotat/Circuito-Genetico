@@ -1,4 +1,4 @@
-package vista.panel_control;
+package vista;
 
 import java.awt.Component;
 import java.awt.Dimension;

@@ -4,7 +4,7 @@ package modelo.circuito;
 import java.util.HashMap;
 
 import processing.core.PVector;
-import vista.ventana_grafica.Ventana;
+import vista.Ventana;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Float;

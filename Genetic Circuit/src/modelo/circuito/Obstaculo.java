@@ -2,7 +2,7 @@ package modelo.circuito;
 
 import processing.core.PMatrix2D;
 import processing.core.PVector;
-import vista.ventana_grafica.Ventana;
+import vista.Ventana;
 
 /**
  * Elemento del circuito que las entidades deben evitar en su camino hacia la meta.

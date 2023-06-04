@@ -7,8 +7,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import controlador.Controlador;
-import vista.panel_control.PanelControl;
-import vista.ventana_grafica.Ventana;
 
 /**
  * Contiene todas las ventanas de interfaz de usuario para visualizar y manejar

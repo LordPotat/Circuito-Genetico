@@ -5,9 +5,9 @@ import java.util.TimerTask;
 import modelo.Modelo;
 import modelo.circuito.Circuito;
 import modelo.entidades.Poblacion;
+import vista.PanelControl;
+import vista.Ventana;
 import vista.Vista;
-import vista.panel_control.PanelControl;
-import vista.ventana_grafica.Ventana;
 
 /** 
  * Se encarga de iniciar y manipular el flujo del programa. Contiene la vista y el modelo de datos.

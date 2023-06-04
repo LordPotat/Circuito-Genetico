@@ -1,4 +1,4 @@
-package vista.ventana_grafica;
+package vista;
 
 import controlador.Controlador;
 import controlador.Estado;

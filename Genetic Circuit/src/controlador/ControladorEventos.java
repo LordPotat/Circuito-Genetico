@@ -14,9 +14,9 @@ import modelo.Modelo;
 import modelo.entidades.Entidad;
 import modelo.entidades.Poblacion;
 import processing.core.PVector;
+import vista.PanelControl;
+import vista.Ventana;
 import vista.Vista;
-import vista.panel_control.PanelControl;
-import vista.ventana_grafica.Ventana;
 
 /**
  * Se encarga de gestionar todo lo relativo a los eventos que se ejecutan cuando se interacciona
