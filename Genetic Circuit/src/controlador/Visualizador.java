@@ -1,5 +1,7 @@
 package controlador;
 
+import java.awt.Color;
+
 import modelo.Modelo;
 import modelo.entidades.Entidad;
 import vista.Vista;
@@ -116,6 +118,7 @@ public class Visualizador {
 	 * Vacía la entidad monitorizada y sus datos del panel de control cuando su generación ya no exista
 	 */
 	void limpiarEntidadMonitorizada() {
+		vista.getPanelControl().getPanelDatosEntidad().setBackground(new Color(99, 9, 177));
 		modelo.getPoblacion().setEntidadMonitorizada(null); 
 		actualizarPanel("Entidad", "-");
 		actualizarPanel("Posicion", "(0, 0)");

@@ -1,5 +1,6 @@
 package controlador;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.util.HashMap;
@@ -282,6 +283,7 @@ public class ControladorEventos {
 		for(int i = entidades.length - 1; i >= 0; i--) {
 			if (entidades[i].contieneRaton(posRaton)) {
 				entidades[i].setMonitorizada(true);
+				vista.getPanelControl().getPanelDatosEntidad().setBackground(new Color(120, 33, 195));
 				poblacion.setEntidadMonitorizada(entidades[i]);
 				break;
 			}

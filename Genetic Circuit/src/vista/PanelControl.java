@@ -29,9 +29,8 @@ import java.awt.Point;
 import java.awt.BorderLayout;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.BevelBorder;
-import javax.swing.JSeparator;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.EmptyBorder;
 
 public class PanelControl {
 	
@@ -67,6 +66,7 @@ public class PanelControl {
 	private JButton btnSalir;
 
 	private Controlador controlador;
+	private JPanel panelDatosEntidad;
 
 
 	public PanelControl(Controlador controlador) {
@@ -85,6 +85,7 @@ public class PanelControl {
 
         // Crear JPanel principal
         JPanel panelPrincipal = new JPanel();
+        panelPrincipal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
         panelPrincipal.setBackground(new Color(46, 10, 84));
         panelPrincipal.setLayout(new BorderLayout(0, 0));
         frmCircuitoGenetico.setContentPane(panelPrincipal);
@@ -94,22 +95,28 @@ public class PanelControl {
         panelPrincipal.add(panelTop, BorderLayout.NORTH);
         
         JLabel lblTitulo = new JLabel("Panel de Control");
-        lblTitulo.setVerticalTextPosition(SwingConstants.TOP);
-        lblTitulo.setVerticalAlignment(SwingConstants.TOP);
+        lblTitulo.setMinimumSize(new Dimension(92, 18));
+        lblTitulo.setMaximumSize(new Dimension(148, 30));
+        lblTitulo.setPreferredSize(new Dimension(148, 25));
+        lblTitulo.setVerticalTextPosition(SwingConstants.BOTTOM);
+        lblTitulo.setVerticalAlignment(SwingConstants.BOTTOM);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitulo.setForeground(new Color(255, 255, 255));
         lblTitulo.setFont(new Font("Lato", Font.BOLD, 18));
         panelTop.add(lblTitulo);
         
         JPanel bordeIzq = new JPanel();
+        bordeIzq.setPreferredSize(new Dimension(15, 10));
         bordeIzq.setOpaque(false);
         panelPrincipal.add(bordeIzq, BorderLayout.WEST);
         
         JPanel bordeDrc = new JPanel();
+        bordeDrc.setPreferredSize(new Dimension(15, 10));
         bordeDrc.setOpaque(false);
         panelPrincipal.add(bordeDrc, BorderLayout.EAST);
 
         JPanel bordeAbajo = new JPanel();
+        bordeAbajo.setPreferredSize(new Dimension(10, 15));
         bordeAbajo.setOpaque(false);
         panelPrincipal.add(bordeAbajo, BorderLayout.SOUTH);
         
@@ -137,6 +144,7 @@ public class PanelControl {
         panelControles.add(panelGeneracion);
         
         lblGeneracion = new JLabel("Generación: 0");
+        lblGeneracion.setVerticalAlignment(SwingConstants.TOP);
         lblGeneracion.setForeground(new Color(255, 255, 255));
         lblGeneracion.setFont(new Font("Lato", Font.BOLD, 16));
         lblGeneracion.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -154,6 +162,7 @@ public class PanelControl {
         panelControles.add(panelModoAutomatico);
         
         cbModoAutomatico = new JCheckBox("Modo Automático");
+        cbModoAutomatico.setOpaque(false);
         cbModoAutomatico.setVerticalTextPosition(SwingConstants.BOTTOM);
         cbModoAutomatico.setPreferredSize(new Dimension(140, 21));
         cbModoAutomatico.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -387,35 +396,49 @@ public class PanelControl {
         panelContenido.add(panelDatos);
         
         JPanel panelDatosGeneracion = new JPanel();
+        panelDatosGeneracion.setBackground(new Color(99, 9, 177));
+        panelDatosGeneracion.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
         panelDatosGeneracion.setOpaque(false);
         panelDatosGeneracion.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelDatosGeneracion.setLayout(new BoxLayout(panelDatosGeneracion, BoxLayout.X_AXIS));
         panelDatos.add(panelDatosGeneracion);
         
         JPanel panelTotalGeneraciones = new JPanel();
+        panelTotalGeneraciones.setBorder(new LineBorder(new Color(169, 58, 222)));
         panelTotalGeneraciones.setOpaque(false);
         panelTotalGeneraciones.setAlignmentY(Component.CENTER_ALIGNMENT);
         panelTotalGeneraciones.setLayout(new BorderLayout());
         panelDatosGeneracion.add(panelTotalGeneraciones);
         
         JPanel panelTotalGeneracionesTitulo = new JPanel();
+        panelTotalGeneracionesTitulo.setBorder(new LineBorder(new Color(154, 18, 218)));
         panelTotalGeneracionesTitulo.setOpaque(false);
         panelTotalGeneracionesTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelTotalGeneracionesTitulo.setLayout(new BoxLayout(panelTotalGeneracionesTitulo, BoxLayout.Y_AXIS));
         panelTotalGeneraciones.add(panelTotalGeneracionesTitulo, BorderLayout.NORTH);
         
         JLabel lblDatosTotalGeneraciones = new JLabel("Datos Totales");
+        lblDatosTotalGeneraciones.setVerticalAlignment(SwingConstants.BOTTOM);
+        lblDatosTotalGeneraciones.setHorizontalAlignment(SwingConstants.CENTER);
+        lblDatosTotalGeneraciones.setPreferredSize(new Dimension(78, 22));
+        lblDatosTotalGeneraciones.setMinimumSize(new Dimension(77, 8));
+        lblDatosTotalGeneraciones.setMaximumSize(new Dimension(85, 22));
         lblDatosTotalGeneraciones.setForeground(new Color(255, 255, 255));
         lblDatosTotalGeneraciones.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblDatosTotalGeneraciones.setFont(new Font("Lato", Font.BOLD, 14));
         panelTotalGeneracionesTitulo.add(lblDatosTotalGeneraciones);
         
         JPanel panelTotalGeneracionesContenido = new JPanel();
+        panelTotalGeneracionesContenido.setBorder(new LineBorder(new Color(154, 18, 218)));
         panelTotalGeneracionesContenido.setOpaque(false);
         panelTotalGeneracionesContenido.setAlignmentY(Component.CENTER_ALIGNMENT);
         panelTotalGeneracionesContenido.setLayout(new BoxLayout(panelTotalGeneracionesContenido,BoxLayout.Y_AXIS));
         panelTotalGeneraciones.add(panelTotalGeneracionesContenido, BorderLayout.CENTER);
         
         lblTiempoRecord = new JLabel("Tiempo record: 0");
+        lblTiempoRecord.setBorder(new EmptyBorder(0, 3, 0, 3));
+        lblTiempoRecord.setPreferredSize(new Dimension(93, 20));
+        lblTiempoRecord.setMaximumSize(new Dimension(140, 20));
         lblTiempoRecord.setForeground(new Color(255, 255, 255));
         lblTiempoRecord.setFont(new Font("Lato", Font.BOLD, 12));
         lblTiempoRecord.setName("TiempoRecord");
@@ -423,6 +446,9 @@ public class PanelControl {
         panelTotalGeneracionesContenido.add(lblTiempoRecord);
         
         lblMejorAptitud = new JLabel("Mejor aptitud: 0");
+        lblMejorAptitud.setBorder(new EmptyBorder(0, 3, 0, 3));
+        lblMejorAptitud.setPreferredSize(new Dimension(140, 20));
+        lblMejorAptitud.setMaximumSize(new Dimension(140, 20));
         lblMejorAptitud.setForeground(new Color(255, 255, 255));
         lblMejorAptitud.setFont(new Font("Lato", Font.BOLD, 12));
         lblMejorAptitud.setName("MejorAptitud");
@@ -430,6 +456,9 @@ public class PanelControl {
         panelTotalGeneracionesContenido.add(lblMejorAptitud);
         
         lblMetas = new JLabel("Metas alcanzadas: 0");
+        lblMetas.setBorder(new EmptyBorder(0, 3, 0, 3));
+        lblMetas.setMaximumSize(new Dimension(140, 20));
+        lblMetas.setPreferredSize(new Dimension(112, 20));
         lblMetas.setForeground(new Color(255, 255, 255));
         lblMetas.setFont(new Font("Lato", Font.BOLD, 12));
         lblMetas.setName("Metas");
@@ -437,6 +466,9 @@ public class PanelControl {
         panelTotalGeneracionesContenido.add(lblMetas);
         
         lblColisiones = new JLabel("Colisiones: 0");
+        lblColisiones.setBorder(new EmptyBorder(0, 3, 0, 3));
+        lblColisiones.setPreferredSize(new Dimension(73, 20));
+        lblColisiones.setMaximumSize(new Dimension(140, 20));
         lblColisiones.setForeground(new Color(255, 255, 255));
         lblColisiones.setFont(new Font("Lato", Font.BOLD, 12));
         lblColisiones.setName("Colisiones");
@@ -444,29 +476,40 @@ public class PanelControl {
         panelTotalGeneracionesContenido.add(lblColisiones);
 
         JPanel panelGeneracionActual = new JPanel();
+        panelGeneracionActual.setBorder(new LineBorder(new Color(169, 58, 222)));
         panelGeneracionActual.setOpaque(false);
         panelGeneracionActual.setAlignmentY(Component.CENTER_ALIGNMENT);
         panelGeneracionActual.setLayout(new BorderLayout());
         panelDatosGeneracion.add(panelGeneracionActual);
         
         JPanel panelGeneracionActualTitulo = new JPanel();
+        panelGeneracionActualTitulo.setBorder(new LineBorder(new Color(154, 18, 218)));
         panelGeneracionActualTitulo.setOpaque(false);
         panelGeneracionActualTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelGeneracionActualTitulo.setLayout(new BoxLayout(panelGeneracionActualTitulo, BoxLayout.Y_AXIS));
         panelGeneracionActual.add(panelGeneracionActualTitulo, BorderLayout.NORTH);
         
         JLabel lblDatosGeneracionActual = new JLabel("Datos Generación");
+        lblDatosGeneracionActual.setVerticalAlignment(SwingConstants.BOTTOM);
+        lblDatosGeneracionActual.setHorizontalAlignment(SwingConstants.CENTER);
+        lblDatosGeneracionActual.setPreferredSize(new Dimension(130, 22));
+        lblDatosGeneracionActual.setMaximumSize(new Dimension(140, 22));
         lblDatosGeneracionActual.setForeground(new Color(255, 255, 255));
         lblDatosGeneracionActual.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblDatosGeneracionActual.setFont(new Font("Lato", Font.BOLD, 14));
         panelGeneracionActualTitulo.add(lblDatosGeneracionActual);
         
         JPanel panelGeneracionActualContenido = new JPanel();
+        panelGeneracionActualContenido.setBorder(new LineBorder(new Color(154, 18, 218)));
         panelGeneracionActualContenido.setOpaque(false);
         panelGeneracionActualContenido.setAlignmentY(Component.CENTER_ALIGNMENT);
         panelGeneracionActualContenido.setLayout(new BoxLayout(panelGeneracionActualContenido,BoxLayout.Y_AXIS));
         panelGeneracionActual.add(panelGeneracionActualContenido, BorderLayout.CENTER);
         
         lblTiempoRecordActual = new JLabel("Tiempo record: 0");
+        lblTiempoRecordActual.setBorder(new EmptyBorder(0, 3, 0, 3));
+        lblTiempoRecordActual.setMaximumSize(new Dimension(140, 20));
+        lblTiempoRecordActual.setPreferredSize(new Dimension(93, 20));
         lblTiempoRecordActual.setForeground(new Color(255, 255, 255));
         lblTiempoRecordActual.setFont(new Font("Lato", Font.BOLD, 12));
         lblTiempoRecordActual.setName("TiempoRecordActual");
@@ -474,6 +517,9 @@ public class PanelControl {
         panelGeneracionActualContenido.add(lblTiempoRecordActual);
         
         lblMejorAptitudActual = new JLabel("Mejor aptitud: 0");
+        lblMejorAptitudActual.setBorder(new EmptyBorder(0, 3, 0, 3));
+        lblMejorAptitudActual.setPreferredSize(new Dimension(140, 20));
+        lblMejorAptitudActual.setMaximumSize(new Dimension(150, 20));
         lblMejorAptitudActual.setForeground(new Color(255, 255, 255));
         lblMejorAptitudActual.setFont(new Font("Lato", Font.BOLD, 12));
         lblMejorAptitudActual.setName("MejorAptitudActual");
@@ -481,6 +527,9 @@ public class PanelControl {
         panelGeneracionActualContenido.add(lblMejorAptitudActual);
         
         lblMetasActual = new JLabel("Metas alcanzadas: 0");
+        lblMetasActual.setBorder(new EmptyBorder(0, 3, 0, 3));
+        lblMetasActual.setPreferredSize(new Dimension(112, 20));
+        lblMetasActual.setMaximumSize(new Dimension(140, 20));
         lblMetasActual.setForeground(new Color(255, 255, 255));
         lblMetasActual.setFont(new Font("Lato", Font.BOLD, 12));
         lblMetasActual.setName("MetasActual");
@@ -488,21 +537,26 @@ public class PanelControl {
         panelGeneracionActualContenido.add(lblMetasActual);
         
         lblColisionesActual = new JLabel("Colisiones: 0");
+        lblColisionesActual.setBorder(new EmptyBorder(0, 3, 0, 3));
+        lblColisionesActual.setPreferredSize(new Dimension(73, 20));
+        lblColisionesActual.setMaximumSize(new Dimension(140, 20));
         lblColisionesActual.setForeground(new Color(255, 255, 255));
         lblColisionesActual.setFont(new Font("Lato", Font.BOLD, 12));
         lblColisionesActual.setName("ColisionesActual");
         mapaLabels.put(lblColisionesActual.getName(), lblColisionesActual);
         panelGeneracionActualContenido.add(lblColisionesActual);
         
-        JPanel panelDatosEntidad = new JPanel();
+        panelDatosEntidad = new JPanel();
+        panelDatosEntidad.setMaximumSize(new Dimension(350, 32767));
         panelDatosEntidad.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
         panelDatosEntidad.setOpaque(true);
-        panelDatosEntidad.setBackground(new Color(120, 33, 195));
+        panelDatosEntidad.setBackground(new Color(99, 9, 177));
         panelDatosEntidad.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelDatosEntidad.setLayout(new BorderLayout());
         panelDatos.add(panelDatosEntidad);
         
         JPanel panelDatosEntidadTitulo = new JPanel();
+        panelDatosEntidadTitulo.setMaximumSize(new Dimension(350, 32767));
         panelDatosEntidadTitulo.setBorder(new LineBorder(new Color(169, 58, 222)));
         panelDatosEntidadTitulo.setOpaque(false);
         panelDatosEntidadTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -510,11 +564,11 @@ public class PanelControl {
         panelDatosEntidad.add(panelDatosEntidadTitulo, BorderLayout.NORTH);
         
         lblEntidad = new JLabel("Entidad: -", SwingConstants.CENTER);
-        lblEntidad.setMinimumSize(new Dimension(52, 20));
-        lblEntidad.setMaximumSize(new Dimension(100, 20));
-        lblEntidad.setPreferredSize(new Dimension(52, 20));
-        lblEntidad.setVerticalTextPosition(SwingConstants.BOTTOM);
         lblEntidad.setVerticalAlignment(SwingConstants.BOTTOM);
+        lblEntidad.setMinimumSize(new Dimension(52, 20));
+        lblEntidad.setMaximumSize(new Dimension(360, 25));
+        lblEntidad.setPreferredSize(new Dimension(52, 22));
+        lblEntidad.setVerticalTextPosition(SwingConstants.BOTTOM);
         lblEntidad.setForeground(new Color(255, 255, 255));
         lblEntidad.setFont(new Font("Lato", Font.BOLD, 14));
         lblEntidad.setName("Entidad");
@@ -735,6 +789,8 @@ public class PanelControl {
 	public JComboBox<String> getcBoxCircuito() {
 		return cBoxCircuito;
 	}
-	
-	 
+
+	public JPanel getPanelDatosEntidad() {
+		return panelDatosEntidad;
+	}
 }
