@@ -77,7 +77,6 @@ public class PanelControl {
         frmCircuitoGenetico.setTitle("Panel de Control");
         frmCircuitoGenetico.setIconImage(Toolkit.getDefaultToolkit().getImage(PanelControl.class.getResource("/img/gene_icon.png")));
         frmCircuitoGenetico.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frmCircuitoGenetico.setPreferredSize(new Dimension(335, 732));
         frmCircuitoGenetico.setResizable(false);
         mapaLabels = new HashMap<String, JLabel>();
 
@@ -92,6 +91,8 @@ public class PanelControl {
         panelPrincipal.add(panelTop, BorderLayout.NORTH);
         
         JLabel lblTitulo = new JLabel("Circuito Gen\u00E9tico");
+        lblTitulo.setVerticalTextPosition(SwingConstants.TOP);
+        lblTitulo.setVerticalAlignment(SwingConstants.TOP);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitulo.setForeground(new Color(255, 255, 255));
         lblTitulo.setFont(new Font("Lato", Font.BOLD, 18));
@@ -116,21 +117,42 @@ public class PanelControl {
         
         // Primera sección
         JPanel panelControles = new JPanel();
+        panelControles.setMaximumSize(new Dimension(32767, 150));
         panelControles.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Controles", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(255, 255, 255)));
         panelControles.setBackground(new Color(99, 9, 177));
         panelControles.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelControles.setLayout(new BoxLayout(panelControles, BoxLayout.Y_AXIS));
         panelContenido.add(panelControles);
-
+        
+        JPanel panelGeneracion = new JPanel();
+        panelGeneracion.setPreferredSize(new Dimension(10, 25));
+        panelGeneracion.setMinimumSize(new Dimension(10, 25));
+        panelGeneracion.setMaximumSize(new Dimension(32767, 25));
+        panelGeneracion.setOpaque(false);
+        panelGeneracion.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelGeneracion.setLayout(new FlowLayout());
+        panelControles.add(panelGeneracion);
+        
         lblGeneracion = new JLabel("Generación: 0");
         lblGeneracion.setForeground(new Color(255, 255, 255));
-        lblGeneracion.setFont(new Font("Lato", Font.BOLD, 14));
+        lblGeneracion.setFont(new Font("Lato", Font.BOLD, 16));
+        lblGeneracion.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblGeneracion.setName("Generacion");
         mapaLabels.put(lblGeneracion.getName(), lblGeneracion);
-        panelControles.add(lblGeneracion);
+        panelGeneracion.add(lblGeneracion);
 
+        JPanel panelModoAutomatico = new JPanel();
+        panelModoAutomatico.setMinimumSize(new Dimension(10, 28));
+        panelModoAutomatico.setPreferredSize(new Dimension(10, 25));
+        panelModoAutomatico.setMaximumSize(new Dimension(32767, 28));
+        panelModoAutomatico.setOpaque(false);
+        panelModoAutomatico.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelModoAutomatico.setLayout(new FlowLayout());
+        panelControles.add(panelModoAutomatico);
+        
         cbModoAutomatico = new JCheckBox("Modo Automático");
         cbModoAutomatico.setVerticalTextPosition(SwingConstants.BOTTOM);
+        cbModoAutomatico.setPreferredSize(new Dimension(140, 21));
         cbModoAutomatico.setHorizontalAlignment(SwingConstants.TRAILING);
         cbModoAutomatico.setHorizontalTextPosition(SwingConstants.LEADING);
         cbModoAutomatico.setForeground(new Color(255, 255, 255));
@@ -138,18 +160,40 @@ public class PanelControl {
         cbModoAutomatico.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         cbModoAutomatico.setToolTipText("");
         cbModoAutomatico.setFocusable(false);
-        panelControles.add(cbModoAutomatico);
+        panelModoAutomatico.add(cbModoAutomatico);
+        
+        JPanel panelProceder = new JPanel();
+        panelProceder.setMinimumSize(new Dimension(10, 35));
+        panelProceder.setPreferredSize(new Dimension(0, 35));
+        panelProceder.setMaximumSize(new Dimension(32767, 35));
+        panelProceder.setOpaque(false);
+        panelProceder.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelProceder.setLayout(new FlowLayout());
+        panelControles.add(panelProceder);
         
         btnProceder = new JButton("Empezar");
+        btnProceder.setVerticalAlignment(SwingConstants.TOP);
+        btnProceder.setPreferredSize(new Dimension(200, 28));
         btnProceder.setFont(new Font("Lato", Font.BOLD, 16));
         btnProceder.setBackground(new Color(141, 71, 201));
         btnProceder.setForeground(new Color(255, 255, 255));
         btnProceder.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnProceder.setToolTipText("Comienza una nueva generaci\u00F3n ");
         btnProceder.setFocusable(false);
-        panelControles.add(btnProceder);
+        panelProceder.add(btnProceder);
 
+        JPanel panelPausar = new JPanel();
+        panelPausar.setMinimumSize(new Dimension(10, 35));
+        panelPausar.setPreferredSize(new Dimension(0, 35));
+        panelPausar.setMaximumSize(new Dimension(32767, 35));
+        panelPausar.setOpaque(false);
+        panelPausar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelPausar.setLayout(new FlowLayout());
+        panelControles.add(panelPausar);
+        
         btnPausar = new JButton("Pausar");
+        btnPausar.setVerticalAlignment(SwingConstants.TOP);
+        btnPausar.setPreferredSize(new Dimension(200, 28));
         btnPausar.setFont(new Font("Lato", Font.BOLD, 16));
         btnPausar.setBackground(new Color(141, 71, 201));
         btnPausar.setForeground(new Color(255, 255, 255));
@@ -157,9 +201,20 @@ public class PanelControl {
         btnPausar.setToolTipText("Pausa/Reanuda el movimiento de las entidades");
         btnPausar.setFocusable(false);
         btnPausar.setEnabled(false);
-        panelControles.add(btnPausar);
+        panelPausar.add(btnPausar);
+        
+        JPanel panelReiniciar = new JPanel();
+        panelReiniciar.setMinimumSize(new Dimension(10, 35));
+        panelReiniciar.setPreferredSize(new Dimension(0, 35));
+        panelReiniciar.setMaximumSize(new Dimension(32767, 35));
+        panelReiniciar.setOpaque(false);
+        panelReiniciar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelReiniciar.setLayout(new FlowLayout());
+        panelControles.add(panelReiniciar);
         
         btnReiniciar = new JButton("Reiniciar");
+        btnReiniciar.setVerticalAlignment(SwingConstants.TOP);
+        btnReiniciar.setPreferredSize(new Dimension(200, 28));
         btnReiniciar.setFont(new Font("Lato", Font.BOLD, 16));
         btnReiniciar.setBackground(new Color(141, 71, 201));
         btnReiniciar.setForeground(new Color(255, 255, 255));
@@ -167,41 +222,61 @@ public class PanelControl {
         btnReiniciar.setToolTipText("Termina de ejecutar el proceso evolutivo y vuelve al estado inicial");
         btnReiniciar.setFocusable(false);
         btnReiniciar.setEnabled(false);
-        panelControles.add(btnReiniciar);
+        panelReiniciar.add(btnReiniciar);
+        
+        JPanel panelSalir = new JPanel();
+        panelSalir.setMinimumSize(new Dimension(10, 40));
+        panelSalir.setPreferredSize(new Dimension(0, 35));
+        panelSalir.setMaximumSize(new Dimension(32767, 35));
+        panelSalir.setOpaque(false);
+        panelSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSalir.setLayout(new FlowLayout());
+        panelControles.add(panelSalir);
         
         btnSalir = new JButton("Salir");
+        btnSalir.setVerticalAlignment(SwingConstants.TOP);
+        btnSalir.setPreferredSize(new Dimension(200, 28));
         btnSalir.setFont(new Font("Lato", Font.BOLD, 16));
         btnSalir.setBackground(new Color(141, 71, 201));
         btnSalir.setForeground(new Color(255, 255, 255));
         btnSalir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnSalir.setToolTipText("Cierra el programa");
         btnSalir.setFocusable(false);
-        panelControles.add(btnSalir);
+        panelSalir.add(btnSalir);
  
         Component separador1 = Box.createVerticalStrut(10);
         panelContenido.add(separador1);
         
         // Segunda sección
         JPanel panelConfig = new JPanel();
+        panelConfig.setMaximumSize(new Dimension(350, 32767));
         panelConfig.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Configuraci\u00F3n", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(255, 255, 255)));
         panelConfig.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelConfig.setBackground(new Color(99, 9, 177));
         panelConfig.setLayout(new BoxLayout(panelConfig, BoxLayout.Y_AXIS));
         panelContenido.add(panelConfig);
         
+        JPanel panelParametros = new JPanel();
+        panelParametros.setOpaque(false);
+        panelParametros.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelParametros.setLayout(new BoxLayout(panelParametros, BoxLayout.Y_AXIS));
+        panelConfig.add(panelParametros);
+        
         JPanel panelCircuito = new JPanel();
+        panelCircuito.setMaximumSize(new Dimension(235, 32767));
         panelCircuito.setOpaque(false);
         panelCircuito.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelCircuito.setLayout(new FlowLayout());
-        panelConfig.add(panelCircuito);
+        panelCircuito.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelParametros.add(panelCircuito);
         
         JLabel lblCircuito = new JLabel("Circuito");
         lblCircuito.setForeground(new Color(255, 255, 255));
-        lblCircuito.setFont(new Font("Lato", Font.BOLD, 12));
+        lblCircuito.setFont(new Font("Lato", Font.BOLD, 14));
         lblCircuito.setLabelFor(cBoxCircuito);
         panelCircuito.add(lblCircuito);
         
         cBoxCircuito = rellenarCboxCircuito();
+        cBoxCircuito.setPreferredSize(new Dimension(164, 26));
         cBoxCircuito.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         cBoxCircuito.setFont(new Font("Lato", Font.BOLD, 12));
         cBoxCircuito.setToolTipText("Selecciona un circuito para las entidades ");
@@ -209,19 +284,21 @@ public class PanelControl {
         cBoxCircuito.setMaximumRowCount(10);
         cBoxCircuito.setEditable(true);
         panelCircuito.add(cBoxCircuito);
-
+        
         JPanel panelPoblacionTotal = new JPanel();
+        panelPoblacionTotal.setMaximumSize(new Dimension(235, 32767));
         panelPoblacionTotal.setOpaque(false);
         panelPoblacionTotal.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelPoblacionTotal.setLayout(new FlowLayout());
-        panelConfig.add(panelPoblacionTotal);
+        panelPoblacionTotal.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelParametros.add(panelPoblacionTotal);
         
         JLabel lblPoblacionTotal = new JLabel("Población total");
         lblPoblacionTotal.setForeground(new Color(255, 255, 255));
-        lblPoblacionTotal.setFont(new Font("Lato", Font.BOLD, 12));
+        lblPoblacionTotal.setFont(new Font("Lato", Font.BOLD, 14));
         panelPoblacionTotal.add(lblPoblacionTotal);
         
         spPoblacion = new JSpinner(new SpinnerNumberModel(1000, 4, 15000, 50));
+        spPoblacion.setPreferredSize(new Dimension(72, 28));
         lblPoblacionTotal.setLabelFor(spPoblacion);
         spPoblacion.setFont(new Font("Lato", Font.BOLD, 12));
         spPoblacion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -230,36 +307,41 @@ public class PanelControl {
         panelPoblacionTotal.add(spPoblacion);
 
         JPanel panelTasaMutacion = new JPanel();
+        panelTasaMutacion.setMaximumSize(new Dimension(235, 32767));
         panelTasaMutacion.setOpaque(false);
         panelTasaMutacion.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelTasaMutacion.setLayout(new FlowLayout());
-        panelConfig.add(panelTasaMutacion);
+        panelTasaMutacion.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelParametros.add(panelTasaMutacion);
         
         JLabel lblTasaMutacion = new JLabel("Tasa de mutación (%)");
+        lblTasaMutacion.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblTasaMutacion.setForeground(new Color(255, 255, 255));
-        lblTasaMutacion.setFont(new Font("Lato", Font.BOLD, 12));
+        lblTasaMutacion.setFont(new Font("Lato", Font.BOLD, 14));
         panelTasaMutacion.add(lblTasaMutacion);
         
         spMutacion = new JSpinner(new SpinnerNumberModel(20, 0, 100, 1));
+        spMutacion.setPreferredSize(new Dimension(56, 28));
         lblTasaMutacion.setLabelFor(spMutacion);
         spMutacion.setFont(new Font("Lato", Font.BOLD, 12));
         spMutacion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         spMutacion.setToolTipText("Modifica la probabilidad de que muten los genes");
         spMutacion.setName("TasaMutacion");
         panelTasaMutacion.add(spMutacion);
-
+        
         JPanel panelTiempoObjetivo = new JPanel();
+        panelTiempoObjetivo.setMaximumSize(new Dimension(235, 32767));
         panelTiempoObjetivo.setOpaque(false);
         panelTiempoObjetivo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelTiempoObjetivo.setLayout(new FlowLayout());
-        panelConfig.add(panelTiempoObjetivo);
+        panelTiempoObjetivo.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelParametros.add(panelTiempoObjetivo);
         
         JLabel lblTiempoObjetivo = new JLabel("Tiempo objetivo (frames)");
         lblTiempoObjetivo.setForeground(new Color(255, 255, 255));
-        lblTiempoObjetivo.setFont(new Font("Lato", Font.BOLD, 12));
+        lblTiempoObjetivo.setFont(new Font("Lato", Font.BOLD, 14));
         panelTiempoObjetivo.add(lblTiempoObjetivo);
         
         spTiempoObjetivo = new JSpinner(new SpinnerNumberModel(140, 2, 2000, 1));
+        spTiempoObjetivo.setPreferredSize(new Dimension(64, 28));
         lblTiempoObjetivo.setLabelFor(spTiempoObjetivo);
         spTiempoObjetivo.setFont(new Font("Lato", Font.BOLD, 12));
         spTiempoObjetivo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -268,17 +350,20 @@ public class PanelControl {
         panelTiempoObjetivo.add(spTiempoObjetivo);
 
         JPanel panelTiempoVida = new JPanel();
+        panelTiempoVida.setMaximumSize(new Dimension(235, 32767));
+        panelTiempoVida.setMinimumSize(new Dimension(10, 40));
         panelTiempoVida.setOpaque(false);
         panelTiempoVida.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelTiempoVida.setLayout(new FlowLayout());
-        panelConfig.add(panelTiempoVida);
+        panelTiempoVida.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelParametros.add(panelTiempoVida);
         
         JLabel lblTiempoVida = new JLabel("Tiempo de vida (frames)");
         lblTiempoVida.setForeground(new Color(255, 255, 255));
-        lblTiempoVida.setFont(new Font("Lato", Font.BOLD, 12));
+        lblTiempoVida.setFont(new Font("Lato", Font.BOLD, 14));
         panelTiempoVida.add(lblTiempoVida);
         
         spTiempoVida = new JSpinner(new SpinnerNumberModel(400, 10, 2001, 5));
+        spTiempoVida.setPreferredSize(new Dimension(64, 28));
         lblTiempoVida.setLabelFor(spTiempoVida);
         spTiempoVida.setFont(new Font("Lato", Font.BOLD, 12));
         spTiempoVida.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -310,11 +395,16 @@ public class PanelControl {
         panelTotalGeneraciones.setLayout(new BorderLayout());
         panelDatosGeneracion.add(panelTotalGeneraciones);
         
+        JPanel panelTotalGeneracionesTitulo = new JPanel();
+        panelTotalGeneracionesTitulo.setOpaque(false);
+        panelTotalGeneracionesTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelTotalGeneraciones.add(panelTotalGeneracionesTitulo, BorderLayout.NORTH);
+        
         JLabel lblDatosTotalGeneraciones = new JLabel("Datos Totales");
         lblDatosTotalGeneraciones.setForeground(new Color(255, 255, 255));
         lblDatosTotalGeneraciones.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lblDatosTotalGeneraciones.setFont(new Font("Lato", Font.BOLD, 12));
-        panelTotalGeneraciones.add(lblDatosTotalGeneraciones, BorderLayout.NORTH);
+        lblDatosTotalGeneraciones.setFont(new Font("Lato", Font.BOLD, 14));
+        panelTotalGeneracionesTitulo.add(lblDatosTotalGeneraciones);
         
         JPanel panelTotalGeneracionesContenido = new JPanel();
         panelTotalGeneracionesContenido.setOpaque(false);
@@ -356,11 +446,16 @@ public class PanelControl {
         panelGeneracionActual.setLayout(new BorderLayout());
         panelDatosGeneracion.add(panelGeneracionActual);
         
+        JPanel panelGeneracionActualTitulo = new JPanel();
+        panelGeneracionActualTitulo.setOpaque(false);
+        panelGeneracionActualTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelGeneracionActual.add(panelGeneracionActualTitulo, BorderLayout.NORTH);
+        
         JLabel lblDatosGeneracionActual = new JLabel("Datos Última Generación");
         lblDatosGeneracionActual.setForeground(new Color(255, 255, 255));
         lblDatosGeneracionActual.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lblDatosGeneracionActual.setFont(new Font("Lato", Font.BOLD, 12));
-        panelGeneracionActual.add(lblDatosGeneracionActual, BorderLayout.NORTH);
+        lblDatosGeneracionActual.setFont(new Font("Lato", Font.BOLD, 14));
+        panelGeneracionActualTitulo.add(lblDatosGeneracionActual);
         
         JPanel panelGeneracionActualContenido = new JPanel();
         panelGeneracionActualContenido.setOpaque(false);
@@ -404,13 +499,18 @@ public class PanelControl {
         panelDatosEntidad.setLayout(new BorderLayout());
         panelDatos.add(panelDatosEntidad);
         
+        JPanel panelDatosEntidadTitulo = new JPanel();
+        panelDatosEntidadTitulo.setOpaque(false);
+        panelDatosEntidad.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelDatosEntidad.add(panelDatosEntidadTitulo, BorderLayout.NORTH);
+        
         lblEntidad = new JLabel("Entidad: -", SwingConstants.CENTER);
         lblEntidad.setForeground(new Color(255, 255, 255));
-        lblEntidad.setFont(new Font("Lato", Font.BOLD, 12));
+        lblEntidad.setFont(new Font("Lato", Font.BOLD, 14));
         lblEntidad.setName("Entidad");
         lblEntidad.setAlignmentX(Component.CENTER_ALIGNMENT);
         mapaLabels.put(lblEntidad.getName(), lblEntidad);
-        panelDatosEntidad.add(lblEntidad, BorderLayout.NORTH);
+        panelDatosEntidadTitulo.add(lblEntidad);
         
         JPanel panelDatosEntidadContenido = new JPanel();
         panelDatosEntidadContenido.setOpaque(false);
