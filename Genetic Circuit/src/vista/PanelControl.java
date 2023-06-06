@@ -32,8 +32,18 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.EmptyBorder;
 
-public class PanelControl {
+/**
+ * Ventana de Swing que actuará como interfaz de usuario con la que se interactúa con el
+ * programa a través de sus controles y que muestra todo tipo de información sobre el proceso
+ * evolutivo que se lleva a cabo a lo largo de su ejecución.
+ * @author Alberto
+ */
+public class PanelControl extends JFrame {
 	
+	private static final long serialVersionUID = 1L;
+	
+	/* Componentes de la interfaz que deben de poder ser accesibles por otras clases
+	 * desde el controlador, para poder actualizar y manipularla */
 	private JLabel lblGeneracion;
 	private JCheckBox cbModoAutomatico;
 	private JButton btnProceder;
@@ -60,36 +70,67 @@ public class PanelControl {
 	private JLabel lblMejorAptitudActual;
 	private JLabel lblMetasActual;
 	private JLabel lblColisionesActual;
-	
-	private HashMap<String, JLabel> mapaLabels;
-	private JComboBox<String> cBoxCircuito;
 	private JButton btnSalir;
-
-	private Controlador controlador;
 	private JPanel panelDatosEntidad;
-
-
+	private JComboBox<String> cBoxCircuito;
+	
+	/**
+	 * Mapa que contiene los labels cuya información debe de poder ser actualizada
+	 * por el modelo a través del Visualizador cuando se modifiquen los datos.
+	 * Cada label tiene su identificador que establecemos con setName() y que
+	 * utilizamos como clave textual de su entrada del mapa. */
+	private HashMap<String, JLabel> mapaLabels;
+	
+	/**
+	 * El controlador con el que se comunica con el resto de clases del programa
+	 */
+	private Controlador controlador;
+	
+	/**
+	 * Inicializa el panel de control, construyendo a su vez todos sus contenedores y componentes 
+	 * que conforman la interfaz de usuario siguiendo una estructura de capas que define la
+	 * disposición que vemos en pantalla y la estética que tendrá
+	 * @param controlador que se le pasa para conectarlo con el resto del programa */
 	public PanelControl(Controlador controlador) {
 		
 		this.controlador = controlador;
 		
-		// Crear JFrame principal
-        JFrame frmCircuitoGenetico = new JFrame("Circuito Gen\u00E9tico - Panel de Control\r\n");
-        frmCircuitoGenetico.setLocation(new Point(0, 0));
-        frmCircuitoGenetico.setName("frameCircuitoGenetico");
-        frmCircuitoGenetico.setTitle("Circuito Gen\u00E9tico");
-        frmCircuitoGenetico.setIconImage(Toolkit.getDefaultToolkit().getImage(PanelControl.class.getResource("/img/gene_icon.png")));
-        frmCircuitoGenetico.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frmCircuitoGenetico.setResizable(false);
-        mapaLabels = new HashMap<String, JLabel>();
+		mapaLabels = new HashMap<String, JLabel>();
+		
+		//Inicia los atributos del frame del panel de control
+        this.setLocation(new Point(0, 0));
+        this.setName("frameCircuitoGenetico");
+        this.setTitle("Circuito Gen\u00E9tico");
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(PanelControl.class.getResource("/img/gene_icon.png")));
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        
+        initPanelPrincipal();
+        
+        /* Cuando se hayan creado todos los componentes dentro del frame, ajusta el tamaño de la ventana al necesario
+         * para que quepan todos los elementos
+         */
+        this.pack();
+        //Solo queremos centrarlo verticalmente, que quede alineado a la izquierda de la pantalla
+        centrarFrameVerticalmente(); 
+        this.setVisible(true); //Muestra el frame en la pantalla
+	}
 
-        // Crear JPanel principal
+	/**
+	 * Inicia el panel principal que contendrá todos los componentes del frame
+	 */
+	private void initPanelPrincipal() {
+		
+		//Panel que hace de fondo de la interfaz, el contenedor principal
+		
         JPanel panelPrincipal = new JPanel();
         panelPrincipal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
         panelPrincipal.setBackground(new Color(46, 10, 84));
         panelPrincipal.setLayout(new BorderLayout(0, 0));
-        frmCircuitoGenetico.setContentPane(panelPrincipal);
-
+        this.setContentPane(panelPrincipal);
+        
+        //Panel que hace de encabezado y en el que se muestra el título
+        
         JPanel panelTop = new JPanel();
         panelTop.setOpaque(false);
         panelPrincipal.add(panelTop, BorderLayout.NORTH);
@@ -104,6 +145,8 @@ public class PanelControl {
         lblTitulo.setForeground(new Color(255, 255, 255));
         lblTitulo.setFont(new Font("Lato", Font.BOLD, 18));
         panelTop.add(lblTitulo);
+        
+        //Bordes alrededor del contenido de la interfaz
         
         JPanel bordeIzq = new JPanel();
         bordeIzq.setPreferredSize(new Dimension(15, 10));
@@ -120,146 +163,213 @@ public class PanelControl {
         bordeAbajo.setOpaque(false);
         panelPrincipal.add(bordeAbajo, BorderLayout.SOUTH);
         
-        JPanel panelContenido = new JPanel();
+        initPanelContenido(panelPrincipal);
+	}
+
+	/**
+	 * Inicia el panel en el que se muestra todo el contenido interactivo de la interfaz.
+	 * Este panel contendrá tres secciones distintas que agrupan componentes relacionados entre sí
+	 * @param panelPrincipal
+	 */
+	private void initPanelContenido(JPanel panelPrincipal) {
+		
+		//Panel que contiene las tres secciones
+		
+		JPanel panelContenido = new JPanel();
         panelContenido.setOpaque(false);
         panelContenido.setLayout(new BoxLayout(panelContenido, BoxLayout.Y_AXIS));
         panelPrincipal.add(panelContenido, BorderLayout.CENTER);
         
-        // Primera sección
-        JPanel panelControles = new JPanel();
-        panelControles.setMaximumSize(new Dimension(32767, 150));
-        panelControles.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Controles", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(255, 255, 255)));
-        panelControles.setBackground(new Color(99, 9, 177));
-        panelControles.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelControles.setLayout(new BoxLayout(panelControles, BoxLayout.Y_AXIS));
-        panelContenido.add(panelControles);
+        //Inicia cada una de las secciones y les añade espacio entre ellas
         
-        JPanel panelGeneracion = new JPanel();
-        panelGeneracion.setPreferredSize(new Dimension(10, 25));
-        panelGeneracion.setMinimumSize(new Dimension(10, 25));
-        panelGeneracion.setMaximumSize(new Dimension(32767, 25));
-        panelGeneracion.setOpaque(false);
-        panelGeneracion.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelGeneracion.setLayout(new FlowLayout());
-        panelControles.add(panelGeneracion);
-        
-        lblGeneracion = new JLabel("Generación: 0");
-        lblGeneracion.setVerticalAlignment(SwingConstants.TOP);
-        lblGeneracion.setForeground(new Color(255, 255, 255));
-        lblGeneracion.setFont(new Font("Lato", Font.BOLD, 16));
-        lblGeneracion.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lblGeneracion.setName("Generacion");
-        mapaLabels.put(lblGeneracion.getName(), lblGeneracion);
-        panelGeneracion.add(lblGeneracion);
-
-        JPanel panelModoAutomatico = new JPanel();
-        panelModoAutomatico.setMinimumSize(new Dimension(10, 28));
-        panelModoAutomatico.setPreferredSize(new Dimension(10, 25));
-        panelModoAutomatico.setMaximumSize(new Dimension(32767, 28));
-        panelModoAutomatico.setOpaque(false);
-        panelModoAutomatico.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelModoAutomatico.setLayout(new FlowLayout());
-        panelControles.add(panelModoAutomatico);
-        
-        cbModoAutomatico = new JCheckBox("Modo Automático");
-        cbModoAutomatico.setOpaque(false);
-        cbModoAutomatico.setVerticalTextPosition(SwingConstants.BOTTOM);
-        cbModoAutomatico.setPreferredSize(new Dimension(140, 21));
-        cbModoAutomatico.setHorizontalAlignment(SwingConstants.TRAILING);
-        cbModoAutomatico.setHorizontalTextPosition(SwingConstants.LEADING);
-        cbModoAutomatico.setForeground(new Color(255, 255, 255));
-        cbModoAutomatico.setFont(new Font("Lato", Font.BOLD, 14));
-        cbModoAutomatico.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        cbModoAutomatico.setToolTipText("");
-        cbModoAutomatico.setFocusable(false);
-        panelModoAutomatico.add(cbModoAutomatico);
-        
-        JPanel panelProceder = new JPanel();
-        panelProceder.setMinimumSize(new Dimension(10, 35));
-        panelProceder.setPreferredSize(new Dimension(0, 35));
-        panelProceder.setMaximumSize(new Dimension(32767, 35));
-        panelProceder.setOpaque(false);
-        panelProceder.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelProceder.setLayout(new FlowLayout());
-        panelControles.add(panelProceder);
-        
-        btnProceder = new JButton("Empezar");
-        btnProceder.setVerticalAlignment(SwingConstants.TOP);
-        btnProceder.setPreferredSize(new Dimension(200, 28));
-        btnProceder.setFont(new Font("Lato", Font.BOLD, 16));
-        btnProceder.setBackground(new Color(141, 71, 201));
-        btnProceder.setForeground(new Color(255, 255, 255));
-        btnProceder.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnProceder.setToolTipText("Comienza una nueva generaci\u00F3n ");
-        btnProceder.setFocusable(false);
-        panelProceder.add(btnProceder);
-
-        JPanel panelPausar = new JPanel();
-        panelPausar.setMinimumSize(new Dimension(10, 35));
-        panelPausar.setPreferredSize(new Dimension(0, 35));
-        panelPausar.setMaximumSize(new Dimension(32767, 35));
-        panelPausar.setOpaque(false);
-        panelPausar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelPausar.setLayout(new FlowLayout());
-        panelControles.add(panelPausar);
-        
-        btnPausar = new JButton("Pausar");
-        btnPausar.setVerticalAlignment(SwingConstants.TOP);
-        btnPausar.setPreferredSize(new Dimension(200, 28));
-        btnPausar.setFont(new Font("Lato", Font.BOLD, 16));
-        btnPausar.setBackground(new Color(141, 71, 201));
-        btnPausar.setForeground(new Color(255, 255, 255));
-        btnPausar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnPausar.setToolTipText("Pausa/Reanuda el movimiento de las entidades");
-        btnPausar.setFocusable(false);
-        btnPausar.setEnabled(false);
-        panelPausar.add(btnPausar);
-        
-        JPanel panelReiniciar = new JPanel();
-        panelReiniciar.setMinimumSize(new Dimension(10, 35));
-        panelReiniciar.setPreferredSize(new Dimension(0, 35));
-        panelReiniciar.setMaximumSize(new Dimension(32767, 35));
-        panelReiniciar.setOpaque(false);
-        panelReiniciar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelReiniciar.setLayout(new FlowLayout());
-        panelControles.add(panelReiniciar);
-        
-        btnReiniciar = new JButton("Reiniciar");
-        btnReiniciar.setVerticalAlignment(SwingConstants.TOP);
-        btnReiniciar.setPreferredSize(new Dimension(200, 28));
-        btnReiniciar.setFont(new Font("Lato", Font.BOLD, 16));
-        btnReiniciar.setBackground(new Color(141, 71, 201));
-        btnReiniciar.setForeground(new Color(255, 255, 255));
-        btnReiniciar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnReiniciar.setToolTipText("Termina de ejecutar el proceso evolutivo y vuelve al estado inicial");
-        btnReiniciar.setFocusable(false);
-        btnReiniciar.setEnabled(false);
-        panelReiniciar.add(btnReiniciar);
-        
-        JPanel panelSalir = new JPanel();
-        panelSalir.setMinimumSize(new Dimension(10, 40));
-        panelSalir.setPreferredSize(new Dimension(0, 35));
-        panelSalir.setMaximumSize(new Dimension(32767, 35));
-        panelSalir.setOpaque(false);
-        panelSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelSalir.setLayout(new FlowLayout());
-        panelControles.add(panelSalir);
-        
-        btnSalir = new JButton("Salir");
-        btnSalir.setVerticalAlignment(SwingConstants.TOP);
-        btnSalir.setPreferredSize(new Dimension(200, 28));
-        btnSalir.setFont(new Font("Lato", Font.BOLD, 16));
-        btnSalir.setBackground(new Color(141, 71, 201));
-        btnSalir.setForeground(new Color(255, 255, 255));
-        btnSalir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnSalir.setToolTipText("Cierra el programa");
-        btnSalir.setFocusable(false);
-        panelSalir.add(btnSalir);
+        initPanelControles(panelContenido);
  
+        //Separador entre secciones
         Component separador1 = Box.createVerticalStrut(10);
         panelContenido.add(separador1);
         
-        // Segunda sección
+        initPanelConfiguracion(panelContenido);
+
+        Component separador2 = Box.createVerticalStrut(10);
+        panelContenido.add(separador2);
+        
+        initPanelMonitorizacion(panelContenido);
+	}
+
+	/**
+	 * Inicia el panel que contiene todos los botones para interaccionar con el flujo de ejecución del programa
+	 * y donde se muestra el número de generaciones
+	 * @param panelContenido
+	 */
+	private void initPanelControles(JPanel panelContenido) {
+
+		//Primera sección
+		
+		JPanel panelControles = new JPanel();
+		panelControles.setMaximumSize(new Dimension(32767, 150));
+		panelControles.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Controles", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(255, 255, 255)));
+		panelControles.setBackground(new Color(99, 9, 177));
+		panelControles.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelControles.setLayout(new BoxLayout(panelControles, BoxLayout.Y_AXIS));
+		panelContenido.add(panelControles);
+
+		//Se encapsula cada componente en su respectivo panel para facilitar la disposición de la interfaz
+		
+		JPanel panelGeneracion = new JPanel();
+		panelGeneracion.setPreferredSize(new Dimension(10, 25));
+		panelGeneracion.setMinimumSize(new Dimension(10, 25));
+		panelGeneracion.setMaximumSize(new Dimension(32767, 25));
+		panelGeneracion.setOpaque(false);
+		panelGeneracion.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelGeneracion.setLayout(new FlowLayout());
+		panelControles.add(panelGeneracion);
+
+		//Label que muestra el número de generaciones
+		
+		lblGeneracion = new JLabel("Generación: 0");
+		lblGeneracion.setVerticalAlignment(SwingConstants.TOP);
+		lblGeneracion.setForeground(new Color(255, 255, 255));
+		lblGeneracion.setFont(new Font("Lato", Font.BOLD, 16));
+		lblGeneracion.setAlignmentX(Component.CENTER_ALIGNMENT);
+		/* Todos los labels cuyo valor deba actualizarse desde el controlador deben declarar un
+		 * nombre que haga de identificador. El label se introducirá en el mapa de labels, siendo
+		 * su clave el identificador que hemos establecido y el valor el propio label. De esta 
+		 * forma se puede accedera él a través de su nombre, lo que posibilita no tener que
+		 * conocer el "campo" que se debe actualizar desde otras clases y que se pueda generalizar
+		 * todas las actualizaciones de la interfaz en ún solo método
+		 */
+		lblGeneracion.setName("Generacion");
+		mapaLabels.put(lblGeneracion.getName(), lblGeneracion);
+		panelGeneracion.add(lblGeneracion);
+
+		JPanel panelModoAutomatico = new JPanel();
+		panelModoAutomatico.setMinimumSize(new Dimension(10, 28));
+		panelModoAutomatico.setPreferredSize(new Dimension(10, 25));
+		panelModoAutomatico.setMaximumSize(new Dimension(32767, 28));
+		panelModoAutomatico.setOpaque(false);
+		panelModoAutomatico.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelModoAutomatico.setLayout(new FlowLayout());
+		panelControles.add(panelModoAutomatico);
+		
+		//Checkbox que activa o desactiva el modo automático
+		
+		cbModoAutomatico = new JCheckBox("Modo Automático");
+		cbModoAutomatico.setOpaque(false);
+		cbModoAutomatico.setVerticalTextPosition(SwingConstants.BOTTOM);
+		cbModoAutomatico.setPreferredSize(new Dimension(140, 21));
+		cbModoAutomatico.setHorizontalAlignment(SwingConstants.TRAILING);
+		cbModoAutomatico.setHorizontalTextPosition(SwingConstants.LEADING);
+		cbModoAutomatico.setForeground(new Color(255, 255, 255));
+		cbModoAutomatico.setFont(new Font("Lato", Font.BOLD, 14));
+		cbModoAutomatico.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		cbModoAutomatico.setToolTipText("");
+		cbModoAutomatico.setFocusable(false);
+		panelModoAutomatico.add(cbModoAutomatico);
+
+		JPanel panelProceder = new JPanel();
+		panelProceder.setMinimumSize(new Dimension(10, 35));
+		panelProceder.setPreferredSize(new Dimension(0, 35));
+		panelProceder.setMaximumSize(new Dimension(32767, 35));
+		panelProceder.setOpaque(false);
+		panelProceder.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelProceder.setLayout(new FlowLayout());
+		panelControles.add(panelProceder);
+		
+		/* Botón que al inicio del programa muestra el texto "Empezar" y comienza el proceso.
+		 * Después de eso se transoforma a "Siguiente" y su función es continuar el proceso 
+		 * cuando termina cada generación (si no está el modo automático activado).
+		 * Una vez se reincie el proceso, vuelve a actuar como botón de empezar.
+		 */
+		
+		btnProceder = new JButton("Empezar");
+		btnProceder.setVerticalAlignment(SwingConstants.TOP);
+		btnProceder.setPreferredSize(new Dimension(200, 28));
+		btnProceder.setFont(new Font("Lato", Font.BOLD, 16));
+		btnProceder.setBackground(new Color(141, 71, 201));
+		btnProceder.setForeground(new Color(255, 255, 255));
+		btnProceder.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnProceder.setToolTipText("Comienza una nueva generaci\u00F3n ");
+		btnProceder.setFocusable(false);
+		panelProceder.add(btnProceder);
+
+		JPanel panelPausar = new JPanel();
+		panelPausar.setMinimumSize(new Dimension(10, 35));
+		panelPausar.setPreferredSize(new Dimension(0, 35));
+		panelPausar.setMaximumSize(new Dimension(32767, 35));
+		panelPausar.setOpaque(false);
+		panelPausar.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelPausar.setLayout(new FlowLayout());
+		panelControles.add(panelPausar);
+		
+		//Botón que pausa o reanuda el proceso según esté parado o no
+		
+		btnPausar = new JButton("Pausar");
+		btnPausar.setVerticalAlignment(SwingConstants.TOP);
+		btnPausar.setPreferredSize(new Dimension(200, 28));
+		btnPausar.setFont(new Font("Lato", Font.BOLD, 16));
+		btnPausar.setBackground(new Color(141, 71, 201));
+		btnPausar.setForeground(new Color(255, 255, 255));
+		btnPausar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnPausar.setToolTipText("Pausa/Reanuda el movimiento de las entidades");
+		btnPausar.setFocusable(false);
+		btnPausar.setEnabled(false);
+		panelPausar.add(btnPausar);
+
+		JPanel panelReiniciar = new JPanel();
+		panelReiniciar.setMinimumSize(new Dimension(10, 35));
+		panelReiniciar.setPreferredSize(new Dimension(0, 35));
+		panelReiniciar.setMaximumSize(new Dimension(32767, 35));
+		panelReiniciar.setOpaque(false);
+		panelReiniciar.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelReiniciar.setLayout(new FlowLayout());
+		panelControles.add(panelReiniciar);
+
+		//Botón que reinicia el proceso y devuelve al programa a su estado inicial
+		
+		btnReiniciar = new JButton("Reiniciar");
+		btnReiniciar.setVerticalAlignment(SwingConstants.TOP);
+		btnReiniciar.setPreferredSize(new Dimension(200, 28));
+		btnReiniciar.setFont(new Font("Lato", Font.BOLD, 16));
+		btnReiniciar.setBackground(new Color(141, 71, 201));
+		btnReiniciar.setForeground(new Color(255, 255, 255));
+		btnReiniciar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnReiniciar.setToolTipText("Termina de ejecutar el proceso evolutivo y vuelve al estado inicial");
+		btnReiniciar.setFocusable(false);
+		btnReiniciar.setEnabled(false);
+		panelReiniciar.add(btnReiniciar);
+
+		JPanel panelSalir = new JPanel();
+		panelSalir.setMinimumSize(new Dimension(10, 40));
+		panelSalir.setPreferredSize(new Dimension(0, 35));
+		panelSalir.setMaximumSize(new Dimension(32767, 35));
+		panelSalir.setOpaque(false);
+		panelSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panelSalir.setLayout(new FlowLayout());
+		panelControles.add(panelSalir);
+
+		//Botón que cierra el programa
+		
+		btnSalir = new JButton("Salir");
+		btnSalir.setVerticalAlignment(SwingConstants.TOP);
+		btnSalir.setPreferredSize(new Dimension(200, 28));
+		btnSalir.setFont(new Font("Lato", Font.BOLD, 16));
+		btnSalir.setBackground(new Color(141, 71, 201));
+		btnSalir.setForeground(new Color(255, 255, 255));
+		btnSalir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnSalir.setToolTipText("Cierra el programa");
+		btnSalir.setFocusable(false);
+		panelSalir.add(btnSalir);
+	}
+	
+	/**
+	 * Inicia el panel que contiene inputs para que el usuario pueda alterar el proceso, modificando
+	 * valores de parámetros de la población o cambiando de circuito
+	 * @param panelContenido
+	 */
+	private void initPanelConfiguracion(JPanel panelContenido) {
+		
+		//Segunda seccion
+		
         JPanel panelConfig = new JPanel();
         panelConfig.setMaximumSize(new Dimension(350, 32767));
         panelConfig.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Configuraci\u00F3n", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(255, 255, 255)));
@@ -287,6 +397,12 @@ public class PanelControl {
         lblCircuito.setLabelFor(cBoxCircuito);
         panelCircuito.add(lblCircuito);
         
+        /* Combo box que abre una lista de circuitos seleccionables para el proceso.
+         * Rellena la lista obteniendo los circuitos de los ficheros de recursos 
+         * contenidos en el proyecto. Se cargarán en el modelo y la ventana cuando
+         * se cambie el que está seleccionado
+         */
+        
         cBoxCircuito = rellenarCboxCircuito();
         cBoxCircuito.setPreferredSize(new Dimension(164, 26));
         cBoxCircuito.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -304,10 +420,17 @@ public class PanelControl {
         panelPoblacionTotal.setLayout(new FlowLayout(FlowLayout.LEFT));
         panelParametros.add(panelPoblacionTotal);
         
+        /* Spinners que permiten introducir un valor para modificar un determinado parámetro
+         * del proceso. Se pueden incrementar o decrementar en intervalos especificados y dentro
+         * de unos límites inferiores y superiores.
+         */    
+        
         JLabel lblPoblacionTotal = new JLabel("Población total");
         lblPoblacionTotal.setForeground(new Color(255, 255, 255));
         lblPoblacionTotal.setFont(new Font("Lato", Font.BOLD, 14));
         panelPoblacionTotal.add(lblPoblacionTotal);
+        
+        //Spinner que permite modificar el número de entidades de la población.
         
         spPoblacion = new JSpinner(new SpinnerNumberModel(1000, 4, 15000, 50));
         spPoblacion.setPreferredSize(new Dimension(72, 28));
@@ -331,6 +454,8 @@ public class PanelControl {
         lblTasaMutacion.setFont(new Font("Lato", Font.BOLD, 14));
         panelTasaMutacion.add(lblTasaMutacion);
         
+        //Spinner que permite modificar el número de entidades de la población.
+        
         spMutacion = new JSpinner(new SpinnerNumberModel(20, 0, 100, 1));
         spMutacion.setPreferredSize(new Dimension(56, 28));
         lblTasaMutacion.setLabelFor(spMutacion);
@@ -351,6 +476,8 @@ public class PanelControl {
         lblTiempoObjetivo.setForeground(new Color(255, 255, 255));
         lblTiempoObjetivo.setFont(new Font("Lato", Font.BOLD, 14));
         panelTiempoObjetivo.add(lblTiempoObjetivo);
+        
+        //Spinner que permite modificar el objetivo de tiempo que deben alcanzar las entidades
         
         spTiempoObjetivo = new JSpinner(new SpinnerNumberModel(140, 2, 2000, 1));
         spTiempoObjetivo.setPreferredSize(new Dimension(64, 28));
@@ -374,6 +501,8 @@ public class PanelControl {
         lblTiempoVida.setFont(new Font("Lato", Font.BOLD, 14));
         panelTiempoVida.add(lblTiempoVida);
         
+        //Spinner que permite modificar el tiempo de vida de las entidades en frames
+        
         spTiempoVida = new JSpinner(new SpinnerNumberModel(400, 10, 2001, 5));
         spTiempoVida.setPreferredSize(new Dimension(64, 28));
         lblTiempoVida.setLabelFor(spTiempoVida);
@@ -382,18 +511,21 @@ public class PanelControl {
         spTiempoVida.setToolTipText("Modifica el tiempo en frames que viven las entidades");
         spTiempoVida.setName("TiempoVida");
         panelTiempoVida.add(spTiempoVida);
-
-        Component separador2 = Box.createVerticalStrut(10);
-        panelContenido.add(separador2);
-        
-        // Tercera sección
-        
-        JPanel panelDatos = new JPanel();
-        panelDatos.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Monitorizaci\u00F3n", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(255, 255, 255)));
-        panelDatos.setBackground(new Color(99, 9, 177));
-        panelDatos.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelDatos.setLayout(new BoxLayout(panelDatos, BoxLayout.Y_AXIS));
-        panelContenido.add(panelDatos);
+	}
+	
+	/**
+	 * Inicia el panel que contiene información en tiempo real sobre el proceso evolutivo, tanto en
+	 * total como cada generación. También muestra los datos de una entidad que esté siendo 
+	 * monitorizada
+	 * @param panelContenido
+	 */
+	private void initPanelMonitorizacion(JPanel panelContenido) {
+		JPanel panelMonitorizacion = new JPanel();
+        panelMonitorizacion.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Monitorizaci\u00F3n", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(255, 255, 255)));
+        panelMonitorizacion.setBackground(new Color(99, 9, 177));
+        panelMonitorizacion.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelMonitorizacion.setLayout(new BoxLayout(panelMonitorizacion, BoxLayout.Y_AXIS));
+        panelContenido.add(panelMonitorizacion);
         
         JPanel panelDatosGeneracion = new JPanel();
         panelDatosGeneracion.setBackground(new Color(99, 9, 177));
@@ -401,7 +533,7 @@ public class PanelControl {
         panelDatosGeneracion.setOpaque(false);
         panelDatosGeneracion.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelDatosGeneracion.setLayout(new BoxLayout(panelDatosGeneracion, BoxLayout.X_AXIS));
-        panelDatos.add(panelDatosGeneracion);
+        panelMonitorizacion.add(panelDatosGeneracion);
         
         JPanel panelTotalGeneraciones = new JPanel();
         panelTotalGeneraciones.setBorder(new LineBorder(new Color(169, 58, 222)));
@@ -410,7 +542,23 @@ public class PanelControl {
         panelTotalGeneraciones.setLayout(new BorderLayout());
         panelDatosGeneracion.add(panelTotalGeneraciones);
         
-        JPanel panelTotalGeneracionesTitulo = new JPanel();
+        //Inicia cada sección donde se monitorizan datos distintos
+        
+        initDatosTotales(panelTotalGeneraciones);
+
+        initDatosGeneracionActual(panelDatosGeneracion);
+        
+        initDatosEntidad(panelMonitorizacion);
+	}
+
+	/**
+	 * Inicia el panel que muestra información sobre el proceso evolutivo a lo largo de
+	 * todas las generaciones hasta el momento
+	 * @param panelTotalGeneraciones
+	 */
+	private void initDatosTotales(JPanel panelTotalGeneraciones) {
+		
+		JPanel panelTotalGeneracionesTitulo = new JPanel();
         panelTotalGeneracionesTitulo.setBorder(new LineBorder(new Color(154, 18, 218)));
         panelTotalGeneracionesTitulo.setOpaque(false);
         panelTotalGeneracionesTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -435,6 +583,8 @@ public class PanelControl {
         panelTotalGeneracionesContenido.setLayout(new BoxLayout(panelTotalGeneracionesContenido,BoxLayout.Y_AXIS));
         panelTotalGeneraciones.add(panelTotalGeneracionesContenido, BorderLayout.CENTER);
         
+        //Muestra el mejor tiempo obtenido por alguna entidad hasta el momento
+        
         lblTiempoRecord = new JLabel("Tiempo record: 0");
         lblTiempoRecord.setBorder(new EmptyBorder(0, 3, 0, 3));
         lblTiempoRecord.setPreferredSize(new Dimension(93, 20));
@@ -444,6 +594,8 @@ public class PanelControl {
         lblTiempoRecord.setName("TiempoRecord");
         mapaLabels.put(lblTiempoRecord.getName(), lblTiempoRecord);
         panelTotalGeneracionesContenido.add(lblTiempoRecord);
+        
+        //Muestra la mejor aptitud obtenida por alguna entidad hasta el momento
         
         lblMejorAptitud = new JLabel("Mejor aptitud: 0");
         lblMejorAptitud.setBorder(new EmptyBorder(0, 3, 0, 3));
@@ -455,6 +607,8 @@ public class PanelControl {
         mapaLabels.put(lblMejorAptitud.getName(), lblMejorAptitud);
         panelTotalGeneracionesContenido.add(lblMejorAptitud);
         
+        //Muestra el recuento total de veces que las entidades han llegado a la meta
+        
         lblMetas = new JLabel("Metas alcanzadas: 0");
         lblMetas.setBorder(new EmptyBorder(0, 3, 0, 3));
         lblMetas.setMaximumSize(new Dimension(140, 20));
@@ -465,6 +619,8 @@ public class PanelControl {
         mapaLabels.put(lblMetas.getName(), lblMetas);
         panelTotalGeneracionesContenido.add(lblMetas);
         
+        //Muestra el recuento total de veces que las entidades han chocado con obstáculos
+        
         lblColisiones = new JLabel("Colisiones: 0");
         lblColisiones.setBorder(new EmptyBorder(0, 3, 0, 3));
         lblColisiones.setPreferredSize(new Dimension(73, 20));
@@ -474,8 +630,14 @@ public class PanelControl {
         lblColisiones.setName("Colisiones");
         mapaLabels.put(lblColisiones.getName(), lblColisiones);
         panelTotalGeneracionesContenido.add(lblColisiones);
-
-        JPanel panelGeneracionActual = new JPanel();
+	}
+	
+	/**
+	 * Inicia el panel que muestra información sobre la generación actual del proceso
+	 * @param panelDatosGeneracion
+	 */
+	private void initDatosGeneracionActual(JPanel panelDatosGeneracion) {
+		JPanel panelGeneracionActual = new JPanel();
         panelGeneracionActual.setBorder(new LineBorder(new Color(169, 58, 222)));
         panelGeneracionActual.setOpaque(false);
         panelGeneracionActual.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -506,6 +668,8 @@ public class PanelControl {
         panelGeneracionActualContenido.setLayout(new BoxLayout(panelGeneracionActualContenido,BoxLayout.Y_AXIS));
         panelGeneracionActual.add(panelGeneracionActualContenido, BorderLayout.CENTER);
         
+        //Muestra el mejor tiempo obtenido por alguna entidad en la generación actual
+        
         lblTiempoRecordActual = new JLabel("Tiempo record: 0");
         lblTiempoRecordActual.setBorder(new EmptyBorder(0, 3, 0, 3));
         lblTiempoRecordActual.setMaximumSize(new Dimension(140, 20));
@@ -515,6 +679,8 @@ public class PanelControl {
         lblTiempoRecordActual.setName("TiempoRecordActual");
         mapaLabels.put(lblTiempoRecordActual.getName(), lblTiempoRecordActual);
         panelGeneracionActualContenido.add(lblTiempoRecordActual);
+        
+        //Muestra la mejor aptitud obtenida por alguna entidad en la generación actual
         
         lblMejorAptitudActual = new JLabel("Mejor aptitud: 0");
         lblMejorAptitudActual.setBorder(new EmptyBorder(0, 3, 0, 3));
@@ -526,6 +692,9 @@ public class PanelControl {
         mapaLabels.put(lblMejorAptitudActual.getName(), lblMejorAptitudActual);
         panelGeneracionActualContenido.add(lblMejorAptitudActual);
         
+        /* Muestra el recuento de veces que las entidades han llegado a la meta
+         * en la generación actual */
+        
         lblMetasActual = new JLabel("Metas alcanzadas: 0");
         lblMetasActual.setBorder(new EmptyBorder(0, 3, 0, 3));
         lblMetasActual.setPreferredSize(new Dimension(112, 20));
@@ -536,6 +705,9 @@ public class PanelControl {
         mapaLabels.put(lblMetasActual.getName(), lblMetasActual);
         panelGeneracionActualContenido.add(lblMetasActual);
         
+        /* Muestra el recuento de veces que las entidades han chocado con obstáculo
+         * en la generación actual */
+        
         lblColisionesActual = new JLabel("Colisiones: 0");
         lblColisionesActual.setBorder(new EmptyBorder(0, 3, 0, 3));
         lblColisionesActual.setPreferredSize(new Dimension(73, 20));
@@ -545,15 +717,22 @@ public class PanelControl {
         lblColisionesActual.setName("ColisionesActual");
         mapaLabels.put(lblColisionesActual.getName(), lblColisionesActual);
         panelGeneracionActualContenido.add(lblColisionesActual);
-        
-        panelDatosEntidad = new JPanel();
+	}
+	
+	/**
+	 * Inicia el panel que muestra información sobre una entidad que esté siendo monitorizada
+	 * en ese momento tras seleccionarla en la venta, si es que hay alguna
+	 * @param panelDatosGeneracion
+	 */
+	private void initDatosEntidad(JPanel panelMonitorizacion) {
+		panelDatosEntidad = new JPanel();
         panelDatosEntidad.setMaximumSize(new Dimension(350, 32767));
         panelDatosEntidad.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
         panelDatosEntidad.setOpaque(true);
         panelDatosEntidad.setBackground(new Color(99, 9, 177));
         panelDatosEntidad.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelDatosEntidad.setLayout(new BorderLayout());
-        panelDatos.add(panelDatosEntidad);
+        panelMonitorizacion.add(panelDatosEntidad);
         
         JPanel panelDatosEntidadTitulo = new JPanel();
         panelDatosEntidadTitulo.setMaximumSize(new Dimension(350, 32767));
@@ -562,6 +741,9 @@ public class PanelControl {
         panelDatosEntidadTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelDatosEntidadTitulo.setLayout(new BoxLayout(panelDatosEntidadTitulo, BoxLayout.Y_AXIS));
         panelDatosEntidad.add(panelDatosEntidadTitulo, BorderLayout.NORTH);
+        
+        /* Muestra el número identificador de la entidad que esta siendo actualmente monitorizada,
+         * es decir, su índice dentro de la población*/
         
         lblEntidad = new JLabel("Entidad: -", SwingConstants.CENTER);
         lblEntidad.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -589,6 +771,8 @@ public class PanelControl {
         panelParamsEntidad.setLayout(new BoxLayout(panelParamsEntidad, BoxLayout.Y_AXIS));
         panelDatosEntidadContenido.add(panelParamsEntidad);
         
+        //Muestra la posición actual de la entidad en el eje de coordenadas de la ventana 
+        
         lblPosicion = new JLabel("Posicion: (0,0)");
         lblPosicion.setPreferredSize(new Dimension(102, 20));
         lblPosicion.setMinimumSize(new Dimension(102, 20));
@@ -598,6 +782,8 @@ public class PanelControl {
         lblPosicion.setName("Posicion");
         mapaLabels.put(lblPosicion.getName(), lblPosicion);
         panelParamsEntidad.add(lblPosicion);
+        
+        //Muestra la velocidad actual de la entidad en el eje de coordenadas de la ventana 
         
         lblVelocidad = new JLabel("Velocidad: (0,0)");
         lblVelocidad.setMaximumSize(new Dimension(180, 20));
@@ -609,6 +795,8 @@ public class PanelControl {
         mapaLabels.put(lblVelocidad.getName(), lblVelocidad);
         panelParamsEntidad.add(lblVelocidad);
         
+        //Muestra la aceleración actual de la entidad en el eje de coordenadas de la ventana 
+        
         lblAceleracion = new JLabel("Aceleración: (0,0)");
         lblAceleracion.setMinimumSize(new Dimension(118, 20));
         lblAceleracion.setMaximumSize(new Dimension(180, 20));
@@ -618,6 +806,8 @@ public class PanelControl {
         lblAceleracion.setName("Aceleracion");
         mapaLabels.put(lblAceleracion.getName(), lblAceleracion);
         panelParamsEntidad.add(lblAceleracion);
+        
+        //Muestra la distancia actual a la que se encuentra la entidad sobre la meta 
         
         lblDistancia = new JLabel("Distancia: 0");
         lblDistancia.setMaximumSize(new Dimension(120, 20));
@@ -629,6 +819,8 @@ public class PanelControl {
         mapaLabels.put(lblDistancia.getName(), lblDistancia);
         panelParamsEntidad.add(lblDistancia);
         
+        //Muestra la distancia más cercana a la que ha estado la entidad sobre la meta 
+        
         lblDistMinEntidad = new JLabel("Distancia mínima: 0");
         lblDistMinEntidad.setMaximumSize(new Dimension(180, 20));
         lblDistMinEntidad.setMinimumSize(new Dimension(110, 20));
@@ -638,6 +830,8 @@ public class PanelControl {
         lblDistMinEntidad.setName("DistanciaMinEntidad");
         mapaLabels.put(lblDistMinEntidad.getName(), lblDistMinEntidad);
         panelParamsEntidad.add(lblDistMinEntidad);
+        
+        //Muestra en qué estado se encuentra la entidad (activa, llegado, chocado)
         
         lblEstado = new JLabel("Estado: -");
         lblEstado.setMaximumSize(new Dimension(100, 20));
@@ -649,6 +843,9 @@ public class PanelControl {
         mapaLabels.put(lblEstado.getName(), lblEstado);
         panelParamsEntidad.add(lblEstado);
         
+        /* Muestra el tiempo en llegar a la meta que ha obtenido la entidad al acabar 
+         * su ciclo de vida, que de no haberlo conseguido, será su tiempo de vida */
+        
         lblTiempoEntidad = new JLabel("Tiempo obtenido: 0");
         lblTiempoEntidad.setMinimumSize(new Dimension(106, 20));
         lblTiempoEntidad.setMaximumSize(new Dimension(130, 20));
@@ -659,6 +856,9 @@ public class PanelControl {
         mapaLabels.put(lblTiempoEntidad.getName(), lblTiempoEntidad);
         panelParamsEntidad.add(lblTiempoEntidad);
         
+        /* Muestra la aptitud que ha obtenido la entidad al acabar su ciclo de vida tras
+         * realizarse el proceso de selección y haber sido evaluada */
+        
         lblAptitudEntidad = new JLabel("Aptitud: 0");
         lblAptitudEntidad.setMinimumSize(new Dimension(50, 20));
         lblAptitudEntidad.setMaximumSize(new Dimension(110, 20));
@@ -668,19 +868,6 @@ public class PanelControl {
         lblAptitudEntidad.setName("AptitudEntidad");
         mapaLabels.put(lblAptitudEntidad.getName(), lblAptitudEntidad);
         panelParamsEntidad.add(lblAptitudEntidad);
-
-        // Mostrar la ventana
-        frmCircuitoGenetico.pack();
-        // Obtener el alto de la pantalla
-        Dimension dimensionesPantalla = Toolkit.getDefaultToolkit().getScreenSize();
-        int altoPantalla = dimensionesPantalla.height;
-        // Obtener el alto del JFrame
-        int altoFrame = frmCircuitoGenetico.getHeight();
-        // Calcular la posición vertical para centrar el JFrame
-        int y = (altoPantalla - altoFrame) / 2;
-        // Establecer la posición del JFrame centrado verticalmente
-        frmCircuitoGenetico.setLocation(frmCircuitoGenetico.getX(), y);
-        frmCircuitoGenetico.setVisible(true);
 	}
 	
 	/**
@@ -748,6 +935,26 @@ public class PanelControl {
 		}
 		//Si no se pasan los items en forma de ComboBoxModel el WindowBuilder no lo reconoce
 		return new JComboBox<String>(new DefaultComboBoxModel<String>(circuitos));
+	}
+	
+	/**
+	 * Centra el frame del panel de control sólo verticalmente respecto a la
+	 * pantalla y mantiene la posición horizontal de la ventana.
+	 */
+	private void centrarFrameVerticalmente() {
+		//Obtiene el alto de la pantalla a partir de sus dimensiones
+        Dimension dimensionesPantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        int altoPantalla = dimensionesPantalla.height;
+        /* Obtiene el alto del frame, que dependerá del tamaño que ocupen los componentes
+         * dentro de la ventana al ajustarse automáticamente con pack(); */
+        int altoFrame = this.getHeight();
+        /* Calcula el punto donde la ventana estará alineada en el centro verticalmente,
+         * a partir de obtener el punto medio del alto de la ventana menos el punto medio
+         * del alto del frame, que nos daría la siguiente fórmula */
+        int y = (altoPantalla - altoFrame) / 2;
+        /* Establece la posición del frame en la coordenada x que ya tenía y la coordenada y
+         * que hemos calculado y que coloca el frame centrado en vertical */
+        this.setLocation(this.getX(), y);
 	}
 	
 	public int getTotalPoblacion() {

@@ -25,16 +25,6 @@ public class Visualizador {
 		this.vista = vista;
 		this.modelo = modelo;
 	}
-
-	/**
-	 * Muestra en la ventana gráfica la ruta óptima (en el tiempo establecido) 
-	 * desde el punto inicial de la población hasta la meta
-	 * @param mejorEntidad: la entidad que ha logrado el objetivo establecido 
-	 */
-	void mostrarRutaOptima(Entidad mejorEntidad) {
-		vista.getVentana().drawRutaOptima(mejorEntidad.getAdn().getGenes(), mejorEntidad.getTiempoObtenido());
-		vista.getVentana().drawEntidad(mejorEntidad.getPosicion(), mejorEntidad.getVelocidad(), mejorEntidad.isMonitorizada());
-	}
 	
 	/**
 	 * Muestra una entidad en la ventana gráfica en la posición y dirección actual
@@ -68,16 +58,15 @@ public class Visualizador {
 	}
 	
 	/**
-	 * Vacía los datos del panel de control correspondientes a la última generación
+	 * Muestra en la ventana gráfica la ruta óptima (en el tiempo establecido) 
+	 * desde el punto inicial de la población hasta la meta
+	 * @param mejorEntidad: la entidad que ha logrado el objetivo establecido 
 	 */
-	void limpiarUltimaGeneracion() {
-		modelo.getPoblacion().setEntidadMonitorizada(null); 
-		actualizarPanel("TiempoRecordActual", 0);
-		actualizarPanel("MejorAptitudActual", 0);
-		actualizarPanel("MetasActual", 0);
-		actualizarPanel("ColisionesActual", 0);
+	void mostrarRutaOptima(Entidad mejorEntidad) {
+		vista.getVentana().drawRutaOptima(mejorEntidad.getAdn().getGenes(), mejorEntidad.getTiempoObtenido());
+		vista.getVentana().drawEntidad(mejorEntidad.getPosicion(), mejorEntidad.getVelocidad(), mejorEntidad.isMonitorizada());
 	}
-
+	
 	/**
 	 * Actualiza en el panel de control todos los datos sobre una entidad
 	 * que está siendo monitorizada actualmente
@@ -103,16 +92,15 @@ public class Visualizador {
 	}
 	
 	/**
-	 * Redondea un valor decimal hasta el número de decimales indicado
-	 * @param valor
-	 * @param numDecimales 
-	 * @return el valor redondeado
+	 * Vacía los datos del panel de control correspondientes a la última generación
 	 */
-	private double redondearValor(float valor, int numDecimales) {
-		double factor = Math.pow(10, numDecimales);
-		return Math.round(valor * factor) / factor;
+	void limpiarUltimaGeneracion() {
+		modelo.getPoblacion().setEntidadMonitorizada(null); 
+		actualizarPanel("TiempoRecordActual", 0);
+		actualizarPanel("MejorAptitudActual", 0);
+		actualizarPanel("MetasActual", 0);
+		actualizarPanel("ColisionesActual", 0);
 	}
-	
 	
 	/**
 	 * Vacía la entidad monitorizada y sus datos del panel de control cuando su generación ya no exista
@@ -131,4 +119,14 @@ public class Visualizador {
 		actualizarPanel("EstadoEntidad", "-");
 	}
 	
+	/**
+	 * Redondea un valor decimal hasta el número de decimales indicado
+	 * @param valor
+	 * @param numDecimales 
+	 * @return el valor redondeado
+	 */
+	private double redondearValor(float valor, int numDecimales) {
+		double factor = Math.pow(10, numDecimales);
+		return Math.round(valor * factor) / factor;
+	}
 }

@@ -42,29 +42,6 @@ public class ControladorEventos {
 		this.vista = vista;
 	}
 	
-	/** 
-	 * Determina qué evento debería desencadenarse cuando se pulse la tecla "espacio"
-	 * según las circunstancias actuales del programa
-	 */
-	public void realizarEventoEspacio() {
-		/* Si el botón de proceder corresponde a "Empezar", indica que está en el estado
-		 * inicial y ejecuta empezar(). */
-		if(vista.getPanelControl().getBtnProceder().getText().equals("Empezar")) {
-			empezar();
-		} 
-		/* De lo contrario, implica que el proceso ya ha comenzado. Si en ese momento no está
-		 * en el estado "EN_ESPERA" quiere decir que la generacion todavía no ha acabado
-		 * su ciclo de vida y por tanto ejecuta pausar()
-		 */
-		else if(controlador.getEstado() != Estado.EN_ESPERA){
-			pausar();
-		} 
-		//Para el resto de casos restantes, debe ejecutar continuar()
-		else {
-			continuar();
-		}
-	}
-	
 	/**
 	 * Iniciará la población de entidades a partir de los parámetros introducidos en el 
 	 * panel de control para que de comienzo al proceso evolutivo. Una vez iniciado 
@@ -101,6 +78,21 @@ public class ControladorEventos {
 	}
 	
 	/**
+	 * Actualiza la flag de parado a false para que pueda realizar el ciclo de vida de las entidades 
+	 */
+	public void continuar() {
+		//Actualiza el estado a "realizando ciclo" ya que se reanuda el proceso evolutivo
+		controlador.setEstado(Estado.REALIZANDO_CICLO);
+		controlador.setParado(false);
+		//Habilita el botón de pausa ya que ya no provocaría que iniciase otro ciclo
+		vista.getPanelControl().getBtnPausar().setEnabled(true);
+		controlador.getVisualizador().limpiarEntidadMonitorizada();
+		controlador.getVisualizador().limpiarUltimaGeneracion();
+		//Desactiva el propio botón hasta que se pueda pasar a la siguiente generación
+		vista.getPanelControl().getBtnProceder().setEnabled(false);
+	}
+	
+	/**
 	 * Actualiza la flag de parado a true para que pause el ciclo de vida de las entidades
 	 * hasta reanudar pulsando el mismo botón (actualizando la flag de nuevo)
 	 */
@@ -115,19 +107,27 @@ public class ControladorEventos {
 		controlador.setEstado((controlador.isParado()) ? Estado.PAUSADO : Estado.REALIZANDO_CICLO);
 	}
 	
-	/**
-	 * Actualiza la flag de parado a false para que pueda realizar el ciclo de vida de las entidades 
+	/** 
+	 * Determina qué evento debería desencadenarse cuando se pulse la tecla "espacio"
+	 * según las circunstancias actuales del programa
 	 */
-	public void continuar() {
-		//Actualiza el estado a "realizando ciclo" ya que se reanuda el proceso evolutivo
-		controlador.setEstado(Estado.REALIZANDO_CICLO);
-		controlador.setParado(false);
-		//Habilita el botón de pausa ya que ya no provocaría que iniciase otro ciclo
-		vista.getPanelControl().getBtnPausar().setEnabled(true);
-		controlador.getVisualizador().limpiarEntidadMonitorizada();
-		controlador.getVisualizador().limpiarUltimaGeneracion();
-		//Desactiva el propio botón hasta que se pueda pasar a la siguiente generación
-		vista.getPanelControl().getBtnProceder().setEnabled(false);
+	public void realizarEventoEspacio() {
+		/* Si el botón de proceder corresponde a "Empezar", indica que está en el estado
+		 * inicial y ejecuta empezar(). */
+		if(vista.getPanelControl().getBtnProceder().getText().equals("Empezar")) {
+			empezar();
+		} 
+		/* De lo contrario, implica que el proceso ya ha comenzado. Si en ese momento no está
+		 * en el estado "EN_ESPERA" quiere decir que la generacion todavía no ha acabado
+		 * su ciclo de vida y por tanto ejecuta pausar()
+		 */
+		else if(controlador.getEstado() != Estado.EN_ESPERA){
+			pausar();
+		} 
+		//Para el resto de casos restantes, debe ejecutar continuar()
+		else {
+			continuar();
+		}
 	}
 	
 	/**
@@ -313,20 +313,6 @@ public class ControladorEventos {
 		return poblacionParams;
 	}
 	
-	/* Reinicia todos los valores de información del panel de control sobre el 
-	 * anterior proceso a cero pero deja los parámetros editables sin alterar
-	 * por si quiere repetir un proceso igual que antes
-	 */
-	private void reiniciarInfoPanel(PanelControl panelControl) {
-		panelControl.setValor("TiempoRecord", 0);
-		panelControl.setValor("MejorAptitud", 0);
-		panelControl.setValor("Metas", 0);
-		panelControl.setValor("Colisiones", 0);
-		panelControl.setValor("Generacion", 0);
-		controlador.getVisualizador().limpiarEntidadMonitorizada();
-		controlador.getVisualizador().limpiarUltimaGeneracion();
-	}
-	
 	/**
 	 * Según el nombre del parámetro actualiza el correspondiente de la población
 	 * con el valor nuevo
@@ -348,5 +334,19 @@ public class ControladorEventos {
 				modelo.getPoblacion().setTiempoVida(valor);
 				break;
 		}
+	}
+	
+	/* Reinicia todos los valores de información del panel de control sobre el 
+	 * anterior proceso a cero pero deja los parámetros editables sin alterar
+	 * por si quiere repetir un proceso igual que antes
+	 */
+	private void reiniciarInfoPanel(PanelControl panelControl) {
+		panelControl.setValor("TiempoRecord", 0);
+		panelControl.setValor("MejorAptitud", 0);
+		panelControl.setValor("Metas", 0);
+		panelControl.setValor("Colisiones", 0);
+		panelControl.setValor("Generacion", 0);
+		controlador.getVisualizador().limpiarEntidadMonitorizada();
+		controlador.getVisualizador().limpiarUltimaGeneracion();
 	}
 }

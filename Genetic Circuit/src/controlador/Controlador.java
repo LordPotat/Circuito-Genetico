@@ -121,22 +121,6 @@ public class Controlador {
 	}
 	
 	/** 
-	 * Guarda como fichero en el proyecto el último circuito que hayamos diseñado
-	 * para que se pueda seleccionar y cargar la siguiente vez que ejecute el programa.
-	 * El programa no continúa haciendo nada y termina 
-	 * @param ventana gráfica necesaria para poder crear el circuito
-	 */
-	private void ejecutarModoEditorCircuitos(Ventana ventana) {
-		/* Se le tiene que pasa el nombre del circuito con el que se nombrará el fichero y
-		 * la ventana para poder colocar elementos relativos a ésta
-		 */
-		Circuito.guardarCircuito("circuito3", ventana);
-		//Cierra de manera segura la ventana gráfica y termina la ejecución del programa
-		vista.getVentana().exit();
-		System.exit(0);
-	}
-	
-	/** 
 	 * Inicia los objetos del modelo de datos presentes en el circuito: la meta y obstaculos .
 	 * Obtiene los datos almacenados en el fichero correspondiente al circuito pasado como
 	 * argumento para poder asignar los parámetros necesarios para su inicialización
@@ -264,6 +248,22 @@ public class Controlador {
 		panelControl.getBtnPausar().setEnabled(false);
 		panelControl.setValor("Generacion", entidades.getNumGeneraciones());
 		visualizador.mostrarRutaOptima(entidades.getMejorEntidad());
+	}
+	
+	/** 
+	 * Guarda como fichero en el proyecto el último circuito que hayamos diseñado
+	 * para que se pueda seleccionar y cargar la siguiente vez que ejecute el programa.
+	 * El programa no continúa haciendo nada y termina 
+	 * @param ventana gráfica necesaria para poder crear el circuito
+	 */
+	private void ejecutarModoEditorCircuitos(Ventana ventana) {
+		/* Se le tiene que pasa el nombre del circuito con el que se nombrará el fichero y
+		 * la ventana para poder colocar elementos relativos a ésta
+		 */
+		Circuito.guardarCircuito("circuito3", ventana);
+		//Cierra de manera segura la ventana gráfica y termina la ejecución del programa
+		vista.getVentana().exit();
+		System.exit(0);
 	}
 	
 	public Vista getVista() {
