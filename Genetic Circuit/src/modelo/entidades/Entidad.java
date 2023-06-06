@@ -95,7 +95,7 @@ public class Entidad {
 	 * de fuerza que debe aplicarse en ese frame para desplazarse en el espacio, y comprueba
 	 * si colisiona con algún elemento. De hacerlo (choca con obstáculo o llega a la meta),
 	 * no continúa desplazándose. Si ha llegado a la meta, su tiempo obtenido para de contar,
-	 * pero si ha chochado con un obstáculo sigue incrementando a pesar de no moverse
+	 * pero si ha chocado con un obstáculo sigue incrementando a pesar de no moverse
 	 */
 	public void actuar() {
 		//Comprobar colisiones actualizará las flags para saber si debe seguir moviénose

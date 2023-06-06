@@ -182,7 +182,6 @@ public class Controlador {
 		}
 		//Muestra en el panel de control la generación en la que se encuentra al acabar el ciclo
 		panelControl.setValor("Generacion", entidades.getNumGeneraciones());
-		return;
 	}
 	
 	/**

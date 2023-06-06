@@ -10,15 +10,18 @@ import java.util.Random;
 public class ADN {
 	
 	/**
+	 * Magnitud máxima que pueden tener los vectores
+	 */
+	private static final float FUERZA_MAX = 0.8f;
+	/**
+	 * Magnitud MÍNIMA que pueden tener los vectores
+	 */
+	private static final float FUERZA_MIN = 0.1f;
+	
+	/**
 	 * Genes del genotipo, un array de vectores que actúan como fuerzas
 	 */
 	private PVector[] genes;
-	
-	/**
-	 * Magnitudes máximas y mínimas que pueden tener los vectores
-	 */
-	private float fuerzaMax = 0.8f;
-	private float fuerzaMin = 0.1f;
 	
 	private Random random = new Random();
 	
@@ -49,7 +52,7 @@ public class ADN {
 		 * aleatorio. Para darle una magnitud aleatoria (dentro del rango especificado), hay
 		 * que mutiplicar el vector unitario por el escalar, que determina el "tamaño" del vector
 		 */
-		gen = PVector.random2D().mult(random.nextFloat(fuerzaMin, fuerzaMax));
+		gen = PVector.random2D().mult(random.nextFloat(FUERZA_MIN, FUERZA_MAX));
 	}
 	
 	/**
@@ -61,7 +64,7 @@ public class ADN {
 	private PVector[] generarGenesAleatorios(int numFuerzas) {
 		PVector[] genesAleatorios = new PVector[numFuerzas];
 		for (int i=0; i < genesAleatorios.length; i++) {
-			genesAleatorios[i] = PVector.random2D().mult(random.nextFloat(fuerzaMin, fuerzaMax));
+			genesAleatorios[i] = PVector.random2D().mult(random.nextFloat(FUERZA_MIN, FUERZA_MAX));
 		}
 		return genesAleatorios;
 	}

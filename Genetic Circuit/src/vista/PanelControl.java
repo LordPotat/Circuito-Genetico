@@ -725,7 +725,7 @@ public class PanelControl {
 	 * @param nombre del label
 	 * @return el JLabel que corresponde al nombre
 	 */
-	public JLabel obtenerLabelPorNombre(String nombre) {
+	private JLabel obtenerLabelPorNombre(String nombre) {
         if (mapaLabels.containsKey(nombre)) {
                 return (JLabel) mapaLabels.get(nombre);
         }

@@ -464,7 +464,9 @@ public class Poblacion {
 	 * @return la aptitud redondeada mostrando solo 4 decimales extra
 	 */
 	private String redondearAptitud(double aptitud) {
-		DecimalFormat df = new DecimalFormat("0.0###E0");
+		/* Muestra solo un número seguido de como mucho 3 decimales y la notación
+		 * científica correspondiente según los decimales que tenga la aptitud */
+		DecimalFormat df = new DecimalFormat("0.0##E0");
 		return df.format(aptitud);
 	}
 	
