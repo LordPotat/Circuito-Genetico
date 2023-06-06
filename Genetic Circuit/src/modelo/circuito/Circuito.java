@@ -91,7 +91,6 @@ public class Circuito implements Serializable {
 
 	/**
 	 * Establece el punto de spawn (punto inicial) en el que aparecen las entidades
-	 * @param ventana gráfica para determinar la posición relativa del spawn
 	 * @return el vector de posición del spawn
 	 */
 	public PVector setSpawn()  {

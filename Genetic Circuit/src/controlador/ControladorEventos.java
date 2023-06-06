@@ -171,7 +171,7 @@ public class ControladorEventos {
 	 * las generaciones se sucederán sólas sin necesidad del input del usuario para
 	 * continuar su ciclo de vida. Si se desactiva el usuario deberá pulsar el botón
 	 * de "Siguiente" para avanzar de generación.
-	 * @e evento que se desencadena cuando se marca o desmarca un JCheckBox
+	 * @param e: evento que se desencadena cuando se marca o desmarca un JCheckBox
 	 */
 	public void cambiarModo(ActionEvent e) {
 		//Obtenemos si el checkbox que lanza el evento está o no activado
@@ -215,7 +215,7 @@ public class ControladorEventos {
 	 * seleccionado en el combo box y reestableciendo los parámetros necesarios en los
 	 * elementos del proceso como la meta, obstáculos y la población a partir del circuito.
 	 * En el siguiente frame se actualizara el circuito mostrado en la ventana gráfica.
-	 * @e el evento que se desencadena cuando se selecciona una opción de un JComboBox
+	 * @param e: el evento que se desencadena cuando se selecciona una opción de un JComboBox
 	 */
 	public void elegirCircuito(ItemEvent e) {
 		//Solo se activa si se selecciona una opción distinta a la actual
@@ -236,7 +236,7 @@ public class ControladorEventos {
 	 * Establece un nuevo valor para el parámetro de la población de entidades, a través 
 	 * del cambio detectado en el spinner. Realiza las restricciones necesarias antes
 	 * de modificar el parámetro deseado. Sirve para cualquiera de los spinners
-	 * @e el evento que se desencadena cuando se cambia el valor de un JSpinner
+	 * @param e: el evento que se desencadena cuando se cambia el valor de un JSpinner
 	 */
 	public void modificarParametro(ChangeEvent e) {
 		JSpinner spinner = (JSpinner) e.getSource();

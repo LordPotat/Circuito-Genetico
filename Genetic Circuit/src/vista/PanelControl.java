@@ -722,7 +722,7 @@ public class PanelControl extends JFrame {
 	/**
 	 * Inicia el panel que muestra información sobre una entidad que esté siendo monitorizada
 	 * en ese momento tras seleccionarla en la venta, si es que hay alguna
-	 * @param panelDatosGeneracion
+	 * @param panelMonitorizacion
 	 */
 	private void initDatosEntidad(JPanel panelMonitorizacion) {
 		panelDatosEntidad = new JPanel();

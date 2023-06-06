@@ -258,7 +258,7 @@ public class Poblacion {
 	 * Compara si la aptitud obtenida por una entidad que ha obtenido la mejor aptitud
 	 * de la generación hasta el momento, ha superado a la mejor aptitud de todas las
 	 * generaciones, y lo almacena de ser así
-	 * @param entidad cuya aptitud debe ser comparada
+	 * @param aptitud que debe ser comparada
 	 */
 	private void comprobarMejorAptitud(double aptitud) {
 		Visualizador visualizador = contexto.getControlador().getVisualizador();

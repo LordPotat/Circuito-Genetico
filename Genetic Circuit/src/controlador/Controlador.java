@@ -141,7 +141,6 @@ public class Controlador {
 	 * el objetivo para pararlo y mostrar la ruta óptima. En caso contrario, debe permitir
 	 * a la población realizar su ciclo de vida hasta que acabe y tenga que evolucionar.
 	 * En ese momento llamara a la función con los pasos del algoritmo genético necesarios
-	 * @return el numero de generaciones actual de la población
 	 */
 	public void manipularPoblacion() {
 		Poblacion entidades = modelo.getPoblacion();
