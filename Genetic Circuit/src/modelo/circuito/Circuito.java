@@ -139,7 +139,7 @@ public class Circuito implements Serializable {
 	 * @param ventana
 	 */
 	private void asignarSpawn(Ventana ventana)  {
-		spawn = new Point2D.Float(ventana.width/2, ventana.height-30);
+		spawn = new Point2D.Float(50, ventana.height/2 + 230);
 	}
 	
 	/**
@@ -148,7 +148,7 @@ public class Circuito implements Serializable {
 	 */
 	private void crearMeta(Ventana ventana) {
 		metaParams = new HashMap<String, Object>();
-		metaParams.put("Posicion", new Point2D.Float(ventana.width/2, 40));
+		metaParams.put("Posicion", new Point2D.Float(ventana.width - 80, ventana.height/2 - 240));
 		metaParams.put("Ancho", 50f);	
 		metaParams.put("Alto", 50f);
 	}
@@ -161,47 +161,51 @@ public class Circuito implements Serializable {
 	private void crearObstaculos(Ventana ventana) {
 		//Inicia una lista con todos los obstáculos que deberá tener el circuito
 		obstaculosParams = new ArrayList<HashMap<String, Object>>();
-		int numObstaculos = 9;
+		int numObstaculos = 10;
 		for(int i=0; i < numObstaculos; i++) {
 			obstaculosParams.add(new HashMap<String, Object>());
 		}
 		//Ajusta los parámetros para cada uno de los obstáculos individualmente
-		obstaculosParams.get(0).put("Posicion", new Point2D.Float(ventana.width/2, ventana.height/2));
-		obstaculosParams.get(0).put("Ancho", 200f);	
-		obstaculosParams.get(0).put("Alto", 50f);
+		obstaculosParams.get(0).put("Posicion", new Point2D.Float(120, ventana.height/2 - 150));
+		obstaculosParams.get(0).put("Ancho", 50f);	
+		obstaculosParams.get(0).put("Alto", 300f);
 		obstaculosParams.get(0).put("Angulo", 0f);
-		obstaculosParams.get(1).put("Posicion", new Point2D.Float(ventana.width/2 - 150, ventana.height/2 + 200));
-		obstaculosParams.get(1).put("Ancho", 200f);	
-		obstaculosParams.get(1).put("Alto", 50f);
-		obstaculosParams.get(1).put("Angulo", -45f);
-		obstaculosParams.get(2).put("Posicion", new Point2D.Float(ventana.width/2 + 150, ventana.height/2 + 200));
-		obstaculosParams.get(2).put("Ancho", 200f);	
-		obstaculosParams.get(2).put("Alto", 50f);
-		obstaculosParams.get(2).put("Angulo", 45f);
-		obstaculosParams.get(3).put("Posicion", new Point2D.Float(ventana.width/2 - 150, ventana.height/2 - 200));
-		obstaculosParams.get(3).put("Ancho", 200f);	
+		obstaculosParams.get(1).put("Posicion", new Point2D.Float(320, ventana.height/2 + 150));
+		obstaculosParams.get(1).put("Ancho", 50f);	
+		obstaculosParams.get(1).put("Alto", 300f);
+		obstaculosParams.get(1).put("Angulo", 0f);
+		obstaculosParams.get(2).put("Posicion", new Point2D.Float(520, ventana.height/2 - 150));
+		obstaculosParams.get(2).put("Ancho", 50f);	
+		obstaculosParams.get(2).put("Alto", 300f);
+		obstaculosParams.get(2).put("Angulo", 0f);
+		obstaculosParams.get(3).put("Posicion", new Point2D.Float(720, ventana.height/2 + 150));
+		obstaculosParams.get(3).put("Ancho", 150f);	
 		obstaculosParams.get(3).put("Alto", 50f);
-		obstaculosParams.get(3).put("Angulo", 45f);
-		obstaculosParams.get(4).put("Posicion", new Point2D.Float(ventana.width/2 + 150, ventana.height/2 - 200));
-		obstaculosParams.get(4).put("Ancho", 200f);	
-		obstaculosParams.get(4).put("Alto", 50f);
-		obstaculosParams.get(4).put("Angulo", -45f);
-		obstaculosParams.get(5).put("Posicion", new Point2D.Float(ventana.width/2 - 300, ventana.height/2));
+		obstaculosParams.get(3).put("Angulo", 0f);
+		obstaculosParams.get(4).put("Posicion", new Point2D.Float(920, ventana.height/2 - 150));
+		obstaculosParams.get(4).put("Ancho", 50f);	
+		obstaculosParams.get(4).put("Alto", 300f);
+		obstaculosParams.get(4).put("Angulo", 0f);
+		obstaculosParams.get(5).put("Posicion", new Point2D.Float(1120, ventana.height/2 + 150));
 		obstaculosParams.get(5).put("Ancho", 50f);	
-		obstaculosParams.get(5).put("Alto", (float)ventana.height);
+		obstaculosParams.get(5).put("Alto", 300f);
 		obstaculosParams.get(5).put("Angulo", 0f);
-		obstaculosParams.get(6).put("Posicion", new Point2D.Float(ventana.width/2 + 300, ventana.height/2));
-		obstaculosParams.get(6).put("Ancho", 50f);	
-		obstaculosParams.get(6).put("Alto", (float)ventana.height);
+		obstaculosParams.get(6).put("Posicion", new Point2D.Float(ventana.width/2, ventana.height/2 - 290));
+		obstaculosParams.get(6).put("Ancho", (float)ventana.width);	
+		obstaculosParams.get(6).put("Alto", 20f);
 		obstaculosParams.get(6).put("Angulo", 0f);
-		obstaculosParams.get(7).put("Posicion", new Point2D.Float(ventana.width/2, ventana.height + 5));
+		obstaculosParams.get(7).put("Posicion", new Point2D.Float(ventana.width/2, ventana.height/2 + 290));
 		obstaculosParams.get(7).put("Ancho", (float)ventana.width);	
 		obstaculosParams.get(7).put("Alto", 20f);
 		obstaculosParams.get(7).put("Angulo", 0f);
-		obstaculosParams.get(8).put("Posicion", new Point2D.Float(ventana.width/2, 0));
-		obstaculosParams.get(8).put("Ancho", (float)ventana.width);	
-		obstaculosParams.get(8).put("Alto", 10f);
+		obstaculosParams.get(8).put("Posicion", new Point2D.Float(0, ventana.height/2));
+		obstaculosParams.get(8).put("Ancho", 10f);	
+		obstaculosParams.get(8).put("Alto", 590f);
 		obstaculosParams.get(8).put("Angulo", 0f);
+		obstaculosParams.get(9).put("Posicion", new Point2D.Float(ventana.width, ventana.height/2));
+		obstaculosParams.get(9).put("Ancho", 10f);	
+		obstaculosParams.get(9).put("Alto", 590f);
+		obstaculosParams.get(9).put("Angulo", 0f);
 	}
 }
 
